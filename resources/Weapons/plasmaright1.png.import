@@ -1,0 +1,34 @@
+[remap]
+
+importer="texture"
+type="StreamTexture"
+path="res://.import/plasmaright1.png-234a807de921cc8ce28313144b0a31c0.stex"
+metadata={
+"vram_texture": false
+}
+
+[deps]
+
+source_file="res://resources/Weapons/plasmaright1.png"
+dest_files=[ "res://.import/plasmaright1.png-234a807de921cc8ce28313144b0a31c0.stex" ]
+
+[params]
+
+compress/mode=0
+compress/lossy_quality=0.7
+compress/hdr_mode=0
+compress/bptc_ldr=0
+compress/normal_map=0
+flags/repeat=0
+flags/filter=true
+flags/mipmaps=false
+flags/anisotropic=false
+flags/srgb=2
+process/fix_alpha_border=true
+process/premult_alpha=false
+process/HDR_as_SRGB=false
+process/invert_color=false
+stream=false
+size_limit=0
+detect_3d=true
+svg/scale=1.0

@@ -3,11 +3,11 @@ extends TileMap
 
 export(int)   var map_w           = 60
 export(int)   var map_h           = 60
-export(int)   var min_room_size   = 20
-export(float, 0.2, 0.5) var min_room_factor = 0.4  # percent of leaf room can occupy (up to half at 0.5)
+export(int)   var min_room_size   = 10
+export(float, 0.2, 0.75) var min_room_factor = 0.5  # percent of leaf room can occupy (up to three-quarters)
 export(bool)  var redraw  setget redraw
 
-enum Tiles { FLOOR, FILLED }
+enum Tiles { GROUND=-1, ROOF }
 
 var tree       = {}
 var leaves     = []
@@ -29,19 +29,20 @@ func redraw(value = null):
 
 func generate():
 	clear()
-	fill_floor()
+	fill_roof()
 	start_tree()     # Start Generation
 	create_leaf(0)   # Create Tree
 	create_rooms()   # Create rooms in the leaf leaves of the tree
 	join_rooms()     # Ensure all rooms connected
 	clear_deadends() # Remove deadend corridors
+	update_bitmask_region(Vector2(0, 0), Vector2(map_w * cell_size.x, map_h * cell_size.y)) # autotile
 
 
-# start by filling the map with floor tiles
-func fill_floor():
+# start by filling the map with roof tiles
+func fill_roof():
 	for x in range(0, map_w):
 		for y in range(0, map_h):
-			set_cell(x, y, Tiles.FLOOR)
+			set_cell(x, y, Tiles.ROOF)
 
 
 # First generate a BSP tree of the dungeon
@@ -140,11 +141,10 @@ func create_rooms():
 			rooms.append(room);
 
 	# draw the rooms on the tilemap
-	for i in range(rooms.size()):
-		var r = rooms[i]
+	for r in rooms:
 		for x in range(r.x, r.x + r.w):
 			for y in range(r.y, r.y + r.h):
-				set_cell(x, y, Tiles.FILLED)
+				set_cell(x, y, Tiles.GROUND)
 
 
 func join_rooms():
@@ -175,7 +175,7 @@ func connect_leaves(leaf1, leaf2):
 
 	for i in range(x, x+w):
 		for j in range(y, y+h):
-			if(get_cell(i, j) == Tiles.FLOOR): set_cell(i, j, Tiles.FILLED)
+			if(get_cell(i, j) == Tiles.ROOF): set_cell(i, j, Tiles.GROUND)
 
 
 func clear_deadends():
@@ -185,19 +185,19 @@ func clear_deadends():
 		done = true
 
 		for cell in get_used_cells():
-			if get_cellv(cell) != Tiles.FILLED: continue
+			if get_cellv(cell) != Tiles.GROUND: continue
 
-			var floor_count = check_nearby(cell.x, cell.y)
-			if floor_count == 3:
-				set_cellv(cell, Tiles.FLOOR)
+			var roof_count = check_nearby(cell.x, cell.y)
+			if roof_count == 3:
+				set_cellv(cell, Tiles.ROOF)
 				done = false
 
 
-# check in 4 dirs to see how many tiles are floors
+# check in 4 dirs to see how many tiles are roofs
 func check_nearby(x, y):
 	var count = 0
-	if get_cell(x, y-1)   == Tiles.FLOOR:  count += 1
-	if get_cell(x, y+1)   == Tiles.FLOOR:  count += 1
-	if get_cell(x-1, y)   == Tiles.FLOOR:  count += 1
-	if get_cell(x+1, y)   == Tiles.FLOOR:  count += 1
+	if get_cell(x, y-1)   == Tiles.ROOF:  count += 1
+	if get_cell(x, y+1)   == Tiles.ROOF:  count += 1
+	if get_cell(x-1, y)   == Tiles.ROOF:  count += 1
+	if get_cell(x+1, y)   == Tiles.ROOF:  count += 1
 	return count

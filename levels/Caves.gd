@@ -6,12 +6,12 @@ export(int)   var map_w         = 80
 export(int)   var map_h         = 50
 export(int)   var iterations    = 20000
 export(int)   var neighbors     = 4
-export(int)   var filled_chance = 48
-export(int)   var min_cave_size = 80
+export(int)   var ground_chance = 52
+export(int)   var min_cave_size = 67
 
 export(bool)  var redraw  setget redraw
 
-enum Tiles { FLOOR, FILLED }
+enum Tiles { GROUND=-1, ROOF }
 
 var caves = []
 
@@ -31,26 +31,27 @@ func redraw(value = null):
 
 func generate():
 	clear()
-	fill_floor()
-	random_filled()
+	fill_roof()
+	random_ground()
 	dig_caves()
 	get_caves()
 	connect_caves()
+	update_bitmask_region(Vector2(0, 0), Vector2(map_w * cell_size.x, map_h * cell_size.y)) # autotile
 
 
-# start by filling the map with floor tiles
-func fill_floor():
+# start by filling the map with roof tiles
+func fill_roof():
 	for x in range(0, map_w):
 		for y in range(0, map_h):
-			set_cell(x, y, Tiles.FLOOR)
+			set_cell(x, y, Tiles.ROOF)
 
 
-# then randomly place filled tiles
-func random_filled():
+# then randomly place ground tiles
+func random_ground():
 	for x in range(1, map_w-1):
 		for y in range(1, map_h-1):
-			if Util.chance(filled_chance):
-				set_cell(x, y, Tiles.FILLED)
+			if Util.chance(ground_chance):
+				set_cell(x, y, Tiles.GROUND)
 
 
 func dig_caves():
@@ -61,13 +62,13 @@ func dig_caves():
 		var x = floor(rand_range(1, map_w-1))
 		var y = floor(rand_range(1, map_h-1))
 
-		# if nearby cells > neighbors, make it a floor tile
+		# if nearby cells > neighbors, make it a roof tile
 		if check_nearby(x,y) > neighbors:
-			set_cell(x, y, Tiles.FLOOR)
+			set_cell(x, y, Tiles.ROOF)
 
-		# or make it the filled tile
+		# or make it the ground tile
 		elif check_nearby(x,y) < neighbors:
-			set_cell(x, y, Tiles.FILLED)
+			set_cell(x, y, Tiles.GROUND)
 
 
 func get_caves():
@@ -76,12 +77,12 @@ func get_caves():
 	# locate all the caves and store them
 	for x in range (0, map_w):
 		for y in range (0, map_h):
-			if get_cell(x, y) == Tiles.FILLED:
+			if get_cell(x, y) == Tiles.GROUND:
 				flood_fill(x,y)
 
 	for cave in caves:
 		for tile in cave:
-			set_cellv(tile, Tiles.FILLED)
+			set_cellv(tile, Tiles.GROUND)
 
 
 func flood_fill(tilex, tiley):
@@ -96,7 +97,7 @@ func flood_fill(tilex, tiley):
 
 		if !cave.has(tile):
 			cave.append(tile)
-			set_cellv(tile, Tiles.FLOOR)
+			set_cellv(tile, Tiles.ROOF)
 
 			#check adjacent cells
 			var north = Vector2(tile.x, tile.y-1)
@@ -105,7 +106,7 @@ func flood_fill(tilex, tiley):
 			var west  = Vector2(tile.x-1, tile.y)
 
 			for dir in [north,south,east,west]:
-				if get_cellv(dir) == Tiles.FILLED:
+				if get_cellv(dir) == Tiles.GROUND:
 					if !to_fill.has(dir) and !cave.has(dir):
 						to_fill.append(dir)
 
@@ -188,23 +189,23 @@ func create_tunnel(point1, point2, cave):
 			(2 < drunk_y + dy and drunk_y + dy < map_h-2):
 			drunk_x += dx
 			drunk_y += dy
-			if get_cell(drunk_x, drunk_y) == Tiles.FLOOR:
-				set_cell(drunk_x, drunk_y, Tiles.FILLED)
+			if get_cell(drunk_x, drunk_y) == Tiles.ROOF:
+				set_cell(drunk_x, drunk_y, Tiles.GROUND)
 
 				# optional: make tunnel wider
-				set_cell(drunk_x+1, drunk_y, Tiles.FILLED)
-				set_cell(drunk_x+1, drunk_y+1, Tiles.FILLED)
+				set_cell(drunk_x+1, drunk_y, Tiles.GROUND)
+				set_cell(drunk_x+1, drunk_y+1, Tiles.GROUND)
 
 
-# check in 8 dirs to see how many tiles are floors
+# check in 8 dirs to see how many tiles are roofs
 func check_nearby(x, y):
 	var count = 0
-	if get_cell(x, y-1)   == Tiles.FLOOR:  count += 1
-	if get_cell(x, y+1)   == Tiles.FLOOR:  count += 1
-	if get_cell(x-1, y)   == Tiles.FLOOR:  count += 1
-	if get_cell(x+1, y)   == Tiles.FLOOR:  count += 1
-	if get_cell(x+1, y+1) == Tiles.FLOOR:  count += 1
-	if get_cell(x+1, y-1) == Tiles.FLOOR:  count += 1
-	if get_cell(x-1, y+1) == Tiles.FLOOR:  count += 1
-	if get_cell(x-1, y-1) == Tiles.FLOOR:  count += 1
+	if get_cell(x, y-1)   == Tiles.ROOF:  count += 1
+	if get_cell(x, y+1)   == Tiles.ROOF:  count += 1
+	if get_cell(x-1, y)   == Tiles.ROOF:  count += 1
+	if get_cell(x+1, y)   == Tiles.ROOF:  count += 1
+	if get_cell(x+1, y+1) == Tiles.ROOF:  count += 1
+	if get_cell(x+1, y-1) == Tiles.ROOF:  count += 1
+	if get_cell(x-1, y+1) == Tiles.ROOF:  count += 1
+	if get_cell(x-1, y-1) == Tiles.ROOF:  count += 1
 	return count

@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/Spacepack 4.png-eeccc1409b324d63a3eff87656cb84f2.stex"
+path="res://.import/walls.png-703ec5a9684a2581a35d527ec9044585.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://resources/SpacePack/Spacepack 4.png"
-dest_files=[ "res://.import/Spacepack 4.png-eeccc1409b324d63a3eff87656cb84f2.stex" ]
+source_file="res://levels/walls.png"
+dest_files=[ "res://.import/walls.png-703ec5a9684a2581a35d527ec9044585.stex" ]
 
 [params]
 

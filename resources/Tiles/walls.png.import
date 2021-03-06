@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/$RobotCircuit.png-1bd7e503de8446203ebbf1536d1ba20b.stex"
+path="res://.import/walls.png-7498efca130b4159095288273934af97.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://resources/SpacePack/$RobotCircuit.png"
-dest_files=[ "res://.import/$RobotCircuit.png-1bd7e503de8446203ebbf1536d1ba20b.stex" ]
+source_file="res://resources/Tiles/walls.png"
+dest_files=[ "res://.import/walls.png-7498efca130b4159095288273934af97.stex" ]
 
 [params]
 
@@ -19,7 +19,7 @@ compress/lossy_quality=0.7
 compress/hdr_mode=0
 compress/bptc_ldr=0
 compress/normal_map=0
-flags/repeat=0
+flags/repeat=1
 flags/filter=true
 flags/mipmaps=false
 flags/anisotropic=false

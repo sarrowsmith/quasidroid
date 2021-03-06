@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/$Robot_Suit.png-d969ac9146793518d7fccdd3006c7ed3.stex"
+path="res://.import/Spacepack Floor 1-1.png-0ab16fb4b6e34c91fb285ff16429cf10.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://resources/SpacePack/$Robot_Suit.png"
-dest_files=[ "res://.import/$Robot_Suit.png-d969ac9146793518d7fccdd3006c7ed3.stex" ]
+source_file="res://resources/Tiles/Spacepack Floor 1-1.png"
+dest_files=[ "res://.import/Spacepack Floor 1-1.png-0ab16fb4b6e34c91fb285ff16429cf10.stex" ]
 
 [params]
 
@@ -19,7 +19,7 @@ compress/lossy_quality=0.7
 compress/hdr_mode=0
 compress/bptc_ldr=0
 compress/normal_map=0
-flags/repeat=0
+flags/repeat=1
 flags/filter=true
 flags/mipmaps=false
 flags/anisotropic=false

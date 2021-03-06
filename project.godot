@@ -19,6 +19,10 @@ config/name="RoboLike"
 run/main_scene="res://Main.tscn"
 config/icon="res://icon.png"
 
+[autoload]
+
+Util="*res://godot_tuts/procgen_bsp/Util.gd"
+
 [display]
 
 window/size/width=1280
@@ -27,6 +31,9 @@ window/size/height=720
 [rendering]
 
 quality/driver/driver_name="GLES2"
+quality/intended_usage/framebuffer_allocation=0
+quality/intended_usage/framebuffer_allocation.mobile=0
+quality/2d/use_pixel_snap=true
 vram_compression/import_etc=true
 vram_compression/import_etc2=false
 environment/default_environment="res://default_env.tres"

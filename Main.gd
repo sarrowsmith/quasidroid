@@ -26,8 +26,8 @@ func _physics_process(delta):
 		if Input.is_action_pressed(e):
 			position += pan_speed * input_map[e]
 	$World.position = Vector2(
-		clamp(position.x, -world_size.x + view_size.x, -48),
-		clamp(position.y, -world_size.y + view_size.y, -48))
+		clamp(position.x, -world_size.x + 0.5 * view_size.x - 48, 0.5 * view_size.x),
+		clamp(position.y, -world_size.y + 0.5 * view_size.y - 48, 0.5 * view_size.y))
 
 
 func _unhandled_input(event):

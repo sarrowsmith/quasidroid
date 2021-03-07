@@ -17,10 +17,11 @@ var caves = []
 
 
 func _ready():
-	generate()
+	redraw()
 
 
-
+# warning-ignore:unused_argument
+# warning-ignore:function_conflicts_variable
 func redraw(value = null):
 
 	# only do this if we are working in the editor
@@ -57,7 +58,7 @@ func random_ground():
 func dig_caves():
 	randomize()
 
-	for i in range(iterations):
+	for _i in range(iterations):
 		# Pick a random point with a 1-tile buffer within the map
 		var x = floor(rand_range(1, map_w-1))
 		var y = floor(rand_range(1, map_h-1))

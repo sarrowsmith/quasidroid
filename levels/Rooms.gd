@@ -15,7 +15,7 @@ var leaf_id    = 0
 var rooms      = []
 
 func _ready():
-	generate()
+	redraw()
 
 
 # warning-ignore:unused_argument
@@ -184,13 +184,15 @@ func clear_deadends():
 	while !done:
 		done = true
 
-		for cell in get_used_cells():
-			if get_cellv(cell) != Tiles.GROUND: continue
+		for x in range(0, map_w):
+			for y in range(0, map_h):
+				if get_cell(x, y) == Tiles.ROOF:
+					continue
 
-			var roof_count = check_nearby(cell.x, cell.y)
-			if roof_count == 3:
-				set_cellv(cell, Tiles.ROOF)
-				done = false
+				var roof_count = check_nearby(x, y)
+				if roof_count == 3:
+					set_cell(x, y, Tiles.ROOF)
+					done = false
 
 
 # check in 4 dirs to see how many tiles are roofs

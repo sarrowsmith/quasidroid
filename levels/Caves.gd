@@ -2,8 +2,8 @@ tool
 extends TileMap
 
 
-export(int)   var map_w         = 80
-export(int)   var map_h         = 50
+export(int)   var map_w         = 63
+export(int)   var map_h         = 63
 export(int)   var iterations    = 20000
 export(int)   var neighbors     = 4
 export(int)   var ground_chance = 52
@@ -48,8 +48,8 @@ func fill_roof():
 
 # then randomly place ground tiles
 func random_ground():
-	for x in range(1, map_w-1):
-		for y in range(1, map_h-1):
+	for x in range(2, map_w-3):
+		for y in range(2, map_h-3):
 			if Util.chance(ground_chance):
 				set_cell(x, y, Tiles.GROUND)
 

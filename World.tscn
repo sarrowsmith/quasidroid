@@ -4,43 +4,6 @@
 [ext_resource path="res://World.gd" type="Script" id=2]
 
 [node name="World" type="Node2D"]
-position = Vector2( -970, -1080 )
 script = ExtResource( 2 )
 
 [node name="Level" parent="." instance=ExtResource( 1 )]
-
-[node name="ColorRectBottom2" type="ColorRect" parent="."]
-anchor_top = 1.0
-anchor_bottom = 1.0
-margin_top = 2928.0
-margin_right = 2976.0
-margin_bottom = 2976.0
-color = Color( 0.0235294, 0.0627451, 0.0666667, 1 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="ColorRectTop" type="ColorRect" parent="."]
-margin_right = 2976.0
-margin_bottom = 48.0
-color = Color( 0.0235294, 0.0627451, 0.0666667, 1 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="ColorRectLeft" type="ColorRect" parent="."]
-margin_right = 48.0
-margin_bottom = 2976.0
-color = Color( 0.0235294, 0.0627451, 0.0666667, 1 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="ColorRectRight" type="ColorRect" parent="."]
-margin_left = 2928.0
-margin_right = 2976.0
-margin_bottom = 2976.0
-color = Color( 0.0235294, 0.0627451, 0.0666667, 1 )
-__meta__ = {
-"_edit_use_anchors_": false
-}

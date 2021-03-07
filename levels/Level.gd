@@ -5,10 +5,16 @@ extends Node2D
 export(int) var level_seed = 0
 export(bool) var rooms = false
 export(int) var level = 0
-var root = null
+var world = null
 var parent = null
 var children = null
 var prototypes = null
+var specials = {
+	entry = null,
+	exit0 = null,
+	exit1 = null,
+	charge = []
+}
 
 
 func _ready():
@@ -23,11 +29,11 @@ func create(from):
 	parent = from
 	if parent == null:
 		level = 1
-		root = owner
+		world = owner
 	else:
 		level = parent.level + 1
 		prototypes = parent.prototypes
-		root = parent.root
+		world = parent.world
 	level_seed = randi()
 
 
@@ -37,13 +43,42 @@ func generate():
 		return
 	seed(level_seed)
 	$Map.generate()
+	place_specials()
 	children = [null, null]
 	if level < 7:
 		for i in 2:
 			var child = prototypes[i].instance()
 			child.rooms = rooms && i > 0
 			child.create(self)
-			root.add_child(child)
+			world.add_child(child)
 			children[i] = child
 			if not rooms:
 				break
+
+
+func place_specials():
+	for s in specials:
+		while specials[s] == null:
+			var probe = Vector2(
+				Util.randi_range(1, $Map.map_w - 1),
+				Util.randi_range(1, $Map.map_h - 1))
+			if check_nearby(probe.x, probe.y, 2) == 0:
+				specials[s] = probe
+
+
+func check_nearby(x, y, r):
+	var count = 0
+	for i in 2*r:
+		for j in 2*r:
+			if $Map.get_cell(x+i-r, y+j-r) != TileMap.INVALID_CELL:
+				count += 1
+	return count
+
+
+
+func _on_Background_click(position, button):
+	print($Map.world_to_map(position))
+
+
+func _on_Background_move(position):
+	pass

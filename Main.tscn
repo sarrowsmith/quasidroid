@@ -8,65 +8,127 @@ script = ExtResource( 2 )
 
 [node name="World" parent="." instance=ExtResource( 1 )]
 
-[node name="Overlay" type="Node2D" parent="."]
-
-[node name="Panel" type="Panel" parent="Overlay"]
-margin_left = 920.0
-margin_right = 1280.0
-margin_bottom = 720.0
+[node name="ColorRectBottom2" type="ColorRect" parent="."]
+anchor_top = 1.0
+anchor_bottom = 1.0
+margin_top = 2928.0
+margin_right = 2976.0
+margin_bottom = 2976.0
+color = Color( 0.0235294, 0.0627451, 0.0666667, 1 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="ColorRectBottom" type="ColorRect" parent="Overlay/Panel"]
-anchor_left = 1.0
-anchor_top = 1.0
+[node name="ColorRectTop" type="ColorRect" parent="."]
+margin_right = 2976.0
+margin_bottom = 48.0
+color = Color( 0.0235294, 0.0627451, 0.0666667, 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="ColorRectLeft" type="ColorRect" parent="."]
+margin_right = 48.0
+margin_bottom = 2976.0
+color = Color( 0.0235294, 0.0627451, 0.0666667, 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="ColorRectRight" type="ColorRect" parent="."]
+margin_left = 2928.0
+margin_right = 2976.0
+margin_bottom = 2976.0
+color = Color( 0.0235294, 0.0627451, 0.0666667, 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="View" type="Node2D" parent="."]
+
+[node name="Panel" type="Panel" parent="View"]
+margin_left = 280.0
+margin_top = -360.0
+margin_right = 640.0
+margin_bottom = 360.0
+
+[node name="VSplitContainer" type="VSplitContainer" parent="View/Panel"]
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_left = -1280.0
-margin_top = -12.0
-color = Color( 0.0235294, 0.0627451, 0.0666667, 1 )
+margin_left = 12.0
+margin_top = 12.0
+margin_right = -12.0
+margin_bottom = -12.0
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="ColorRectTop" type="ColorRect" parent="Overlay/Panel"]
-anchor_left = 1.0
-anchor_right = 1.0
-margin_left = -1280.0
-margin_bottom = 12.0
-color = Color( 0.0235294, 0.0627451, 0.0666667, 1 )
+[node name="RichTextLabel" type="RichTextLabel" parent="View/Panel/VSplitContainer"]
+margin_right = 336.0
+margin_bottom = 696.0
+text = "Debug navigation controls:
+
+arrow keys: move view
+
+u: up level
+z: down level
+x: down other level (if possible)
+"
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="ColorRectLeft" type="ColorRect" parent="Overlay/Panel"]
-anchor_left = 1.0
-anchor_right = 1.0
-margin_left = -1280.0
-margin_right = -1268.0
-margin_bottom = 720.0
-color = Color( 0.0235294, 0.0627451, 0.0666667, 1 )
+[node name="ColorRectBottom" type="ColorRect" parent="View"]
+anchor_top = 1.0
+anchor_bottom = 1.0
+margin_left = -640.0
+margin_top = 354.0
+margin_right = 640.0
+margin_bottom = 360.0
+color = Color( 0, 0, 0, 1 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="ColorRectRight" type="ColorRect" parent="Overlay/Panel"]
-anchor_left = 1.0
-anchor_right = 1.0
-margin_left = -12.0
-margin_bottom = 720.0
-color = Color( 0.0235294, 0.0627451, 0.0666667, 1 )
+[node name="ColorRectTop" type="ColorRect" parent="View"]
+margin_left = -640.0
+margin_top = -360.0
+margin_right = 640.0
+margin_bottom = -354.0
+color = Color( 0, 0, 0, 1 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="ColorRectMid" type="ColorRect" parent="Overlay/Panel"]
-margin_right = 12.0
-margin_bottom = 720.0
-color = Color( 0.0235294, 0.0627451, 0.0666667, 1 )
+[node name="ColorRectLeft" type="ColorRect" parent="View"]
+margin_left = -640.0
+margin_top = -360.0
+margin_right = -634.0
+margin_bottom = 360.0
+color = Color( 0, 0, 0, 1 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[editable path="World"]
+[node name="ColorRectRight" type="ColorRect" parent="View"]
+margin_left = 634.0
+margin_top = -360.0
+margin_right = 640.0
+margin_bottom = 360.0
+color = Color( 0, 0, 0, 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="ColorRectMid" type="ColorRect" parent="View"]
+margin_left = 280.0
+margin_top = -360.0
+margin_right = 286.0
+margin_bottom = 360.0
+color = Color( 0, 0, 0, 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Camera" type="Camera2D" parent="View"]
+current = true

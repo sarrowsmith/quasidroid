@@ -2,6 +2,7 @@ extends Node2D
 
 
 export(int) var world_seed
+export(Vector2) var world_size = Vector2(2880, 2880)
 onready var active_level = $Level
 
 

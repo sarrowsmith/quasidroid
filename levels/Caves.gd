@@ -56,12 +56,11 @@ func random_ground():
 
 
 func dig_caves():
-	randomize()
 
 	for _i in range(iterations):
 		# Pick a random point with a 1-tile buffer within the map
-		var x = floor(rand_range(1, map_w-1))
-		var y = floor(rand_range(1, map_h-1))
+		var x = Util.randi_range(1, map_w-1)
+		var y = Util.randi_range(1, map_h-1)
 
 		# if nearby cells > neighbors, make it a roof tile
 		if check_nearby(x,y) > neighbors:
@@ -133,7 +132,6 @@ func connect_caves():
 
 # do a drunken walk from point1 to point2
 func create_tunnel(point1, point2, cave):
-	randomize()          # for randf
 	var max_steps = 500  # set a max_steps so editor won't hang if walk fails
 	var steps = 0
 	var drunk_x = point2[0]

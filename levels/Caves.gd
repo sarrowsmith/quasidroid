@@ -2,8 +2,8 @@ tool
 extends TileMap
 
 
-export(int)   var map_w         = 63
-export(int)   var map_h         = 63
+export(int)   var map_w         = 62
+export(int)   var map_h         = 62
 export(int)   var iterations    = 20000
 export(int)   var neighbors     = 4
 export(int)   var ground_chance = 52

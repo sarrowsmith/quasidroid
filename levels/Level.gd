@@ -5,22 +5,23 @@ extends Node2D
 export(int) var level_seed = 0
 export(bool) var rooms = false
 export(int) var level = 0
+
+enum Prototype {CAVES, ROOMS, LIFT, ACCESS}
+
 var world = null
 var parent = null
 var children = null
 var prototypes = null
-var specials = {
-	entry = null,
-	exit0 = null,
-	exit1 = null,
-	charge = []
-}
+var lifts = []
+var access = {}
 
 
 func _ready():
 	prototypes = [
 		load("res://levels/CavesLevel.tscn"),
-		load("res://levels/RoomsLevel.tscn")
+		load("res://levels/RoomsLevel.tscn"),
+		load("res://levels/Lift.tscn"),
+		load("res://levels/AccessPoint.tscn"),
 	]
 
 
@@ -46,7 +47,7 @@ func generate():
 	place_specials()
 	children = [null, null]
 	if level < 7:
-		for i in 2:
+		for i in [Prototype.CAVES, Prototype.ROOMS]:
 			var child = prototypes[i].instance()
 			child.rooms = rooms && i > 0
 			child.create(self)
@@ -57,13 +58,24 @@ func generate():
 
 
 func place_specials():
-	for s in specials:
-		while specials[s] == null:
+	while len(lifts) < (3 if rooms else 2):
+		while true:
 			var probe = Vector2(
 				Util.randi_range(1, $Map.map_w - 1),
 				Util.randi_range(1, $Map.map_h - 1))
 			if check_nearby(probe.x, probe.y, 2) == 0:
-				specials[s] = probe
+				lifts.append(new_lift(probe))
+				break
+	var n_access = Util.randi_range(5, 9)
+	for _i in n_access:
+		while true:
+			var probe = Vector2(
+				Util.randi_range(1, $Map.map_w - 1),
+				Util.randi_range(1, $Map.map_h - 1))
+			var adjacencies = check_nearby(probe.x, probe.y, 1)
+			if 0 < adjacencies and adjacencies < 5:
+				access[probe] = new_feature(probe, Prototype.ACCESS)
+				break
 
 
 func check_nearby(x, y, r):
@@ -74,6 +86,16 @@ func check_nearby(x, y, r):
 				count += 1
 	return count
 
+
+func new_lift(location):
+	var lift = new_feature(location, Prototype.LIFT)
+	return lift
+	
+	
+func new_feature(location, type):
+	var feature = prototypes[type].instance()
+	feature.position = $Map.world_to_map(position)
+	return feature
 
 
 func _on_Background_click(position, button):

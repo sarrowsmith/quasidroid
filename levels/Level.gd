@@ -40,25 +40,29 @@ func create(from):
 
 func generate():
 	set_visible(true)
-	if children != null:
+	if children:
 		return
 	seed(level_seed)
 	$Map.generate()
-	place_specials()
-	children = [null, null]
-	if level < 7:
-		for i in [Prototype.CAVES, Prototype.ROOMS]:
+	if level == 7:
+		children = [null, null]
+	else:
+		children = []
+		for i in [Prototype.CAVES, Prototype.ROOMS if level < 6 else Prototype.CAVES]:
 			var child = prototypes[i].instance()
-			child.rooms = rooms && i > 0
+			child.rooms = i == Prototype.ROOMS
 			child.create(self)
 			world.add_child(child)
-			children[i] = child
+			children.append(child)
 			if not rooms:
+				children.append(null)
 				break
+	place_features()
 
 
-func place_specials():
-	while len(lifts) < (3 if rooms else 2):
+func place_features():
+	var n_lifts = (3 if rooms else 2) if level < 7 else 1
+	while len(lifts) < n_lifts:
 		while true:
 			var probe = Vector2(
 				Util.randi_range(1, $Map.map_w - 1),
@@ -89,14 +93,26 @@ func check_nearby(x, y, r):
 
 func new_lift(location):
 	var lift = new_feature(location, Prototype.LIFT)
+	lift.location = location
+	lift.from = self
+	if len(lifts) == 0:
+		lift.to = parent
+	else:
+		lift.to = children[len(lifts) - 1]
+	for o in [Vector2.ZERO, Vector2.UP]:
+		$Map.set_cellv(location + o, $Map.Tiles.ROOF)
+		$Map.update_bitmask_area(location + o)
 	return lift
 
 
 func new_feature(location, type):
 	var feature = prototypes[type].instance()
-	feature.position = $Map.world_to_map(position)
+	feature.position = location_to_position(location)
 	return feature
 
+
+func location_to_position(location):
+	return $Map.map_to_world(location)
 
 func _on_Background_click(position, button):
 	print($Map.world_to_map(position))

@@ -6,6 +6,11 @@ func _ready():
 	set_sprite()
 
 
+func change_level(level):
+	self.level = level
+	set_location(level.lifts[0].location + Vector2.DOWN)
+
+
 const move_map = {
 	"move_up": Vector2.UP,
 	"move_down": Vector2.DOWN,

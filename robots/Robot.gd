@@ -2,8 +2,8 @@ class_name Robot
 extends Node2D
 
 
-var map_position = Vector2.ZERO
-var map = null
+var location = Vector2.ZERO
+var level = null
 var base = "2"
 var state = "Idle"
 var facing = Vector2.DOWN
@@ -30,7 +30,7 @@ func set_sprite(dead=false):
 	if equipment.extras:
 		robot += "-X"
 	if not dead:
-		path = "Robots/%s/%s" % [robot, path]
+		path = "Robot/%s/%s" % [robot, path]
 	sprite = get_node(path)
 	sprite.set_visible(true)
 	if dead or equipment["weapon"] == null:
@@ -40,6 +40,11 @@ func set_sprite(dead=false):
 		return
 	weapon = get_node("Weapons/%s/%s" % [equipment["weapon"], path])
 	weapon.set_visible(true)
+
+
+func set_location(destination):
+	location = destination
+	position = level.location_to_position(location)
 
 
 func move(movement):

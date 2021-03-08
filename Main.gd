@@ -46,7 +46,7 @@ func _unhandled_input(event):
 
 
 func change_level(level):
-	if level == null:
+	if not level:
 		return
 	$World.change_level(level)
 	$Player.change_level(level)

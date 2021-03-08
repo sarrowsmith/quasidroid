@@ -37,7 +37,7 @@ func generate():
 	dig_caves()
 	get_caves()
 	connect_caves()
-	update_bitmask_region(Vector2(0, 0), Vector2(map_w * cell_size.x, map_h * cell_size.y)) # autotile
+	update_bitmask_region(Vector2(0, 0), Vector2(map_w, map_h)) # autotile
 
 
 # start by filling the map with roof tiles

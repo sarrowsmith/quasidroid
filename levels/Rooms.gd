@@ -35,7 +35,7 @@ func generate():
 	create_rooms()   # Create rooms in the leaf leaves of the tree
 	join_rooms()     # Ensure all rooms connected
 	clear_deadends() # Remove deadend corridors
-	update_bitmask_region(Vector2(0, 0), Vector2(map_w * cell_size.x, map_h * cell_size.y)) # autotile
+	update_bitmask_region(Vector2(0, 0), Vector2(map_w, map_h)) # autotile
 
 
 # start by filling the map with roof tiles

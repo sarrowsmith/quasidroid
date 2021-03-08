@@ -50,7 +50,8 @@ func _unhandled_input(event):
 func change_level(level):
 	if not level:
 		return
-	$World.change_level(level)
+	if level != $World.active_level:
+		$World.change_level(level)
 	$Player.change_level(level)
 	$View.position = $Player.position
 	set_value("Level", level.map_name)

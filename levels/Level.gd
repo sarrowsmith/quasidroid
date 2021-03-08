@@ -26,26 +26,28 @@ func _ready():
 	]
 
 
-func create(from):
+func create(from, rooms):
 	set_visible(false)
 	parent = from
+	self.rooms = rooms
 	if parent == null:
 		level = 1
 		world = owner
+		map_name = "1"
 	else:
 		level = parent.level + 1
 		prototypes = parent.prototypes
 		world = parent.world
-	var depth = 0
-	var up = parent
-	while up and up.rooms:
-		depth += 1
-		up = up.parent
-	map_name = String(level)
-	if depth:
-		var A = "-A".to_ascii()
-		A.set(1, A[1]+depth-1)
-		map_name += A.get_string_from_ascii()
+		map_name = String(level)
+		if not rooms:
+			var depth = 1
+			var up = parent
+			while up and not up.rooms:
+				depth += 1
+				up = up.parent
+			var A = "-A".to_ascii()
+			A.set(1, A[1]+depth-1)
+			map_name += A.get_string_from_ascii()
 	level_seed = randi()
 
 
@@ -61,8 +63,7 @@ func generate():
 		children = []
 		for i in [Prototype.CAVES, Prototype.ROOMS if level < 6 else Prototype.CAVES]:
 			var child = prototypes[i].instance()
-			child.rooms = i == Prototype.ROOMS
-			child.create(self)
+			child.create(self, i == Prototype.ROOMS)
 			world.add_child(child)
 			children.append(child)
 			if not rooms:

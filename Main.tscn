@@ -1,7 +1,8 @@
-[gd_scene load_steps=3 format=2]
+[gd_scene load_steps=4 format=2]
 
 [ext_resource path="res://World.tscn" type="PackedScene" id=1]
 [ext_resource path="res://Main.gd" type="Script" id=2]
+[ext_resource path="res://robots/Player.tscn" type="PackedScene" id=3]
 
 [node name="Main" type="Node2D"]
 script = ExtResource( 2 )
@@ -44,13 +45,18 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
+[node name="Player" parent="." instance=ExtResource( 3 )]
+
 [node name="View" type="Node2D" parent="."]
 
 [node name="Panel" type="Panel" parent="View"]
-margin_left = 280.0
+margin_left = 420.0
 margin_top = -360.0
-margin_right = 640.0
+margin_right = 780.0
 margin_bottom = 360.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="VSplitContainer" type="VSplitContainer" parent="View/Panel"]
 anchor_right = 1.0
@@ -69,6 +75,7 @@ margin_bottom = 696.0
 text = "Debug navigation controls:
 
 arrow keys: move view
+backspace: recentre view
 
 u: up level
 z: down level
@@ -81,9 +88,9 @@ __meta__ = {
 [node name="ColorRectBottom" type="ColorRect" parent="View"]
 anchor_top = 1.0
 anchor_bottom = 1.0
-margin_left = -640.0
+margin_left = -500.0
 margin_top = 354.0
-margin_right = 640.0
+margin_right = 780.0
 margin_bottom = 360.0
 color = Color( 0, 0, 0, 1 )
 __meta__ = {
@@ -91,9 +98,9 @@ __meta__ = {
 }
 
 [node name="ColorRectTop" type="ColorRect" parent="View"]
-margin_left = -640.0
+margin_left = -500.0
 margin_top = -360.0
-margin_right = 640.0
+margin_right = 780.0
 margin_bottom = -354.0
 color = Color( 0, 0, 0, 1 )
 __meta__ = {
@@ -101,9 +108,9 @@ __meta__ = {
 }
 
 [node name="ColorRectLeft" type="ColorRect" parent="View"]
-margin_left = -640.0
+margin_left = -500.0
 margin_top = -360.0
-margin_right = -634.0
+margin_right = -494.0
 margin_bottom = 360.0
 color = Color( 0, 0, 0, 1 )
 __meta__ = {
@@ -111,9 +118,9 @@ __meta__ = {
 }
 
 [node name="ColorRectRight" type="ColorRect" parent="View"]
-margin_left = 634.0
+margin_left = 774.0
 margin_top = -360.0
-margin_right = 640.0
+margin_right = 780.0
 margin_bottom = 360.0
 color = Color( 0, 0, 0, 1 )
 __meta__ = {
@@ -121,9 +128,9 @@ __meta__ = {
 }
 
 [node name="ColorRectMid" type="ColorRect" parent="View"]
-margin_left = 280.0
+margin_left = 420.0
 margin_top = -360.0
-margin_right = 286.0
+margin_right = 426.0
 margin_bottom = 360.0
 color = Color( 0, 0, 0, 1 )
 __meta__ = {
@@ -131,4 +138,5 @@ __meta__ = {
 }
 
 [node name="Camera" type="Camera2D" parent="View"]
+offset = Vector2( 140, 0 )
 current = true

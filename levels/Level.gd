@@ -9,7 +9,7 @@ var world = null
 var parent = null
 var children = null
 var prototypes = null
-var specials = {
+var points_of_interest = {
 	entry = null,
 	exit0 = null,
 	exit1 = null,
@@ -43,7 +43,7 @@ func generate():
 		return
 	seed(level_seed)
 	$Map.generate()
-	place_specials()
+	place_points_of_interest()
 	children = [null, null]
 	if level < 7:
 		for i in 2:
@@ -56,14 +56,14 @@ func generate():
 				break
 
 
-func place_specials():
-	for s in specials:
-		while specials[s] == null:
+func place_points_of_interest():
+	for p in points_of_interest:
+		while points_of_interest[p] == null:
 			var probe = Vector2(
 				Util.randi_range(1, $Map.map_w - 1),
 				Util.randi_range(1, $Map.map_h - 1))
 			if check_nearby(probe.x, probe.y, 2) == 0:
-				specials[s] = probe
+				points_of_interest[p] = probe
 
 
 func check_nearby(x, y, r):

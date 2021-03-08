@@ -140,26 +140,26 @@ animations = [ {
 [node name="Down" type="AnimatedSprite" parent="Idle"]
 visible = false
 frames = SubResource( 4 )
-frame = 2
 playing = true
+centered = false
 
 [node name="Up" type="AnimatedSprite" parent="Idle"]
 visible = false
 frames = SubResource( 8 )
-frame = 2
 playing = true
+centered = false
 
 [node name="Left" type="AnimatedSprite" parent="Idle"]
 visible = false
 frames = SubResource( 12 )
-frame = 2
 playing = true
+centered = false
 
 [node name="Right" type="AnimatedSprite" parent="Idle"]
 visible = false
 frames = SubResource( 16 )
-frame = 2
 playing = true
+centered = false
 
 [node name="Fire" type="Node2D" parent="."]
 
@@ -167,18 +167,22 @@ playing = true
 visible = false
 frames = SubResource( 17 )
 playing = true
+centered = false
 
 [node name="Up" type="AnimatedSprite" parent="Fire"]
 visible = false
 frames = SubResource( 18 )
 playing = true
+centered = false
 
 [node name="Left" type="AnimatedSprite" parent="Fire"]
 visible = false
 frames = SubResource( 19 )
 playing = true
+centered = false
 
 [node name="Right" type="AnimatedSprite" parent="Fire"]
 visible = false
 frames = SubResource( 20 )
 playing = true
+centered = false

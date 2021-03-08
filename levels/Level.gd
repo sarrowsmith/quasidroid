@@ -69,6 +69,7 @@ func place_features():
 				Util.randi_range(1, $Map.map_h - 1))
 			if check_nearby(probe.x, probe.y, 2) == 0:
 				lifts.append(new_lift(probe))
+				access[probe] = null
 				break
 	var n_access = Util.randi_range(5, 9)
 	for _i in n_access:
@@ -86,7 +87,8 @@ func check_nearby(x, y, r):
 	var count = 0
 	for i in 2*r:
 		for j in 2*r:
-			if $Map.get_cell(x+i-r, y+j-r) != TileMap.INVALID_CELL:
+			var cell = Vector2(x+i-r, y+j-r)
+			if $Map.get_cellv(cell) != TileMap.INVALID_CELL or access.has(cell):
 				count += 1
 	return count
 
@@ -107,6 +109,7 @@ func new_lift(location):
 
 func new_feature(location, type):
 	var feature = prototypes[type].instance()
+	add_child(feature)
 	feature.position = location_to_position(location)
 	return feature
 

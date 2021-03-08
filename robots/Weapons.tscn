@@ -5,7 +5,6 @@
 [ext_resource path="res://robots/weapons/Laser.tscn" type="PackedScene" id=3]
 
 [node name="Weapons" type="Node2D"]
-position = Vector2( 24, 24 )
 
 [node name="Dual" parent="." instance=ExtResource( 1 )]
 

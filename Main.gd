@@ -31,11 +31,12 @@ func _physics_process(delta):
 
 
 func _unhandled_input(event):
+	if InputMap.event_is_action(event, "map_reset"):
+		$View.position = $Player.position
+		return
 	if event is InputEventKey and event.pressed:
 		var level = null
 		match event.scancode:
-			KEY_BACKSPACE:
-				$View.position = $Player.position
 			KEY_U:
 				level = $World.active_level.parent
 			KEY_Z:

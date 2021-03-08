@@ -44,7 +44,7 @@ func generate():
 		return
 	seed(level_seed)
 	$Map.generate()
-	place_points_of_interest()
+	place_specials()
 	children = [null, null]
 	if level < 7:
 		for i in [Prototype.CAVES, Prototype.ROOMS]:
@@ -57,14 +57,25 @@ func generate():
 				break
 
 
-func place_points_of_interest():
-	for p in points_of_interest:
-		while points_of_interest[p] == null:
+func place_specials():
+	while len(lifts) < (3 if rooms else 2):
+		while true:
 			var probe = Vector2(
 				Util.randi_range(1, $Map.map_w - 1),
 				Util.randi_range(1, $Map.map_h - 1))
 			if check_nearby(probe.x, probe.y, 2) == 0:
-				points_of_interest[p] = probe
+				lifts.append(new_lift(probe))
+				break
+	var n_access = Util.randi_range(5, 9)
+	for _i in n_access:
+		while true:
+			var probe = Vector2(
+				Util.randi_range(1, $Map.map_w - 1),
+				Util.randi_range(1, $Map.map_h - 1))
+			var adjacencies = check_nearby(probe.x, probe.y, 1)
+			if 0 < adjacencies and adjacencies < 5:
+				access[probe] = new_feature(probe, Prototype.ACCESS)
+				break
 
 
 func check_nearby(x, y, r):

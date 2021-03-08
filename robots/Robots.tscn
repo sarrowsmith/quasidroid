@@ -1081,7 +1081,7 @@ script = ExtResource( 33 )
 [node name="Down" type="AnimatedSprite" parent="0/Idle"]
 visible = false
 frames = SubResource( 9 )
-frame = 7
+frame = 3
 playing = true
 
 [node name="Up" type="AnimatedSprite" parent="0/Idle"]
@@ -1092,13 +1092,12 @@ playing = true
 [node name="Left" type="AnimatedSprite" parent="0/Idle"]
 visible = false
 frames = SubResource( 31 )
-frame = 3
 playing = true
 
 [node name="Right" type="AnimatedSprite" parent="0/Idle"]
 visible = false
 frames = SubResource( 40 )
-frame = 6
+frame = 2
 playing = true
 
 [node name="Move" type="Node" parent="0"]
@@ -1127,7 +1126,7 @@ frames = SubResource( 58 )
 [node name="Down" type="AnimatedSprite" parent="2/Idle"]
 visible = false
 frames = SubResource( 116 )
-frame = 2
+frame = 6
 playing = true
 
 [node name="Up" type="AnimatedSprite" parent="2/Idle"]
@@ -1138,13 +1137,13 @@ playing = true
 [node name="Left" type="AnimatedSprite" parent="2/Idle"]
 visible = false
 frames = SubResource( 126 )
-frame = 2
+frame = 7
 playing = true
 
 [node name="Right" type="AnimatedSprite" parent="2/Idle"]
 visible = false
 frames = SubResource( 135 )
-frame = 2
+frame = 6
 playing = true
 
 [node name="Move" type="Node" parent="2"]
@@ -1172,6 +1171,7 @@ frames = SubResource( 153 )
 [node name="Down" type="AnimatedSprite" parent="0-X/Idle"]
 visible = false
 frames = SubResource( 67 )
+frame = 4
 playing = true
 
 [node name="Up" type="AnimatedSprite" parent="0-X/Idle"]
@@ -1182,13 +1182,12 @@ playing = true
 [node name="Left" type="AnimatedSprite" parent="0-X/Idle"]
 visible = false
 frames = SubResource( 72 )
-frame = 4
 playing = true
 
 [node name="Right" type="AnimatedSprite" parent="0-X/Idle"]
 visible = false
 frames = SubResource( 89 )
-frame = 6
+frame = 3
 playing = true
 
 [node name="Move" type="Node" parent="0-X"]
@@ -1216,7 +1215,7 @@ frames = SubResource( 107 )
 [node name="Down" type="AnimatedSprite" parent="2-X/Idle"]
 visible = false
 frames = SubResource( 162 )
-frame = 6
+frame = 2
 playing = true
 
 [node name="Up" type="AnimatedSprite" parent="2-X/Idle"]
@@ -1227,13 +1226,12 @@ playing = true
 [node name="Left" type="AnimatedSprite" parent="2-X/Idle"]
 visible = false
 frames = SubResource( 172 )
-frame = 4
 playing = true
 
 [node name="Right" type="AnimatedSprite" parent="2-X/Idle"]
 visible = false
 frames = SubResource( 181 )
-frame = 5
+frame = 1
 playing = true
 
 [node name="Move" type="Node" parent="2-X"]

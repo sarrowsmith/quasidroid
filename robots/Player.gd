@@ -1,16 +1,13 @@
-extends Node2D
+extends Robot
 
 
-# Declare member variables here. Examples:
-# var a = 2
-# var b = "text"
-
-
-# Called when the node enters the scene tree for the first time.
-func _ready():
-	pass # Replace with function body.
-
-
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-#func _process(delta):
-#	pass
+const move_map = {
+	"move_up": Vector2(0, -1),
+	"move_down": Vector2(0, 1),
+	"move_left": Vector2(-1, 0),
+	"move_right": Vector2(1, 0)
+}
+func _unhandled_input(event):
+	for e in move_map:
+		if InputMap.event_is_action(event, e):
+			this.move(move_map[e])

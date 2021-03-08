@@ -1,9 +1,10 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://World.tscn" type="PackedScene" id=1]
 [ext_resource path="res://Main.gd" type="Script" id=2]
 [ext_resource path="res://resources/Resources/nova_mono.tres" type="DynamicFontData" id=3]
 [ext_resource path="res://robots/Player.tscn" type="PackedScene" id=4]
+[ext_resource path="res://LabelledValue.tscn" type="PackedScene" id=5]
 
 [sub_resource type="DynamicFont" id=1]
 font_data = ExtResource( 3 )
@@ -53,41 +54,112 @@ __meta__ = {
 
 [node name="View" type="Node2D" parent="."]
 
-[node name="Panel" type="Panel" parent="View"]
+[node name="Panel" type="PanelContainer" parent="View"]
 margin_left = 280.0
 margin_top = -360.0
 margin_right = 640.0
 margin_bottom = 360.0
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="VSplitContainer" type="VSplitContainer" parent="View/Panel"]
+margin_left = 7.0
+margin_top = 7.0
+margin_right = 353.0
+margin_bottom = 713.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="TabContainer" type="TabContainer" parent="View/Panel/VSplitContainer"]
+margin_right = 346.0
+margin_bottom = 706.0
+
+[node name="Status" type="VBoxContainer" parent="View/Panel/VSplitContainer/TabContainer"]
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_left = 12.0
-margin_top = 12.0
-margin_right = -12.0
-margin_bottom = -12.0
-__meta__ = {
-"_edit_use_anchors_": false
-}
+margin_left = 4.0
+margin_top = 32.0
+margin_right = -4.0
+margin_bottom = -4.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
 
-[node name="RichTextLabel" type="RichTextLabel" parent="View/Panel/VSplitContainer"]
-margin_right = 336.0
-margin_bottom = 696.0
+[node name="LabelledValue" parent="View/Panel/VSplitContainer/TabContainer/Status" instance=ExtResource( 5 )]
+margin_top = 0.0
+margin_right = 338.0
+margin_bottom = 23.0
+
+[node name="Menu" type="VBoxContainer" parent="View/Panel/VSplitContainer/TabContainer"]
+visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 4.0
+margin_top = 32.0
+margin_right = -4.0
+margin_bottom = -4.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Controls" type="VBoxContainer" parent="View/Panel/VSplitContainer/TabContainer"]
+visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_top = -670.0
+margin_right = -8.0
+margin_bottom = -706.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="LabelledValue" parent="View/Panel/VSplitContainer/TabContainer/Controls" instance=ExtResource( 5 )]
+margin_top = 0.0
+margin_right = 338.0
+margin_bottom = 23.0
+label = "Move view"
+default = "arrow keys"
+
+[node name="LabelledValue2" parent="View/Panel/VSplitContainer/TabContainer/Controls" instance=ExtResource( 5 )]
+margin_top = 0.0
+margin_right = 338.0
+margin_bottom = 23.0
+label = "Reset view"
+default = "backspace"
+
+[node name="LabelledValue3" parent="View/Panel/VSplitContainer/TabContainer/Controls" instance=ExtResource( 5 )]
+margin_top = 0.0
+margin_right = 338.0
+margin_bottom = 23.0
+label = "DEBUG:"
+
+[node name="LabelledValue4" parent="View/Panel/VSplitContainer/TabContainer/Controls" instance=ExtResource( 5 )]
+margin_top = 0.0
+margin_right = 338.0
+margin_bottom = 23.0
+label = "Level up"
+default = "U"
+
+[node name="LabelledValue5" parent="View/Panel/VSplitContainer/TabContainer/Controls" instance=ExtResource( 5 )]
+margin_top = 0.0
+margin_right = 338.0
+margin_bottom = 23.0
+label = "Level down"
+default = "Z, X"
+
+[node name="Help" type="VBoxContainer" parent="View/Panel/VSplitContainer/TabContainer"]
+visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 4.0
+margin_top = 32.0
+margin_right = -4.0
+margin_bottom = -4.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="RichTextLabel" type="RichTextLabel" parent="View/Panel/VSplitContainer/TabContainer/Help"]
+margin_right = 40.0
+margin_bottom = 40.0
 custom_fonts/normal_font = SubResource( 1 )
-text = "Debug navigation controls:
-
-arrow keys: move view
-
-u: up level
-z: down level
-x: down other level (if possible)
-"
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="ColorRectBottom" type="ColorRect" parent="View"]
 anchor_top = 1.0

@@ -90,8 +90,8 @@ func check_nearby(x, y, r):
 func new_lift(location):
 	var lift = new_feature(location, Prototype.LIFT)
 	return lift
-	
-	
+
+
 func new_feature(location, type):
 	var feature = prototypes[type].instance()
 	feature.position = $Map.world_to_map(position)

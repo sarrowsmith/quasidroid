@@ -149,85 +149,85 @@ animations = [ {
 "speed": 5.0
 } ]
 
-[sub_resource type="AtlasTexture" id=29]
+[sub_resource type="AtlasTexture" id=26]
 flags = 4
 atlas = ExtResource( 6 )
 region = Rect2( 0, 0, 48, 48 )
 
-[sub_resource type="AtlasTexture" id=30]
+[sub_resource type="AtlasTexture" id=27]
 flags = 4
 atlas = ExtResource( 6 )
 region = Rect2( 48, 0, 48, 48 )
 
-[sub_resource type="AtlasTexture" id=31]
+[sub_resource type="AtlasTexture" id=28]
 flags = 4
 atlas = ExtResource( 6 )
 region = Rect2( 96, 0, 48, 48 )
 
-[sub_resource type="AtlasTexture" id=32]
+[sub_resource type="AtlasTexture" id=29]
 flags = 4
 atlas = ExtResource( 6 )
 region = Rect2( 144, 0, 48, 48 )
 
-[sub_resource type="SpriteFrames" id=33]
+[sub_resource type="SpriteFrames" id=30]
 animations = [ {
-"frames": [ SubResource( 29 ), SubResource( 30 ), SubResource( 31 ), SubResource( 32 ) ],
+"frames": [ SubResource( 26 ), SubResource( 27 ), SubResource( 28 ), SubResource( 29 ) ],
 "loop": true,
 "name": "default",
 "speed": 5.0
 } ]
+
+[sub_resource type="AtlasTexture" id=31]
+flags = 4
+atlas = ExtResource( 7 )
+region = Rect2( 0, 0, 48, 48 )
+
+[sub_resource type="AtlasTexture" id=32]
+flags = 4
+atlas = ExtResource( 7 )
+region = Rect2( 48, 0, 48, 48 )
+
+[sub_resource type="AtlasTexture" id=33]
+flags = 4
+atlas = ExtResource( 7 )
+region = Rect2( 96, 0, 48, 48 )
 
 [sub_resource type="AtlasTexture" id=34]
 flags = 4
 atlas = ExtResource( 7 )
-region = Rect2( 0, 0, 48, 48 )
-
-[sub_resource type="AtlasTexture" id=35]
-flags = 4
-atlas = ExtResource( 7 )
-region = Rect2( 48, 0, 48, 48 )
-
-[sub_resource type="AtlasTexture" id=36]
-flags = 4
-atlas = ExtResource( 7 )
-region = Rect2( 96, 0, 48, 48 )
-
-[sub_resource type="AtlasTexture" id=37]
-flags = 4
-atlas = ExtResource( 7 )
 region = Rect2( 144, 0, 48, 48 )
 
-[sub_resource type="SpriteFrames" id=38]
+[sub_resource type="SpriteFrames" id=35]
 animations = [ {
-"frames": [ SubResource( 34 ), SubResource( 35 ), SubResource( 36 ), SubResource( 37 ) ],
+"frames": [ SubResource( 31 ), SubResource( 32 ), SubResource( 33 ), SubResource( 34 ) ],
 "loop": true,
 "name": "default",
 "speed": 5.0
 } ]
 
-[sub_resource type="AtlasTexture" id=39]
+[sub_resource type="AtlasTexture" id=36]
 flags = 4
 atlas = ExtResource( 8 )
 region = Rect2( 0, 0, 48, 48 )
 
-[sub_resource type="AtlasTexture" id=40]
+[sub_resource type="AtlasTexture" id=37]
 flags = 4
 atlas = ExtResource( 8 )
 region = Rect2( 48, 0, 48, 48 )
 
-[sub_resource type="AtlasTexture" id=41]
+[sub_resource type="AtlasTexture" id=38]
 flags = 4
 atlas = ExtResource( 8 )
 region = Rect2( 96, 0, 48, 48 )
 
-[sub_resource type="AtlasTexture" id=42]
+[sub_resource type="AtlasTexture" id=39]
 flags = 4
 atlas = ExtResource( 8 )
 region = Rect2( 144, 0, 48, 48 )
 
-[sub_resource type="SpriteFrames" id=43]
+[sub_resource type="SpriteFrames" id=40]
 animations = [ {
-"frames": [ SubResource( 39 ), SubResource( 40 ), SubResource( 41 ), SubResource( 42 ) ],
+"frames": [ SubResource( 36 ), SubResource( 37 ), SubResource( 38 ), SubResource( 39 ) ],
 "loop": true,
 "name": "default",
 "speed": 5.0
@@ -235,53 +235,53 @@ animations = [ {
 
 [node name="Plasma" type="Node2D"]
 
-[node name="Idle" type="Node" parent="."]
+[node name="Idle" type="Node2D" parent="."]
 
 [node name="Down" type="AnimatedSprite" parent="Idle"]
 visible = false
 frames = SubResource( 5 )
-frame = 3
+frame = 1
 playing = true
 
 [node name="Up" type="AnimatedSprite" parent="Idle"]
 visible = false
 frames = SubResource( 10 )
-frame = 3
+frame = 1
 playing = true
 
 [node name="Left" type="AnimatedSprite" parent="Idle"]
 visible = false
 frames = SubResource( 15 )
-frame = 3
+frame = 1
 playing = true
 
 [node name="Right" type="AnimatedSprite" parent="Idle"]
 visible = false
 frames = SubResource( 20 )
-frame = 3
+frame = 1
 playing = true
 
-[node name="Fire" type="Node" parent="."]
+[node name="Fire" type="Node2D" parent="."]
 
 [node name="Down" type="AnimatedSprite" parent="Fire"]
 visible = false
 frames = SubResource( 25 )
-frame = 2
 playing = true
 
 [node name="Up" type="AnimatedSprite" parent="Fire"]
 visible = false
-frames = SubResource( 33 )
-frame = 3
+frames = SubResource( 30 )
+frame = 1
 playing = true
 
 [node name="Left" type="AnimatedSprite" parent="Fire"]
 visible = false
-frames = SubResource( 38 )
+frames = SubResource( 35 )
+frame = 2
 playing = true
 
 [node name="Right" type="AnimatedSprite" parent="Fire"]
 visible = false
-frames = SubResource( 43 )
-frame = 1
+frames = SubResource( 40 )
+frame = 3
 playing = true

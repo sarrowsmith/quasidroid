@@ -135,33 +135,33 @@ animations = [ {
 
 [node name="Laser" type="Node2D"]
 
-[node name="Idle" type="Node" parent="."]
+[node name="Idle" type="Node2D" parent="."]
 
 [node name="Down" type="AnimatedSprite" parent="Idle"]
 visible = false
 frames = SubResource( 4 )
-frame = 1
+frame = 2
 playing = true
 
 [node name="Up" type="AnimatedSprite" parent="Idle"]
 visible = false
 frames = SubResource( 8 )
-frame = 1
+frame = 2
 playing = true
 
 [node name="Left" type="AnimatedSprite" parent="Idle"]
 visible = false
 frames = SubResource( 12 )
-frame = 1
+frame = 2
 playing = true
 
 [node name="Right" type="AnimatedSprite" parent="Idle"]
 visible = false
 frames = SubResource( 16 )
-frame = 1
+frame = 2
 playing = true
 
-[node name="Fire" type="Node" parent="."]
+[node name="Fire" type="Node2D" parent="."]
 
 [node name="Down" type="AnimatedSprite" parent="Fire"]
 visible = false

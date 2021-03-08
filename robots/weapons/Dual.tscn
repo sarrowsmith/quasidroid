@@ -235,53 +235,51 @@ animations = [ {
 
 [node name="Dual" type="Node2D"]
 
-[node name="Idle" type="Node" parent="."]
+[node name="Idle" type="Node2D" parent="."]
 
 [node name="Down" type="AnimatedSprite" parent="Idle"]
 visible = false
 frames = SubResource( 5 )
+frame = 3
 playing = true
 
 [node name="Up" type="AnimatedSprite" parent="Idle"]
 visible = false
 frames = SubResource( 10 )
-frame = 3
+frame = 2
 playing = true
 
 [node name="Left" type="AnimatedSprite" parent="Idle"]
 visible = false
 frames = SubResource( 15 )
-frame = 1
 playing = true
 
 [node name="Right" type="AnimatedSprite" parent="Idle"]
 visible = false
 frames = SubResource( 20 )
-frame = 3
+frame = 2
 playing = true
 
-[node name="Fire" type="Node" parent="."]
+[node name="Fire" type="Node2D" parent="."]
 
 [node name="Down" type="AnimatedSprite" parent="Fire"]
 visible = false
 frames = SubResource( 25 )
-frame = 1
 playing = true
 
 [node name="Up" type="AnimatedSprite" parent="Fire"]
 visible = false
 frames = SubResource( 30 )
-frame = 3
+frame = 2
 playing = true
 
 [node name="Left" type="AnimatedSprite" parent="Fire"]
 visible = false
 frames = SubResource( 35 )
-frame = 1
 playing = true
 
 [node name="Right" type="AnimatedSprite" parent="Fire"]
 visible = false
 frames = SubResource( 40 )
-frame = 2
+frame = 1
 playing = true

@@ -1,4 +1,4 @@
-[gd_scene load_steps=221 format=2]
+[gd_scene load_steps=238 format=2]
 
 [ext_resource path="res://resources/Robots/0/down-idle.png" type="Texture" id=1]
 [ext_resource path="res://resources/Robots/dead+.png" type="Texture" id=2]
@@ -33,6 +33,7 @@
 [ext_resource path="res://resources/Robots/2/left+.png" type="Texture" id=31]
 [ext_resource path="res://resources/Robots/2/right+.png" type="Texture" id=32]
 [ext_resource path="res://robots/Robot.gd" type="Script" id=33]
+[ext_resource path="res://resources/Robots/zapped.png" type="Texture" id=34]
 
 [sub_resource type="AtlasTexture" id=1]
 flags = 4
@@ -1071,7 +1072,100 @@ animations = [ {
 "speed": 5.0
 } ]
 
+[sub_resource type="AtlasTexture" id=188]
+flags = 4
+atlas = ExtResource( 34 )
+region = Rect2( 0, 0, 47, 46 )
+
+[sub_resource type="AtlasTexture" id=189]
+flags = 4
+atlas = ExtResource( 34 )
+region = Rect2( 47, 0, 47, 46 )
+
+[sub_resource type="AtlasTexture" id=190]
+flags = 4
+atlas = ExtResource( 34 )
+region = Rect2( 94, 0, 47, 46 )
+
+[sub_resource type="SpriteFrames" id=191]
+animations = [ {
+"frames": [ SubResource( 188 ), SubResource( 189 ), SubResource( 190 ) ],
+"loop": true,
+"name": "default",
+"speed": 5.0
+} ]
+
+[sub_resource type="AtlasTexture" id=192]
+flags = 4
+atlas = ExtResource( 34 )
+region = Rect2( 0, 138, 47, 46 )
+
+[sub_resource type="AtlasTexture" id=193]
+flags = 4
+atlas = ExtResource( 34 )
+region = Rect2( 47, 138, 47, 46 )
+
+[sub_resource type="AtlasTexture" id=194]
+flags = 4
+atlas = ExtResource( 34 )
+region = Rect2( 94, 138, 47, 46 )
+
+[sub_resource type="SpriteFrames" id=195]
+animations = [ {
+"frames": [ SubResource( 192 ), SubResource( 193 ), SubResource( 194 ) ],
+"loop": true,
+"name": "default",
+"speed": 5.0
+} ]
+
+[sub_resource type="AtlasTexture" id=196]
+flags = 4
+atlas = ExtResource( 34 )
+region = Rect2( 0, 46, 47, 46 )
+
+[sub_resource type="AtlasTexture" id=197]
+flags = 4
+atlas = ExtResource( 34 )
+region = Rect2( 47, 46, 47, 46 )
+
+[sub_resource type="AtlasTexture" id=198]
+flags = 4
+atlas = ExtResource( 34 )
+region = Rect2( 94, 46, 47, 46 )
+
+[sub_resource type="SpriteFrames" id=199]
+animations = [ {
+"frames": [ SubResource( 196 ), SubResource( 197 ), SubResource( 198 ) ],
+"loop": true,
+"name": "default",
+"speed": 5.0
+} ]
+
+[sub_resource type="AtlasTexture" id=200]
+flags = 4
+atlas = ExtResource( 34 )
+region = Rect2( 0, 92, 47, 46 )
+
+[sub_resource type="AtlasTexture" id=201]
+flags = 4
+atlas = ExtResource( 34 )
+region = Rect2( 47, 92, 47, 46 )
+
+[sub_resource type="AtlasTexture" id=202]
+flags = 4
+atlas = ExtResource( 34 )
+region = Rect2( 94, 92, 47, 46 )
+
+[sub_resource type="SpriteFrames" id=203]
+animations = [ {
+"frames": [ SubResource( 200 ), SubResource( 201 ), SubResource( 202 ) ],
+"loop": true,
+"name": "default",
+"speed": 5.0
+} ]
+
 [node name="Robots" type="Node2D"]
+position = Vector2( 24, 24 )
 script = ExtResource( 33 )
 
 [node name="0" type="Node2D" parent="."]
@@ -1081,7 +1175,7 @@ script = ExtResource( 33 )
 [node name="Down" type="AnimatedSprite" parent="0/Idle"]
 visible = false
 frames = SubResource( 9 )
-frame = 4
+frame = 5
 playing = true
 
 [node name="Up" type="AnimatedSprite" parent="0/Idle"]
@@ -1092,13 +1186,13 @@ playing = true
 [node name="Left" type="AnimatedSprite" parent="0/Idle"]
 visible = false
 frames = SubResource( 19 )
-frame = 1
+frame = 2
 playing = true
 
 [node name="Right" type="AnimatedSprite" parent="0/Idle"]
 visible = false
 frames = SubResource( 28 )
-frame = 4
+frame = 5
 playing = true
 
 [node name="Move" type="Node2D" parent="0"]
@@ -1106,23 +1200,25 @@ playing = true
 [node name="Down" type="AnimatedSprite" parent="0/Move"]
 visible = false
 frames = SubResource( 33 )
-frame = 1
+frame = 2
 playing = true
 
 [node name="Up" type="AnimatedSprite" parent="0/Move"]
 visible = false
 frames = SubResource( 38 )
-frame = 2
+frame = 3
 playing = true
 
 [node name="Left" type="AnimatedSprite" parent="0/Move"]
 visible = false
 frames = SubResource( 42 )
+frame = 2
 playing = true
 
 [node name="Right" type="AnimatedSprite" parent="0/Move"]
 visible = false
 frames = SubResource( 46 )
+frame = 2
 playing = true
 
 [node name="2" type="Node2D" parent="."]
@@ -1132,6 +1228,7 @@ playing = true
 [node name="Down" type="AnimatedSprite" parent="2/Idle"]
 visible = false
 frames = SubResource( 55 )
+frame = 1
 playing = true
 
 [node name="Up" type="AnimatedSprite" parent="2/Idle"]
@@ -1142,11 +1239,13 @@ playing = true
 [node name="Left" type="AnimatedSprite" parent="2/Idle"]
 visible = false
 frames = SubResource( 65 )
+frame = 1
 playing = true
 
 [node name="Right" type="AnimatedSprite" parent="2/Idle"]
 visible = false
 frames = SubResource( 74 )
+frame = 1
 playing = true
 
 [node name="Move" type="Node2D" parent="2"]
@@ -1154,23 +1253,25 @@ playing = true
 [node name="Down" type="AnimatedSprite" parent="2/Move"]
 visible = false
 frames = SubResource( 79 )
+frame = 1
 playing = true
 
 [node name="Up" type="AnimatedSprite" parent="2/Move"]
 visible = false
 frames = SubResource( 84 )
+frame = 1
 playing = true
 
 [node name="Left" type="AnimatedSprite" parent="2/Move"]
 visible = false
 frames = SubResource( 88 )
-frame = 2
+frame = 1
 playing = true
 
 [node name="Right" type="AnimatedSprite" parent="2/Move"]
 visible = false
 frames = SubResource( 92 )
-frame = 2
+frame = 1
 playing = true
 
 [node name="0-X" type="Node2D" parent="."]
@@ -1180,7 +1281,7 @@ playing = true
 [node name="Down" type="AnimatedSprite" parent="0-X/Idle"]
 visible = false
 frames = SubResource( 101 )
-frame = 5
+frame = 6
 playing = true
 
 [node name="Up" type="AnimatedSprite" parent="0-X/Idle"]
@@ -1191,13 +1292,13 @@ playing = true
 [node name="Left" type="AnimatedSprite" parent="0-X/Idle"]
 visible = false
 frames = SubResource( 111 )
-frame = 2
+frame = 3
 playing = true
 
 [node name="Right" type="AnimatedSprite" parent="0-X/Idle"]
 visible = false
 frames = SubResource( 120 )
-frame = 4
+frame = 5
 playing = true
 
 [node name="Move" type="Node2D" parent="0-X"]
@@ -1205,23 +1306,25 @@ playing = true
 [node name="Down" type="AnimatedSprite" parent="0-X/Move"]
 visible = false
 frames = SubResource( 125 )
+frame = 1
 playing = true
 
 [node name="Up" type="AnimatedSprite" parent="0-X/Move"]
 visible = false
 frames = SubResource( 130 )
+frame = 1
 playing = true
 
 [node name="Left" type="AnimatedSprite" parent="0-X/Move"]
 visible = false
 frames = SubResource( 134 )
-frame = 2
+frame = 1
 playing = true
 
 [node name="Right" type="AnimatedSprite" parent="0-X/Move"]
 visible = false
 frames = SubResource( 138 )
-frame = 2
+frame = 1
 playing = true
 
 [node name="2-X" type="Node2D" parent="."]
@@ -1231,7 +1334,7 @@ playing = true
 [node name="Down" type="AnimatedSprite" parent="2-X/Idle"]
 visible = false
 frames = SubResource( 147 )
-frame = 4
+frame = 5
 playing = true
 
 [node name="Up" type="AnimatedSprite" parent="2-X/Idle"]
@@ -1242,13 +1345,13 @@ playing = true
 [node name="Left" type="AnimatedSprite" parent="2-X/Idle"]
 visible = false
 frames = SubResource( 157 )
-frame = 2
+frame = 3
 playing = true
 
 [node name="Right" type="AnimatedSprite" parent="2-X/Idle"]
 visible = false
 frames = SubResource( 166 )
-frame = 3
+frame = 4
 playing = true
 
 [node name="Move" type="Node2D" parent="2-X"]
@@ -1256,25 +1359,23 @@ playing = true
 [node name="Down" type="AnimatedSprite" parent="2-X/Move"]
 visible = false
 frames = SubResource( 171 )
-frame = 1
+frame = 2
 playing = true
 
 [node name="Up" type="AnimatedSprite" parent="2-X/Move"]
 visible = false
 frames = SubResource( 176 )
-frame = 1
+frame = 2
 playing = true
 
 [node name="Left" type="AnimatedSprite" parent="2-X/Move"]
 visible = false
 frames = SubResource( 180 )
-frame = 1
 playing = true
 
 [node name="Right" type="AnimatedSprite" parent="2-X/Move"]
 visible = false
 frames = SubResource( 184 )
-frame = 1
 playing = true
 
 [node name="Dead-X" type="AnimatedSprite" parent="."]
@@ -1284,3 +1385,29 @@ frames = SubResource( 186 )
 [node name="Dead" type="AnimatedSprite" parent="."]
 visible = false
 frames = SubResource( 187 )
+
+[node name="Hit" type="Node2D" parent="."]
+
+[node name="Down" type="AnimatedSprite" parent="Hit"]
+visible = false
+frames = SubResource( 191 )
+frame = 1
+playing = true
+
+[node name="Up" type="AnimatedSprite" parent="Hit"]
+visible = false
+frames = SubResource( 195 )
+frame = 1
+playing = true
+
+[node name="Left" type="AnimatedSprite" parent="Hit"]
+visible = false
+frames = SubResource( 199 )
+frame = 2
+playing = true
+
+[node name="Right" type="AnimatedSprite" parent="Hit"]
+visible = false
+frames = SubResource( 203 )
+frame = 1
+playing = true

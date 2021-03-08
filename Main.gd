@@ -9,8 +9,8 @@ onready var panel = $View.get_node("Panel")
 
 func _ready():
 	seed(game_seed)
-	$View.position = 0.5 * world_size
-	$World.create()
+	$Player.change_level($World.create())
+	$View.position = $Player.position
 
 
 const input_map = {
@@ -34,10 +34,20 @@ func _unhandled_input(event):
 	if event is InputEventKey and event.pressed:
 		var level = null
 		match event.scancode:
+			KEY_BACKSPACE:
+				$View.position = $Player.position
 			KEY_U:
 				level = $World.active_level.parent
 			KEY_Z:
 				level = $World.active_level.children[0]
 			KEY_X:
 				level = $World.active_level.children[1]
-		$World.change_level(level)
+		change_level(level)
+
+
+func change_level(level):
+	if level == null:
+		return
+	$World.change_level(level)
+	$Player.change_level(level)
+	$View.position = $Player.position

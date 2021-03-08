@@ -14,6 +14,7 @@ var children = null
 var prototypes = null
 var lifts = []
 var access = {}
+var map_name = ""
 
 
 func _ready():
@@ -35,6 +36,16 @@ func create(from):
 		level = parent.level + 1
 		prototypes = parent.prototypes
 		world = parent.world
+	var depth = 0
+	var up = parent
+	while up and up.rooms:
+		depth += 1
+		up = up.parent
+	map_name = String(level)
+	if depth:
+		var A = "-A".to_ascii()
+		A.set(1, A[1]+depth-1)
+		map_name += A.get_string_from_ascii()
 	level_seed = randi()
 
 

@@ -3,14 +3,15 @@ extends Node2D
 
 export(int) var game_seed
 export(int) var pan_speed = 8
+export(NodePath) var status_path
+
 onready var world_size = $World.world_size
-onready var panel = $View.get_node("Panel")
+onready var status_box = get_node(status_path)
 
 
 func _ready():
 	seed(game_seed)
-	$Player.change_level($World.create())
-	$View.position = $Player.position
+	change_level($World.create())
 
 
 const input_map = {
@@ -52,3 +53,8 @@ func change_level(level):
 	$World.change_level(level)
 	$Player.change_level(level)
 	$View.position = $Player.position
+	set_value("Level", level.map_name)
+
+
+func set_value(name, value):
+	status_box.get_node(name).set_value(value)

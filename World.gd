@@ -14,6 +14,8 @@ func create():
 
 
 func change_level(level):
+	if level == active_level:
+		return
 	active_level.set_visible(false)
 	level.generate()
 	active_level = level

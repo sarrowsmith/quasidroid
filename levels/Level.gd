@@ -15,6 +15,7 @@ var children = null
 var prototypes = null
 var lifts = []
 var access = {}
+var robots = {}
 var map_name = ""
 
 
@@ -133,8 +134,15 @@ func location_to_position(location):
 
 
 func _on_Background_click(position, button):
-	print(map.world_to_map(position))
+	pass
 
 
 func _on_Background_move(position):
-	pass
+	var location = map.world_to_map(position) + Vector2(1, 1)
+	if access.has(location) or robots.has(location):
+		$Cursor.set_mode("Info")
+	elif map.get_cellv(location) == map.Tiles.ROOF:
+		$Cursor.set_mode(null)
+	else:
+		$Cursor.set_mode("Default")
+	$Cursor.position = location_to_position(location)

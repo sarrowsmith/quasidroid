@@ -48,9 +48,9 @@ func _unhandled_input(event):
 		match event.scancode:
 			KEY_U:
 				level = $World.active_level.parent
-			KEY_Z:
+			KEY_O:
 				level = $World.active_level.children[0]
-			KEY_X:
+			KEY_P:
 				level = $World.active_level.children[1]
 		change_level(level)
 

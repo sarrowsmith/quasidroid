@@ -2,4 +2,4 @@ extends Robot
 
 
 func _ready():
-	set_sprite()
+	equip(true)

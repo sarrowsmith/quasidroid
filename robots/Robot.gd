@@ -6,6 +6,7 @@ var location = Vector2.ZERO
 var level = null
 var base = "2"
 var state = "Idle"
+var firing = "Idle"
 var facing = Vector2.DOWN
 var destination = Vector2.ZERO
 var sprite = null
@@ -18,6 +19,7 @@ var stats = {
 	move = 1
 }
 var moveable = false
+var dead = false
 
 
 func _process(_delta):
@@ -41,15 +43,16 @@ const facing_map = {
 	Vector2.LEFT: "Left",
 	Vector2.RIGHT: "Right",
 }
-func set_sprite(dead=false):
+func set_sprite():
 	if sprite:
 		sprite.set_visible(false)
-	var path = "%s/%s" % [state, facing_map[facing]]
-	var robot = "Dead" if dead else base
+	if weapon:
+		weapon.set_visible(false)
+	var path = "Dead" if dead else base
 	if equipment.extras:
-		robot += "-X"
+		path += "-X"
 	if not dead:
-		path = "Robot/%s/%s" % [robot, path]
+		path = "Robot/%s/%s/%s" % [path, state, facing_map[facing]]
 	sprite = get_node(path)
 	sprite.set_visible(true)
 	if dead or equipment["weapon"] == null:
@@ -57,8 +60,13 @@ func set_sprite(dead=false):
 			weapon.set_visible(false)
 			weapon = null
 		return
-	weapon = get_node("Weapons/%s/%s" % [equipment["weapon"], path])
-	weapon.set_visible(true)
+	weapon = get_node("Weapons/%s/%s/%s" % [equipment["weapon"], firing, facing_map[facing]])
+
+
+func equip(on):
+	set_sprite()
+	if weapon:
+		weapon.set_visible(on)
 
 
 func set_location(destination):
@@ -77,3 +85,9 @@ func move(direction):
 			moveable = false
 			destination = target
 	set_sprite()
+
+func fire(direction):
+	facing = direction
+	var target = location + direction
+	firing = "Fire"
+	equip(false)

@@ -4,10 +4,14 @@ extends Robot
 signal move(position)
 
 
+var equipped = false
+
+
 func _ready():
 	base = "0"
 	moveable = true
-	set_sprite()
+	equipment["weapon"] = "Plasma"
+	equip(equipped)
 
 
 func _process(delta):
@@ -33,7 +37,16 @@ func _unhandled_input(event):
 		return
 	for e in move_map:
 		if InputMap.event_is_action(event, e):
+			if equipped:
+				fire(move_map[e])
+				break
 			move(move_map[e])
+	if event is InputEventKey and event.pressed:
+		match event.scancode:
+			KEY_Z:
+				equipped = not equipped
+				equip(equipped)
+				set_cursor()
 
 
 const cursor_types = {
@@ -55,7 +68,9 @@ func set_cursor():
 			if location.distance_squared_to(level.cursor.location) <= stats["move"]:
 				location_type = Level.Type.PLAYER
 		Level.Type.ROGUE:
-			if location.x == level.cursor.location.x or location.y == level.cursor.location.y:
+			if not equipped:
+				location_type = Level.Type.ACCESS
+			elif location.x == level.cursor.location.x or location.y == level.cursor.location.y:
 				if location.x == level.cursor.location.x:
 					for y in range(min(location.y, level.cursor.location.y), max(location.y, level.cursor.location.y)):
 						if y != location.y and y != level.cursor.location.y and level.location_type(Vector2(location.x, y)) != Level.Type.FLOOR:

@@ -134,8 +134,15 @@ size_flags_vertical = 3
 margin_top = 0.0
 margin_right = 338.0
 margin_bottom = 23.0
-label = "Move"
+label = "Move/Fire"
 default = "H, J, K, L"
+
+[node name="LabelledValue8" parent="View/Panel/VSplitContainer/TabContainer/Controls" instance=ExtResource( 5 )]
+margin_top = 0.0
+margin_right = 338.0
+margin_bottom = 23.0
+label = "Toggle weapon"
+default = "Z"
 
 [node name="LabelledValue6" parent="View/Panel/VSplitContainer/TabContainer/Controls" instance=ExtResource( 5 )]
 margin_top = 0.0
@@ -176,7 +183,7 @@ margin_top = 108.0
 margin_right = 338.0
 margin_bottom = 131.0
 label = "Level down"
-default = "Z, X"
+default = "O, P"
 
 [node name="About" type="VBoxContainer" parent="View/Panel/VSplitContainer/TabContainer"]
 visible = false

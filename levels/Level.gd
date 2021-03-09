@@ -9,6 +9,7 @@ export(int) var level = 0
 enum Prototype {CAVES, ROOMS, LIFT, ACCESS, ROGUE}
 enum Type {FLOOR, WALL, LIFT, ACCESS, PLAYER, ROGUE}
 
+var map = null
 var world = null
 var parent = null
 var children = null
@@ -21,8 +22,7 @@ var rogues = []
 
 func _ready():
 	prototypes = [
-		load("res://levels/CavesLevel.tscn"),
-		load("res://levels/RoomsLevel.tscn"),
+		load("res://levels/Level.tscn"),
 		load("res://levels/Lift.tscn"),
 		load("res://levels/AccessPoint.tscn"),
 		load("res://robots/Rogue.tscn")
@@ -31,6 +31,8 @@ func _ready():
 
 func create(from, rooms):
 	set_visible(false)
+	map = get_node("Rooms" if rooms else "Caves")
+	map.set_visible(true)
 	parent = from
 	self.rooms = rooms
 	if parent == null:
@@ -59,14 +61,14 @@ func generate():
 	if children:
 		return
 	seed(level_seed)
-	$Map.generate()
+	map.generate()
 	if level == 7:
 		children = [null, null]
 	else:
 		children = []
-		for i in [Prototype.CAVES, Prototype.ROOMS if level < 6 else Prototype.CAVES]:
-			var child = prototypes[i].instance()
-			child.create(self, i == Prototype.ROOMS)
+		for i in 2:
+			var child = prototypes[Prototype.LEVEL].instance()
+			child.create(self, i == 1 and level < 6)
 			world.add_child(child)
 			children.append(child)
 			if not rooms:
@@ -165,8 +167,8 @@ func new_lift(location):
 	else:
 		lift.to = children[len(lifts) - 1]
 	for o in [Vector2.ZERO, Vector2.UP]:
-		$Map.set_cellv(location + o, $Map.Tiles.ROOF)
-		$Map.update_bitmask_area(location + o)
+		map.set_cellv(location + o, map.Tiles.ROOF)
+		map.update_bitmask_area(location + o)
 	return lift
 
 
@@ -178,16 +180,19 @@ func new_feature(location, type):
 
 
 func location_to_position(location):
-	return $Map.map_to_world(location)
-
-
-func position_to_location(position):
-	return $Map.world_to_map(position)
+	return map.map_to_world(location)
 
 
 func _on_Background_click(position, button):
-	print($Map.world_to_map(position))
+	pass
 
 
 func _on_Background_move(position):
-	pass
+	var location = map.world_to_map(position) + Vector2(1, 1)
+	if access.has(location) or robots.has(location):
+		$Cursor.set_mode("Info")
+	elif map.get_cellv(location) == map.Tiles.ROOF:
+		$Cursor.set_mode(null)
+	else:
+		$Cursor.set_mode("Default")
+	$Cursor.position = location_to_position(location)

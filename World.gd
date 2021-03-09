@@ -6,7 +6,13 @@ export(Vector2) var world_size = Vector2(2880, 2880)
 onready var active_level = $Level
 
 
-func create():
+# This the "official" refrence to the player object, the Node is a sibling
+# to make render order easier
+var player = null
+
+
+func create(player):
+	self.player = player
 	world_seed = randi()
 	active_level.create(null, true)
 	change_level(active_level)

@@ -11,7 +11,7 @@ onready var status_box = get_node(status_path)
 
 func _ready():
 	seed(game_seed)
-	change_level($World.create())
+	change_level($World.create($Player))
 
 
 const input_map = {

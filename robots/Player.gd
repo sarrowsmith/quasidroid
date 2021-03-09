@@ -44,28 +44,28 @@ const cursor_types = {
 	Level.Type.PLAYER: "Move",
 	Level.Type.ROGUE: "Target"
 }
-func cursor_at(cursor, location):
-	var location_type = level.location_type(location)
+func set_cursor():
+	var location_type = level.location_type(level.cursor.location)
 	match location_type:
 		Level.Type.LIFT:
-			var lift = level.lift_at(location)
+			var lift = level.lift_at(level.cursor.location)
 			if lift and lift.open:
 				location_type = Level.Type.PLAYER
 		Level.Type.FLOOR, Level.Type.ACCESS:
-			if self.location.distance_squared_to(location) <= stats["move"]:
+			if location.distance_squared_to(level.cursor.location) <= stats["move"]:
 				location_type = Level.Type.PLAYER
 		Level.Type.ROGUE:
-			if self.location.x == location.x or self.location.y == location.y:
-				if self.location.x == location.x:
-					for y in range(min(self.location.y, location.y), max(self.location.y, location.y)):
-						if y != self.location.y and y != location.y and level.location_type(Vector2(location.x, y)) != Level.Type.FLOOR:
+			if location.x == level.cursor.location.x or location.y == level.cursor.location.y:
+				if location.x == level.cursor.location.x:
+					for y in range(min(location.y, level.cursor.location.y), max(location.y, level.cursor.location.y)):
+						if y != location.y and y != level.cursor.location.y and level.location_type(Vector2(location.x, y)) != Level.Type.FLOOR:
 							location_type = Level.Type.ACCESS
 							break
-				if self.location.y == location.y:
-					for x in range(min(self.location.x, location.x), max(self.location.x, location.x)):
-						if x != self.location.x and x != location.x and level.location_type(Vector2(x, location.y)) != Level.Type.FLOOR:
+				if location.y == level.cursor.location.y:
+					for x in range(min(location.x, level.cursor.location.x), max(location.x, level.cursor.location.x)):
+						if x != location.x and x != level.cursor.location.x and level.location_type(Vector2(x, location.y)) != Level.Type.FLOOR:
 							location_type = Level.Type.ACCESS
 							break
 			else:
 				location_type = Level.Type.ACCESS
-	cursor.set_mode(cursor_types[location_type])
+	level.cursor.set_mode(cursor_types[location_type])

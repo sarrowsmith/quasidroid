@@ -9,6 +9,8 @@ export(int) var level = 0
 enum Prototype {LEVEL, LIFT, ACCESS, ROGUE}
 enum Type {FLOOR, WALL, LIFT, ACCESS, PLAYER, ROGUE}
 
+onready var cursor = $Cursor
+
 var map = null
 var world = null
 var parent = null
@@ -198,15 +200,14 @@ func position_to_location(position):
 
 
 func move_cursor(movement):
-	set_cursor(position_to_location($Cursor.position) + movement)
+	set_cursor(position_to_location(cursor.position) + movement)
 
 
 func set_cursor(location=null):
 	if location:
-		$Cursor.position = location_to_position(location)
-	else:
-		location = position_to_location($Cursor.position)
-	world.player.cursor_at($Cursor, location)
+		cursor.location = location
+		cursor.position = location_to_position(location)
+	world.player.set_cursor()
 
 
 func _on_Background_click(position, button):

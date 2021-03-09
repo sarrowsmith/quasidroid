@@ -130,6 +130,7 @@ func generate_rogues():
 			if probe.distance_squared_to(lifts[0].location) > 25:
 				var r = new_feature(probe, Prototype.ROGUE)
 				r.equipment.extras.append(null)
+				#r.level = self
 				r.set_sprite()
 				rogues.append(r)
 				break
@@ -178,6 +179,11 @@ func new_feature(location, type):
 
 func location_to_position(location):
 	return $Map.map_to_world(location)
+
+
+func position_to_location(position):
+	return $Map.world_to_map(position)
+
 
 func _on_Background_click(position, button):
 	print($Map.world_to_map(position))

@@ -7,6 +7,7 @@ var level = null
 var base = "2"
 var state = "Idle"
 var facing = Vector2.DOWN
+var destination = Vector2.ZERO
 var sprite = null
 var weapon = null
 var equipment = {
@@ -14,6 +15,20 @@ var equipment = {
 	extras = []
 }
 var stats = {}
+var moveable = false
+
+
+func _process(_delta):
+	if level == null:
+		return
+	if state == "Move":
+		if level.position_to_location(position) == destination:
+			location = destination
+			state = "Idle"
+			set_sprite()
+			moveable = true
+			return
+		position += facing
 
 
 const facing_map = {
@@ -43,10 +58,17 @@ func set_sprite(dead=false):
 
 
 func set_location(destination):
+	self.destination = destination
 	location = destination
 	position = level.location_to_position(location)
 
 
-func move(movement):
-	facing = movement
+func move(direction):
+	facing = direction
+	var target = location + direction
+	match level.location_type(target):
+		level.Type.FLOOR, level.Type.ACCESS:
+			state = "Move"
+			moveable = false
+			destination = target
 	set_sprite()

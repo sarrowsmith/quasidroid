@@ -3,6 +3,7 @@ extends Robot
 
 func _ready():
 	base = "0"
+	moveable = true
 	set_sprite()
 
 
@@ -18,6 +19,8 @@ const move_map = {
 	"move_right": Vector2.RIGHT
 }
 func _unhandled_input(event):
+	if not moveable:
+		return
 	for e in move_map:
 		if InputMap.event_is_action(event, e):
 			move(move_map[e])

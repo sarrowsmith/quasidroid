@@ -11,13 +11,18 @@ func _ready():
 	base = "0"
 	equipment["weapon"] = "Plasma"
 	turn()
-	equip(equipped)
 
 
 func _process(delta):
 	._process(delta)
 	if state == State.WAIT:
 		emit_signal("move", position)
+
+
+func turn():
+	.turn()
+	equipped = false
+	equip(equipped)
 
 
 func change_level(level):

@@ -13,12 +13,15 @@ var facing = Vector2.DOWN
 var destination = Vector2.ZERO
 var sprite = null
 var weapon = null
+var fire = Vector2.ZERO
 var equipment = {
 	weapon = null,
-	extras = []
+	extras = [],
 }
 var stats = {
-	move = 1
+	move = 1,
+	weapon = 12,
+	sight = 12,
 }
 var moves = 0
 var state = State.DEAD
@@ -29,6 +32,7 @@ func _process(_delta):
 		return
 	if mode == "Move":
 		level.world.set_value("Position", location)
+		position += facing
 		if position == level.location_to_position(destination):
 			location = destination
 			mode = "Idle"
@@ -37,8 +41,20 @@ func _process(_delta):
 				state = State.DONE
 			level.set_cursor()
 			return
-		position += facing
 	if firing == "Fire":
+		weapon.position += facing
+		var target = level.position_to_location(weapon.global_position)
+		if level.position_to_location(weapon.position) == fire:
+			return
+		fire = target
+		match level.location_type(fire):
+			Level.Type.FLOOR:
+				if position.distance_squared_to(weapon.position) > stats["weapon"] * stats["weapon"]:
+					return
+		firing = "Idle"
+		weapon.position = position
+		fire = location
+		equip(true)
 		if not moves:
 			state = State.DONE
 
@@ -101,8 +117,9 @@ func move(direction):
 
 func fire(direction):
 	facing = direction
-	var target = location + direction
 	firing = "Fire"
+	fire = location + direction
+	weapon.position = level.location_to_position(fire)
 	state = State.WAIT
 	moves -= 1
-	equip(false)
+	equip(true)

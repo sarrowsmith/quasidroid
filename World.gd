@@ -4,8 +4,10 @@ extends Node2D
 export(int) var world_seed
 export(Vector2) var world_size = Vector2(2880, 2880)
 export(NodePath) var status_path
+export(NodePath) var info_path
 
 onready var status_box = get_node(status_path)
+onready var info_box = get_node(info_path)
 onready var active_level = $Level
 
 

@@ -11,6 +11,7 @@ script = ExtResource( 2 )
 
 [node name="World" parent="." instance=ExtResource( 1 )]
 status_path = NodePath("../View/Panel/VSplitContainer/TabContainer/Status")
+info_path = NodePath("../View/Panel/VSplitContainer/TabContainer/Info")
 
 [node name="ColorRectBottom" type="ColorRect" parent="."]
 anchor_top = 1.0
@@ -78,7 +79,18 @@ margin_bottom = 706.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
+[node name="Menu" type="VBoxContainer" parent="View/Panel/VSplitContainer/TabContainer"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 4.0
+margin_top = 32.0
+margin_right = -4.0
+margin_bottom = -4.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
 [node name="Status" type="VBoxContainer" parent="View/Panel/VSplitContainer/TabContainer"]
+visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_left = 4.0
@@ -101,14 +113,7 @@ margin_right = 338.0
 margin_bottom = 50.0
 label = "Position:"
 
-[node name="DEBUG" parent="View/Panel/VSplitContainer/TabContainer/Status" instance=ExtResource( 5 )]
-margin_top = 54.0
-margin_right = 338.0
-margin_bottom = 77.0
-label = "DEBUG:"
-default = "0"
-
-[node name="Menu" type="VBoxContainer" parent="View/Panel/VSplitContainer/TabContainer"]
+[node name="Info" type="VBoxContainer" parent="View/Panel/VSplitContainer/TabContainer"]
 visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -118,6 +123,22 @@ margin_right = -4.0
 margin_bottom = -4.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
+
+[node name="RichTextLabel" type="RichTextLabel" parent="View/Panel/VSplitContainer/TabContainer/Info"]
+margin_right = 338.0
+margin_bottom = 670.0
+rect_clip_content = false
+focus_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_fonts/mono_font = ExtResource( 3 )
+custom_fonts/bold_italics_font = ExtResource( 3 )
+custom_fonts/italics_font = ExtResource( 3 )
+custom_fonts/bold_font = ExtResource( 3 )
+custom_fonts/normal_font = ExtResource( 3 )
+bbcode_enabled = true
+fit_content_height = true
+selection_enabled = true
 
 [node name="Controls" type="VBoxContainer" parent="View/Panel/VSplitContainer/TabContainer"]
 visible = false

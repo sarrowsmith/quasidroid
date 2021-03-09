@@ -2,10 +2,12 @@ class_name Robot
 extends Node2D
 
 
+enum State {DEAD, IDLE, WAIT, DONE}
+
 var location = Vector2.ZERO
 var level = null
 var base = "2"
-var state = "Idle"
+var mode = "Idle"
 var firing = "Idle"
 var facing = Vector2.DOWN
 var destination = Vector2.ZERO
@@ -18,23 +20,32 @@ var equipment = {
 var stats = {
 	move = 1
 }
-var moveable = false
-var dead = false
+var moves = 0
+var state = State.DEAD
 
 
 func _process(_delta):
 	if level == null:
 		return
-	if state == "Move":
+	if mode == "Move":
 		level.world.set_value("Position", location)
 		if position == level.location_to_position(destination):
 			location = destination
-			state = "Idle"
+			mode = "Idle"
 			set_sprite()
-			moveable = true
+			if not moves:
+				state = State.DONE
 			level.set_cursor()
 			return
 		position += facing
+	if firing == "Fire":
+		if not moves:
+			state = State.DONE
+
+
+func turn():
+	state = State.IDLE
+	moves = stats["move"]
 
 
 const facing_map = {
@@ -48,11 +59,12 @@ func set_sprite():
 		sprite.set_visible(false)
 	if weapon:
 		weapon.set_visible(false)
-	var path = "Dead" if dead else base
+	var dead = state == State.DEAD
+	var path = "Robot/Dead" if dead else base
 	if equipment.extras:
 		path += "-X"
 	if not dead:
-		path = "Robot/%s/%s/%s" % [path, state, facing_map[facing]]
+		path = "Robot/%s/%s/%s" % [path, mode, facing_map[facing]]
 	sprite = get_node(path)
 	sprite.set_visible(true)
 	if dead or equipment["weapon"] == null:
@@ -81,8 +93,9 @@ func move(direction):
 	match level.location_type(target):
 		Level.Type.FLOOR, Level.Type.ACCESS:
 			var debug = position
-			state = "Move"
-			moveable = false
+			mode = "Move"
+			state = State.WAIT
+			moves -= 1
 			destination = target
 	set_sprite()
 
@@ -90,4 +103,6 @@ func fire(direction):
 	facing = direction
 	var target = location + direction
 	firing = "Fire"
+	state = State.WAIT
+	moves -= 1
 	equip(false)

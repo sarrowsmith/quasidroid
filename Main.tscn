@@ -274,4 +274,4 @@ __meta__ = {
 
 [node name="Camera" type="Camera2D" parent="View"]
 current = true
-[connection signal="move" from="Player" to="." method="_on_Player_move"]
+[connection signal="move" from="Player" to="." method="view_to"]

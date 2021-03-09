@@ -9,15 +9,15 @@ var equipped = false
 
 func _ready():
 	base = "0"
-	moveable = true
 	equipment["weapon"] = "Plasma"
+	turn()
 	equip(equipped)
 
 
 func _process(delta):
-	if state == "Move":
-		emit_signal("move", position)
 	._process(delta)
+	if state == State.WAIT:
+		emit_signal("move", position)
 
 
 func change_level(level):
@@ -33,7 +33,7 @@ const move_map = {
 	"move_right": Vector2.RIGHT
 }
 func _unhandled_input(event):
-	if not moveable:
+	if state != State.IDLE:
 		return
 	for e in move_map:
 		if InputMap.event_is_action(event, e):

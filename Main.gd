@@ -6,6 +6,8 @@ export(int) var pan_speed = 8
 
 onready var world_size = $World.world_size
 
+var turn = 1
+
 
 func _ready():
 	seed(game_seed)
@@ -25,6 +27,18 @@ func _process(delta):
 		if Input.is_action_pressed(e):
 			position += pan_speed * view_map[e]
 	view_to(position)
+	if turn % 2:
+		if $Player.state == Robot.State.DONE:
+			turn += 1
+			for r in $World.active_level.rogues:
+				if r.state != Robot.State.DEAD:
+					r.turn()
+	else:
+		for r in $World.active_level.rogues:
+			if r.state == Robot.State.IDLE or r.state == Robot.State.WAIT:
+				return
+		$Player.turn()
+		turn += 1
 
 
 const cursor_map = {
@@ -73,7 +87,3 @@ func view_to(position):
 	$View.position = Vector2(
 		clamp(position.x, 0, world_size.x),
 		clamp(position.y, 0, world_size.y))
-
-
-func _on_Player_move(position):
-	view_to(position)

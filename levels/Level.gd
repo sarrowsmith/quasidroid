@@ -201,8 +201,11 @@ func move_cursor(movement):
 	set_cursor(position_to_location($Cursor.position) + movement)
 
 
-func set_cursor(location):
-	$Cursor.position = location_to_position(location)
+func set_cursor(location=null):
+	if location:
+		$Cursor.position = location_to_position(location)
+	else:
+		location = position_to_location($Cursor.position)
 	world.player.cursor_at($Cursor, location)
 
 

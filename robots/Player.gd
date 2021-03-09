@@ -46,22 +46,26 @@ const cursor_types = {
 }
 func cursor_at(cursor, location):
 	var location_type = level.location_type(location)
-	if self.location.distance_squared_to(location) <= stats["move"]:
-		var lift = level.lift_at(location)
-		if not lift or lift.open:
-			location_type = Level.Type.PLAYER
-	if location_type == Level.Type.ROGUE:
-		if self.location.x == location.x or self.location.y == location.y:
-			if self.location.x == location.x:
-				for y in range(self.location.y, location.y):
-					if y != self.location.y and y != location.y and level.location_type(Vector2(location.x, y)) != Level.Type.FLOOR:
-						location_type = Level.Type.ACCESS
-						break
-			if self.location.y == location.y:
-				for x in range(self.location.x, location.x):
-					if x != self.location.x and x != location.x and level.location_type(Vector2(x, location.y)) != Level.Type.FLOOR:
-						location_type = Level.Type.ACCESS
-						break
-		else:
-			location_type = Level.Type.ACCESS
+	match location_type:
+		Level.Type.LIFT:
+			var lift = level.lift_at(location)
+			if lift and lift.open:
+				location_type = Level.Type.PLAYER
+		Level.Type.FLOOR, Level.Type.ACCESS:
+			if self.location.distance_squared_to(location) <= stats["move"]:
+				location_type = Level.Type.PLAYER
+		Level.Type.ROGUE:
+			if self.location.x == location.x or self.location.y == location.y:
+				if self.location.x == location.x:
+					for y in range(min(self.location.y, location.y), max(self.location.y, location.y)):
+						if y != self.location.y and y != location.y and level.location_type(Vector2(location.x, y)) != Level.Type.FLOOR:
+							location_type = Level.Type.ACCESS
+							break
+				if self.location.y == location.y:
+					for x in range(min(self.location.x, location.x), max(self.location.x, location.x)):
+						if x != self.location.x and x != location.x and level.location_type(Vector2(x, location.y)) != Level.Type.FLOOR:
+							location_type = Level.Type.ACCESS
+							break
+			else:
+				location_type = Level.Type.ACCESS
 	cursor.set_mode(cursor_types[location_type])

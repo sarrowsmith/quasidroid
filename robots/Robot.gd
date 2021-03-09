@@ -25,11 +25,12 @@ func _process(_delta):
 		return
 	if state == "Move":
 		level.world.set_value("Position", location)
-		if level.position_to_location(position) == destination:
+		if position == level.location_to_position(destination):
 			location = destination
 			state = "Idle"
 			set_sprite()
 			moveable = true
+			level.set_cursor()
 			return
 		position += facing
 
@@ -70,7 +71,8 @@ func move(direction):
 	facing = direction
 	var target = location + direction
 	match level.location_type(target):
-		level.Type.FLOOR, level.Type.ACCESS:
+		Level.Type.FLOOR, Level.Type.ACCESS:
+			var debug = position
 			state = "Move"
 			moveable = false
 			destination = target

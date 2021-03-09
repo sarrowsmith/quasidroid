@@ -14,7 +14,9 @@ var equipment = {
 	weapon = null,
 	extras = []
 }
-var stats = {}
+var stats = {
+	move = 1
+}
 var moveable = false
 
 

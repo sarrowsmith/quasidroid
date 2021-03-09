@@ -12,7 +12,7 @@ func _ready():
 	change_level($World.create($Player))
 
 
-const input_map = {
+const view_map = {
 	"ui_up": Vector2(0, -1),
 	"ui_down": Vector2(0, 1),
 	"ui_left": Vector2(-1, 0),
@@ -21,15 +21,27 @@ const input_map = {
 # warning-ignore:unused_argument
 func _process(delta):
 	var position = $View.position
-	for e in input_map:
+	for e in view_map:
 		if Input.is_action_pressed(e):
-			position += pan_speed * input_map[e]
+			position += pan_speed * view_map[e]
 	view_to(position)
 
 
+const cursor_map = {
+	"cursor_up": Vector2(0, -1),
+	"cursor_down": Vector2(0, 1),
+	"cursor_left": Vector2(-1, 0),
+	"cursor_right": Vector2(1, 0)
+}
 func _unhandled_input(event):
+	var move = Vector2.ZERO
+	for e in cursor_map:
+		if InputMap.event_is_action(event, e):
+			move += cursor_map[e]
+	if move != Vector2.ZERO:
+		$World.active_level.move_cursor(move)
 	if InputMap.event_is_action(event, "map_reset"):
-		$View.position = $Player.position
+		view_to($Player.position)
 		return
 	if event is InputEventKey and event.pressed:
 		var level = null

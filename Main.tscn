@@ -130,6 +130,20 @@ margin_bottom = -4.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
+[node name="LabelledValue7" parent="View/Panel/VSplitContainer/TabContainer/Controls" instance=ExtResource( 5 )]
+margin_top = 0.0
+margin_right = 338.0
+margin_bottom = 23.0
+label = "Move"
+default = "H, J, K, L"
+
+[node name="LabelledValue6" parent="View/Panel/VSplitContainer/TabContainer/Controls" instance=ExtResource( 5 )]
+margin_top = 0.0
+margin_right = 338.0
+margin_bottom = 23.0
+label = "Move cursor"
+default = "W, A, S, D"
+
 [node name="LabelledValue" parent="View/Panel/VSplitContainer/TabContainer/Controls" instance=ExtResource( 5 )]
 margin_top = 0.0
 margin_right = 338.0

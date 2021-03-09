@@ -159,6 +159,15 @@ func location_type(location):
 	return Type.WALL if map.get_cellv(location) != TileMap.INVALID_CELL else Type.FLOOR
 
 
+func lift_at(location):
+	if not access.has(location) or access[location]:
+		return null
+	for l in lifts:
+		if l.location == location:
+			return l
+	return null
+
+
 func new_lift(location):
 	var lift = new_feature(location, Prototype.LIFT)
 	lift.location = location
@@ -188,21 +197,20 @@ func position_to_location(position):
 	return map.world_to_map(position)
 
 
+func move_cursor(movement):
+	set_cursor(position_to_location($Cursor.position) + movement)
+
+
+func set_cursor(location):
+	$Cursor.position = location_to_position(location)
+	world.player.cursor_at($Cursor, location)
+
+
 func _on_Background_click(position, button):
 	var location = position_to_location(position) + Vector2(1, 1)
 	world.set_value("DEBUG", location_type(location))
 	world.set_value("Position", location)
 
 
-const cursor_map = {
-	Type.FLOOR: "Default",
-	Type.WALL: null,
-	Type.LIFT: "Info",
-	Type.ACCESS: "Info",
-	Type.PLAYER: "Move",
-	Type.ROGUE: "Target"
-}
 func _on_Background_move(position):
-	var location = position_to_location(position) + Vector2(1, 1)
-	$Cursor.set_mode(cursor_map[location_type(location)])
-	$Cursor.position = location_to_position(location)
+	set_cursor(position_to_location(position) + Vector2(1, 1))

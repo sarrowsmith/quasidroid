@@ -1,10 +1,19 @@
 extends Robot
 
 
+signal move(position)
+
+
 func _ready():
 	base = "0"
 	moveable = true
 	set_sprite()
+
+
+func _process(delta):
+	if state == "Move":
+		emit_signal("move", position)
+	._process(delta)
 
 
 func change_level(level):

@@ -132,7 +132,8 @@ func generate_rogues():
 			if probe.distance_squared_to(lifts[0].location) > 25:
 				var r = new_feature(probe, Prototype.ROGUE)
 				r.equipment.extras.append(null)
-				#r.level = self
+				r.level = self
+				r.set_location(probe)
 				r.set_sprite()
 				rogues.append(r)
 				break
@@ -188,17 +189,20 @@ func position_to_location(position):
 
 
 func _on_Background_click(position, button):
-	var location = map.world_to_map(position) + Vector2(1, 1)
+	var location = position_to_location(position) + Vector2(1, 1)
 	world.set_value("DEBUG", location_type(location))
 	world.set_value("Position", location)
 
 
+const cursor_map = {
+	Type.FLOOR: "Default",
+	Type.WALL: null,
+	Type.LIFT: "Info",
+	Type.ACCESS: "Info",
+	Type.PLAYER: "Move",
+	Type.ROGUE: "Target"
+}
 func _on_Background_move(position):
-	var location = map.world_to_map(position) + Vector2(1, 1)
-	if access.has(location):
-		$Cursor.set_mode("Info")
-	elif map.get_cellv(location) == map.Tiles.ROOF:
-		$Cursor.set_mode(null)
-	else:
-		$Cursor.set_mode("Default")
+	var location = position_to_location(position) + Vector2(1, 1)
+	$Cursor.set_mode(cursor_map[location_type(location)])
 	$Cursor.position = location_to_position(location)

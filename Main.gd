@@ -19,14 +19,12 @@ const input_map = {
 	"ui_right": Vector2(1, 0)
 }
 # warning-ignore:unused_argument
-func _physics_process(delta):
+func _process(delta):
 	var position = $View.position
 	for e in input_map:
 		if Input.is_action_pressed(e):
 			position += pan_speed * input_map[e]
-	$View.position = Vector2(
-		clamp(position.x, 0, world_size.x),
-		clamp(position.y, 0, world_size.y))
+	view_to(position)
 
 
 func _unhandled_input(event):
@@ -51,9 +49,19 @@ func change_level(level):
 	if level != $World.active_level:
 		$World.change_level(level)
 	$Player.change_level(level)
-	$View.position = $Player.position
+	view_to($Player.position)
 	set_value("Level", level.map_name)
 
 
 func set_value(name, value):
 	$World.set_value(name, value)
+
+
+func view_to(position):
+	$View.position = Vector2(
+		clamp(position.x, 0, world_size.x),
+		clamp(position.y, 0, world_size.y))
+
+
+func _on_Player_move(position):
+	view_to(position)

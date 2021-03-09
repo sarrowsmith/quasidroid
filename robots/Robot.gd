@@ -22,6 +22,7 @@ func _process(_delta):
 	if level == null:
 		return
 	if state == "Move":
+		level.world.set_value("Position", location)
 		if level.position_to_location(position) == destination:
 			location = destination
 			state = "Idle"

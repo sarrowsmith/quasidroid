@@ -6,7 +6,7 @@ export(int) var level_seed = 0
 export(bool) var rooms = false
 export(int) var level = 0
 
-enum Prototype {CAVES, ROOMS, LIFT, ACCESS, ROGUE}
+enum Prototype {LEVEL, LIFT, ACCESS, ROGUE}
 enum Type {FLOOR, WALL, LIFT, ACCESS, PLAYER, ROGUE}
 
 var map = null
@@ -83,8 +83,8 @@ func place_features():
 	while len(lifts) < n_lifts:
 		while true:
 			var probe = Vector2(
-				Util.randi_range(1, $Map.map_w - 1),
-				Util.randi_range(1, $Map.map_h - 1))
+				Util.randi_range(1, map.map_w - 1),
+				Util.randi_range(1, map.map_h - 1))
 			for l in lifts:
 				if probe.distance_squared_to(l.location) < 400:
 					probe = null
@@ -97,8 +97,8 @@ func place_features():
 	for _i in n_access:
 		while true:
 			var probe = Vector2(
-				Util.randi_range(1, $Map.map_w - 1),
-				Util.randi_range(1, $Map.map_h - 1))
+				Util.randi_range(1, map.map_w - 1),
+				Util.randi_range(1, map.map_h - 1))
 			if location_type(probe) != Type.FLOOR:
 				continue
 			for a in access:
@@ -125,8 +125,8 @@ func generate_rogues():
 	while len(rogues) < n_rogues:
 		while true:
 			var probe = Vector2(
-				Util.randi_range(1, $Map.map_w - 1),
-				Util.randi_range(1, $Map.map_h - 1))
+				Util.randi_range(1, map.map_w - 1),
+				Util.randi_range(1, map.map_h - 1))
 			if location_type(probe) != Type.FLOOR:
 				continue
 			if probe.distance_squared_to(lifts[0].location) > 25:
@@ -155,7 +155,7 @@ func location_type(location):
 	for r in rogues:
 		if location == r.location:
 			return Type.ROGUE
-	return Type.WALL if $Map.get_cellv(location) != TileMap.INVALID_CELL else Type.FLOOR
+	return Type.WALL if map.get_cellv(location) != TileMap.INVALID_CELL else Type.FLOOR
 
 
 func new_lift(location):
@@ -183,13 +183,19 @@ func location_to_position(location):
 	return map.map_to_world(location)
 
 
+func position_to_location(position):
+	return map.world_to_map(position)
+
+
 func _on_Background_click(position, button):
-	pass
+	var location = map.world_to_map(position) + Vector2(1, 1)
+	world.set_value("DEBUG", location_type(location))
+	world.set_value("Position", location)
 
 
 func _on_Background_move(position):
 	var location = map.world_to_map(position) + Vector2(1, 1)
-	if access.has(location) or robots.has(location):
+	if access.has(location):
 		$Cursor.set_mode("Info")
 	elif map.get_cellv(location) == map.Tiles.ROOF:
 		$Cursor.set_mode(null)

@@ -3,10 +3,8 @@ extends Node2D
 
 export(int) var game_seed
 export(int) var pan_speed = 8
-export(NodePath) var status_path
 
 onready var world_size = $World.world_size
-onready var status_box = get_node(status_path)
 
 
 func _ready():
@@ -58,4 +56,4 @@ func change_level(level):
 
 
 func set_value(name, value):
-	status_box.get_node(name).set_value(value)
+	$World.set_value(name, value)

@@ -3,6 +3,9 @@ extends Node2D
 
 export(int) var world_seed
 export(Vector2) var world_size = Vector2(2880, 2880)
+export(NodePath) var status_path
+
+onready var status_box = get_node(status_path)
 onready var active_level = $Level
 
 
@@ -23,3 +26,7 @@ func change_level(level):
 	active_level.set_visible(false)
 	level.generate()
 	active_level = level
+
+
+func set_value(name, value):
+	status_box.get_node(name).set_value(value)

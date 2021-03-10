@@ -69,7 +69,7 @@ func _unhandled_input(event):
 
 const cursor_types = {
 	Level.FLOOR: "Default",
-	Level.WALL: null,
+	Level.WALL: "Wall",
 	Level.LIFT: "Info",
 	Level.ACCESS: "Info",
 	Level.PLAYER: "Move",

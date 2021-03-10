@@ -143,4 +143,4 @@ func show_stats(visible=false):
 	level.world.set_value("Position", location, is_player)
 	if visible:
 		level.world.show_stats(is_player)
-	
+

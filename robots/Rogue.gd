@@ -2,10 +2,10 @@ extends Robot
 
 
 func _ready():
-	state = State.DONE
+	state = DONE
 	equip(true)
 
 
 func turn():
 	.turn()
-	state = State.DONE
+	state = DONE

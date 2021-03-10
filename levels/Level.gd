@@ -7,7 +7,7 @@ export(bool) var rooms = false
 export(int) var level = 0
 
 enum Prototype {LEVEL, LIFT, ACCESS, ROGUE}
-enum Type {FLOOR, WALL, LIFT, ACCESS, PLAYER, ROGUE}
+enum {FLOOR, WALL, LIFT, ACCESS, PLAYER, ROGUE}
 
 onready var cursor = $Cursor
 
@@ -91,7 +91,7 @@ func place_features():
 				if probe.distance_squared_to(l.location) < 400:
 					probe = null
 					break
-			if probe and check_nearby(probe.x, probe.y, 2)[Type.FLOOR] == 25:
+			if probe and check_nearby(probe.x, probe.y, 2)[FLOOR] == 25:
 				lifts.append(new_lift(probe))
 				access[probe] = null
 				break
@@ -101,7 +101,7 @@ func place_features():
 			var probe = Vector2(
 				Util.randi_range(1, map.map_w - 1),
 				Util.randi_range(1, map.map_h - 1))
-			if location_type(probe) != Type.FLOOR:
+			if location_type(probe) != FLOOR:
 				continue
 			for a in access:
 				if probe.distance_squared_to(a) < 144:
@@ -116,8 +116,8 @@ func place_features():
 			if not probe:
 				continue
 			var counts = check_nearby(probe.x, probe.y, 1)
-			var walls = counts[Type.WALL]
-			if 0 < walls and walls < 5 and walls + counts[Type.FLOOR] == 9:
+			var walls = counts[WALL]
+			if 0 < walls and walls < 5 and walls + counts[FLOOR] == 9:
 				access[probe] = new_feature(probe, Prototype.ACCESS)
 				break
 
@@ -129,7 +129,7 @@ func generate_rogues():
 			var probe = Vector2(
 				Util.randi_range(1, map.map_w - 1),
 				Util.randi_range(1, map.map_h - 1))
-			if location_type(probe) != Type.FLOOR:
+			if location_type(probe) != FLOOR:
 				continue
 			if probe.distance_squared_to(lifts[0].location) > 25:
 				var r = new_feature(probe, Prototype.ROGUE)
@@ -152,13 +152,13 @@ func check_nearby(x, y, r):
 
 func location_type(location):
 	if access.has(location):
-		return Type.ACCESS if access[location] else Type.LIFT
+		return ACCESS if access[location] else LIFT
 	if location == world.player.location:
-		return Type.PLAYER
+		return PLAYER
 	for r in rogues:
 		if location == r.location:
-			return Type.ROGUE
-	return Type.WALL if map.get_cellv(location) != TileMap.INVALID_CELL else Type.FLOOR
+			return ROGUE
+	return WALL if map.get_cellv(location) != TileMap.INVALID_CELL else FLOOR
 
 
 func lift_at(location):

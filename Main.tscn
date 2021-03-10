@@ -10,9 +10,10 @@
 script = ExtResource( 2 )
 
 [node name="World" parent="." instance=ExtResource( 1 )]
-player_status_path = NodePath("../View/Panel/VSplitContainer/TabContainer/Status")
-rogue_status_path = NodePath("../View/Panel/VSplitContainer/TabContainer2/Scan")
-info_path = NodePath("../View/Panel/VSplitContainer/TabContainer2/Info/RichTextLabel")
+tab_container_path = NodePath("../View/Panel/Split")
+player_status_path = NodePath("../View/Panel/Split/UpperPanel/Status")
+rogue_status_path = NodePath("../View/Panel/Split/LowerPanel/Scan")
+info_path = NodePath("../View/Panel/Split/LowerPanel/Info/RichTextLabel")
 
 [node name="ColorRectBottom" type="ColorRect" parent="."]
 anchor_top = 1.0
@@ -63,7 +64,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="VSplitContainer" type="VSplitContainer" parent="View/Panel"]
+[node name="Split" type="VSplitContainer" parent="View/Panel"]
 margin_left = 7.0
 margin_top = 7.0
 margin_right = 353.0
@@ -74,13 +75,14 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="TabContainer" type="TabContainer" parent="View/Panel/VSplitContainer"]
+[node name="UpperPanel" type="TabContainer" parent="View/Panel/Split"]
 margin_right = 346.0
 margin_bottom = 347.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
+tab_align = 0
 
-[node name="Menu" type="VBoxContainer" parent="View/Panel/VSplitContainer/TabContainer"]
+[node name="Menu" type="VBoxContainer" parent="View/Panel/Split/UpperPanel"]
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_left = 4.0
@@ -90,7 +92,7 @@ margin_bottom = -4.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="Status" type="VBoxContainer" parent="View/Panel/VSplitContainer/TabContainer"]
+[node name="Status" type="VBoxContainer" parent="View/Panel/Split/UpperPanel"]
 visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -101,22 +103,34 @@ margin_bottom = -4.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="Turn" parent="View/Panel/VSplitContainer/TabContainer/Status" instance=ExtResource( 5 )]
+[node name="Turn" parent="View/Panel/Split/UpperPanel/Status" instance=ExtResource( 5 )]
 margin_top = 27.0
 margin_right = 338.0
 margin_bottom = 50.0
 label = "Turn:"
 
-[node name="Position" parent="View/Panel/VSplitContainer/TabContainer/Status" instance=ExtResource( 5 )]
+[node name="Moves" parent="View/Panel/Split/UpperPanel/Status" instance=ExtResource( 5 )]
+margin_top = 27.0
+margin_right = 338.0
+margin_bottom = 50.0
+label = "Moves left:"
+
+[node name="Position" parent="View/Panel/Split/UpperPanel/Status" instance=ExtResource( 5 )]
 margin_top = 27.0
 margin_right = 338.0
 margin_bottom = 50.0
 label = "Position:"
 
-[node name="speed" parent="View/Panel/VSplitContainer/TabContainer/Status" instance=ExtResource( 5 )]
+[node name="speed" parent="View/Panel/Split/UpperPanel/Status" instance=ExtResource( 5 )]
 label = "Speed:"
 
-[node name="Controls" type="VBoxContainer" parent="View/Panel/VSplitContainer/TabContainer"]
+[node name="weapon" parent="View/Panel/Split/UpperPanel/Status" instance=ExtResource( 5 )]
+label = "Weapon:"
+
+[node name="Combat" parent="View/Panel/Split/UpperPanel/Status" instance=ExtResource( 5 )]
+label = "Combat:"
+
+[node name="Controls" type="VBoxContainer" parent="View/Panel/Split/UpperPanel"]
 visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -127,62 +141,62 @@ margin_bottom = -4.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="LabelledValue7" parent="View/Panel/VSplitContainer/TabContainer/Controls" instance=ExtResource( 5 )]
+[node name="LabelledValue7" parent="View/Panel/Split/UpperPanel/Controls" instance=ExtResource( 5 )]
 margin_top = 0.0
 margin_right = 338.0
 margin_bottom = 23.0
 label = "Move/Fire"
 default = "H, J, K, L"
 
-[node name="LabelledValue8" parent="View/Panel/VSplitContainer/TabContainer/Controls" instance=ExtResource( 5 )]
+[node name="LabelledValue8" parent="View/Panel/Split/UpperPanel/Controls" instance=ExtResource( 5 )]
 margin_top = 0.0
 margin_right = 338.0
 margin_bottom = 23.0
 label = "Toggle weapon"
 default = "Z"
 
-[node name="LabelledValue6" parent="View/Panel/VSplitContainer/TabContainer/Controls" instance=ExtResource( 5 )]
+[node name="LabelledValue6" parent="View/Panel/Split/UpperPanel/Controls" instance=ExtResource( 5 )]
 margin_top = 0.0
 margin_right = 338.0
 margin_bottom = 23.0
 label = "Move cursor"
 default = "W, A, S, D"
 
-[node name="LabelledValue" parent="View/Panel/VSplitContainer/TabContainer/Controls" instance=ExtResource( 5 )]
+[node name="LabelledValue" parent="View/Panel/Split/UpperPanel/Controls" instance=ExtResource( 5 )]
 margin_top = 0.0
 margin_right = 338.0
 margin_bottom = 23.0
 label = "Move view"
 default = "arrow keys"
 
-[node name="LabelledValue2" parent="View/Panel/VSplitContainer/TabContainer/Controls" instance=ExtResource( 5 )]
+[node name="LabelledValue2" parent="View/Panel/Split/UpperPanel/Controls" instance=ExtResource( 5 )]
 margin_top = 27.0
 margin_right = 338.0
 margin_bottom = 50.0
 label = "Reset view"
 default = "backspace"
 
-[node name="LabelledValue3" parent="View/Panel/VSplitContainer/TabContainer/Controls" instance=ExtResource( 5 )]
+[node name="LabelledValue3" parent="View/Panel/Split/UpperPanel/Controls" instance=ExtResource( 5 )]
 margin_top = 54.0
 margin_right = 338.0
 margin_bottom = 77.0
 label = "DEBUG:"
 
-[node name="LabelledValue4" parent="View/Panel/VSplitContainer/TabContainer/Controls" instance=ExtResource( 5 )]
+[node name="LabelledValue4" parent="View/Panel/Split/UpperPanel/Controls" instance=ExtResource( 5 )]
 margin_top = 81.0
 margin_right = 338.0
 margin_bottom = 104.0
 label = "Level up"
 default = "U"
 
-[node name="LabelledValue5" parent="View/Panel/VSplitContainer/TabContainer/Controls" instance=ExtResource( 5 )]
+[node name="LabelledValue5" parent="View/Panel/Split/UpperPanel/Controls" instance=ExtResource( 5 )]
 margin_top = 108.0
 margin_right = 338.0
 margin_bottom = 131.0
 label = "Level down"
 default = "O, P"
 
-[node name="About" type="VBoxContainer" parent="View/Panel/VSplitContainer/TabContainer"]
+[node name="About" type="VBoxContainer" parent="View/Panel/Split/UpperPanel"]
 visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -193,7 +207,7 @@ margin_bottom = -4.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="RichTextLabel" type="RichTextLabel" parent="View/Panel/VSplitContainer/TabContainer/About"]
+[node name="RichTextLabel" type="RichTextLabel" parent="View/Panel/Split/UpperPanel/About"]
 margin_right = 338.0
 margin_bottom = 670.0
 rect_clip_content = false
@@ -217,14 +231,15 @@ reboot safely."
 fit_content_height = true
 selection_enabled = true
 
-[node name="TabContainer2" type="TabContainer" parent="View/Panel/VSplitContainer"]
+[node name="LowerPanel" type="TabContainer" parent="View/Panel/Split"]
 margin_top = 359.0
 margin_right = 346.0
 margin_bottom = 706.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
+tab_align = 0
 
-[node name="Scan" type="VBoxContainer" parent="View/Panel/VSplitContainer/TabContainer2"]
+[node name="Info" type="VBoxContainer" parent="View/Panel/Split/LowerPanel"]
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_left = 4.0
@@ -234,26 +249,9 @@ margin_bottom = -4.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="Position" parent="View/Panel/VSplitContainer/TabContainer2/Scan" instance=ExtResource( 5 )]
-margin_top = 0.0
+[node name="RichTextLabel" type="RichTextLabel" parent="View/Panel/Split/LowerPanel/Info"]
 margin_right = 338.0
-margin_bottom = 23.0
-label = "Position:"
-
-[node name="Info" type="VBoxContainer" parent="View/Panel/VSplitContainer/TabContainer2"]
-visible = false
-anchor_right = 1.0
-anchor_bottom = 1.0
-margin_left = 4.0
-margin_top = 32.0
-margin_right = -4.0
-margin_bottom = -4.0
-size_flags_horizontal = 3
-size_flags_vertical = 3
-
-[node name="RichTextLabel" type="RichTextLabel" parent="View/Panel/VSplitContainer/TabContainer2/Info"]
-margin_right = 338.0
-margin_bottom = 670.0
+margin_bottom = 311.0
 rect_clip_content = false
 focus_mode = 2
 size_flags_horizontal = 3
@@ -267,7 +265,7 @@ bbcode_enabled = true
 fit_content_height = true
 selection_enabled = true
 
-[node name="Levels" type="VBoxContainer" parent="View/Panel/VSplitContainer/TabContainer2"]
+[node name="Scan" type="VBoxContainer" parent="View/Panel/Split/LowerPanel"]
 visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -278,7 +276,24 @@ margin_bottom = -4.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="Map" type="VBoxContainer" parent="View/Panel/VSplitContainer/TabContainer2"]
+[node name="Position" parent="View/Panel/Split/LowerPanel/Scan" instance=ExtResource( 5 )]
+margin_top = 0.0
+margin_right = 338.0
+margin_bottom = 23.0
+label = "Position:"
+
+[node name="Levels" type="VBoxContainer" parent="View/Panel/Split/LowerPanel"]
+visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 4.0
+margin_top = 32.0
+margin_right = -4.0
+margin_bottom = -4.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Map" type="VBoxContainer" parent="View/Panel/Split/LowerPanel"]
 visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0

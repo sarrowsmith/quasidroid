@@ -2,7 +2,7 @@ class_name Robot
 extends Node2D
 
 
-enum State {DEAD, IDLE, WAIT, DONE}
+enum {DEAD, IDLE, WAIT, DONE}
 
 var location = Vector2.ZERO
 var level = null
@@ -24,7 +24,7 @@ var stats = {
 	sight = 12,
 }
 var moves = 0
-var state = State.DEAD
+var state = DEAD
 
 
 func _process(_delta):
@@ -37,7 +37,7 @@ func _process(_delta):
 			mode = "Idle"
 			set_sprite()
 			if not moves:
-				state = State.DONE
+				state = DONE
 			level.set_cursor()
 			return
 	if firing == "Fire":
@@ -47,7 +47,7 @@ func _process(_delta):
 			return
 		fire = target
 		match level.location_type(fire):
-			Level.Type.FLOOR:
+			Level.FLOOR:
 				if position.distance_squared_to(weapon.position) > stats["weapon"] * stats["weapon"]:
 					return
 		firing = "Idle"
@@ -55,11 +55,11 @@ func _process(_delta):
 		fire = location
 		equip(true)
 		if not moves:
-			state = State.DONE
+			state = DONE
 
 
 func turn():
-	state = State.IDLE
+	state = IDLE
 	moves = stats["speed"]
 
 
@@ -74,7 +74,7 @@ func set_sprite():
 		sprite.set_visible(false)
 	if weapon:
 		weapon.set_visible(false)
-	var dead = state == State.DEAD
+	var dead = state == DEAD
 	var path = "Robot/Dead" if dead else base
 	if equipment.extras:
 		path += "-X"
@@ -106,10 +106,10 @@ func move(direction):
 	facing = direction
 	var target = location + direction
 	match level.location_type(target):
-		Level.Type.FLOOR, Level.Type.ACCESS:
+		Level.FLOOR, Level.ACCESS:
 			var debug = position
 			mode = "Move"
-			state = State.WAIT
+			state = WAIT
 			moves -= 1
 			destination = target
 	set_sprite()
@@ -119,20 +119,27 @@ func fire(direction):
 	firing = "Fire"
 	fire = location + direction
 	weapon.position = level.location_to_position(fire)
-	state = State.WAIT
+	state = WAIT
 	moves -= 1
 	equip(true)
 
 
 func item_to_string(item):
-	return equipment[item]
+	if equipment[item]:
+		return equipment[item]
+	return "none"
 
 
-func show_stats():
+func show_stats(visible=false):
+	if not level:
+		return
 	var is_player = self == level.world.player
 	for stat in stats:
 		level.world.set_value(stat, stats[stat], is_player)
 	for item in equipment:
 		level.world.set_value(item, item_to_string(item), is_player)
+	level.world.set_value("Moves", moves, is_player)
 	level.world.set_value("Position", location, is_player)
+	if visible:
+		level.world.show_stats(is_player)
 	

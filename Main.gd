@@ -29,14 +29,14 @@ func _process(delta):
 			position += pan_speed * view_map[e]
 	view_to(position)
 	if turn % 2:
-		if $Player.state == Robot.State.DONE:
+		if $Player.state == Robot.DONE:
 			turn += 1
 			for r in $World.active_level.rogues:
-				if r.state != Robot.State.DEAD:
+				if r.state != Robot.DEAD:
 					r.turn()
 	else:
 		for r in $World.active_level.rogues:
-			if r.state == Robot.State.IDLE or r.state == Robot.State.WAIT:
+			if r.state == Robot.IDLE or r.state == Robot.WAIT:
 				return
 		$Player.turn()
 		turn += 1

@@ -7,7 +7,6 @@ signal move(position)
 func _ready():
 	base = "0"
 	equipment["weapon"] = "Plasma"
-	turn(true)
 
 
 func _process(delta):
@@ -16,21 +15,19 @@ func _process(delta):
 		emit_signal("move", position)
 
 
-func turn(init=false):
+func turn():
 	.turn()
 	if combat == WEAPON:
 		combat = GRAPPLE
-	equip(init)
-	if not init:
-		check_location()
+	equip()
+	check_location()
 	show_stats(false)
 
 
-func equip(init=false):
+func equip(_auto=true):
 	.equip(combat == WEAPON and not $Weapons.melee)
-	if not init:
-		show_combat_mode()
-		set_cursor()
+	show_combat_mode()
+	set_cursor()
 
 
 const move_map = {
@@ -106,7 +103,7 @@ func cursor_activate(button):
 		match level.cursor.mode:
 			"Info":
 				show_info()
-			"Move", "Target": 
+			"Move", "Target":
 				if state == IDLE:
 					action(null)
 

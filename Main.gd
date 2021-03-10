@@ -3,16 +3,26 @@ extends Node2D
 
 export(int) var game_seed
 export(int) var pan_speed = 8
+export(NodePath) var popup_path
 
+onready var popup = get_node(popup_path)
 onready var world_size = $World.world_size
 
 var turn = 1
 
 
 func _ready():
+	popup.popup_exclusive = true
+	popup.popup_centered(Vector2(280, 320))
+
+
+func new():
+	popup.popup_exclusive = false
+	popup.set_visible(false)
 	seed(game_seed)
 	change_level($World.create($Player))
 	$World.set_value("Turn", 1, true)
+	$Player.turn()
 
 
 const view_map = {
@@ -88,3 +98,20 @@ func view_to(position):
 	$View.position = Vector2(
 		clamp(position.x, 0, world_size.x),
 		clamp(position.y, 0, world_size.y))
+
+
+func load_game(game_seed):
+	self.game_seed = game_seed
+	new()
+
+
+func _on_Resume_pressed():
+	load_game(game_seed)
+
+
+func _on_New_pressed():
+	new()
+
+
+func _on_Random_pressed():
+	pass # Replace with function body.

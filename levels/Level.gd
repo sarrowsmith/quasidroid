@@ -132,10 +132,7 @@ func generate_rogues():
 				continue
 			if probe.distance_squared_to(lifts[0].location) > 25:
 				var r = new_feature(probe, Prototype.ROGUE)
-				r.equipment.extras.append(null)
-				r.level = self
-				r.set_location(probe)
-				r.set_sprite()
+				r.generate(self, probe)
 				rogues.append(r)
 				break
 

@@ -52,11 +52,11 @@ const cursor_map = {
 func _unhandled_input(event):
 	var move = Vector2.ZERO
 	for e in cursor_map:
-		if InputMap.event_is_action(event, e):
+		if event.is_action_pressed(e, true):
 			move += cursor_map[e]
 	if move != Vector2.ZERO:
 		$World.active_level.move_cursor(move)
-	if InputMap.event_is_action(event, "map_reset"):
+	if event.is_action_pressed("map_reset"):
 		view_to($Player.position)
 		return
 	if event is InputEventKey and event.pressed:

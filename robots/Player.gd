@@ -23,7 +23,8 @@ func _process(delta):
 
 func turn(init=false):
 	.turn()
-	combat = MELEE
+	if combat == WEAPON:
+		combat = GRAPPLE
 	equip(init)
 	show_stats(false)
 
@@ -39,6 +40,7 @@ func change_level(level):
 	self.level = level
 	set_location(level.lifts[0].location + Vector2.DOWN)
 	level.set_cursor(level.lifts[0].location)
+	show_combat_mode()
 	show_stats(true)
 	level.world.show_stats(true)
 
@@ -53,7 +55,7 @@ func _unhandled_input(event):
 	if state != IDLE:
 		return
 	for e in move_map:
-		if InputMap.event_is_action(event, e):
+		if event.is_action_pressed(e):
 			if combat == WEAPON:
 				fire(move_map[e])
 				break
@@ -102,6 +104,21 @@ func set_cursor():
 			else:
 				location_type = Level.ACCESS
 	level.cursor.set_mode(cursor_types[location_type])
+
+
+func cursor_active(button):
+	var location_type = level.location_type(level.cursor.location)
+	match level.cursor.mode:
+		"Info":
+			pass
+		"Move":
+			pass
+		"Target":
+			pass
+
+
+func show_info():
+	pass
 
 
 func show_combat_mode():

@@ -9,7 +9,6 @@
 
 [node name="Main" type="Node2D"]
 script = ExtResource( 2 )
-popup_path = NodePath("StartDialog")
 
 [node name="World" parent="." instance=ExtResource( 1 )]
 player_status_path = NodePath("../View/Panel/Split/UpperPanel/Status")
@@ -96,27 +95,61 @@ margin_bottom = -4.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="LabelledValue" parent="View/Panel/Split/UpperPanel/Menu" instance=ExtResource( 5 )]
+[node name="Seed" parent="View/Panel/Split/UpperPanel/Menu" instance=ExtResource( 5 )]
 margin_top = 0.0
 margin_right = 338.0
 margin_bottom = 23.0
+label = "Game Seed"
 
-[node name="CenterContainer" parent="View/Panel/Split/UpperPanel/Menu" instance=ExtResource( 6 )]
+[node name="CenterContainer" type="CenterContainer" parent="View/Panel/Split/UpperPanel/Menu"]
 margin_top = 27.0
 margin_right = 338.0
-margin_bottom = 167.0
+margin_bottom = 80.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
 
-[node name="CenterContainer2" parent="View/Panel/Split/UpperPanel/Menu" instance=ExtResource( 6 )]
-visible = false
-anchor_right = 1.0
-anchor_bottom = 1.0
-margin_right = -8.0
-margin_bottom = -36.0
+[node name="Save" parent="View/Panel/Split/UpperPanel/Menu" instance=ExtResource( 6 )]
+margin_top = 84.0
+margin_right = 338.0
+margin_bottom = 138.0
 
-[node name="CenterContainer3" parent="View/Panel/Split/UpperPanel/Menu" instance=ExtResource( 6 )]
-margin_top = 171.0
+[node name="Button" parent="View/Panel/Split/UpperPanel/Menu/Save" index="0"]
+margin_left = 148.0
+margin_top = 17.0
+margin_right = 189.0
+margin_bottom = 37.0
+text = "Save"
+
+[node name="Restart" parent="View/Panel/Split/UpperPanel/Menu" instance=ExtResource( 6 )]
+margin_top = 142.0
+margin_right = 338.0
+margin_bottom = 195.0
+
+[node name="Button" parent="View/Panel/Split/UpperPanel/Menu/Restart" index="0"]
+margin_left = 140.0
+margin_top = 16.0
+margin_right = 197.0
+margin_bottom = 36.0
+text = "Restart"
+
+[node name="Quit" parent="View/Panel/Split/UpperPanel/Menu" instance=ExtResource( 6 )]
+margin_top = 199.0
+margin_right = 338.0
+margin_bottom = 253.0
+
+[node name="Button" parent="View/Panel/Split/UpperPanel/Menu/Quit" index="0"]
+margin_left = 149.0
+margin_top = 17.0
+margin_right = 189.0
+margin_bottom = 37.0
+text = "Quit"
+
+[node name="CenterContainer2" type="CenterContainer" parent="View/Panel/Split/UpperPanel/Menu"]
+margin_top = 257.0
 margin_right = 338.0
 margin_bottom = 311.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
 
 [node name="Status" type="VBoxContainer" parent="View/Panel/Split/UpperPanel"]
 visible = false
@@ -416,14 +449,16 @@ __meta__ = {
 [node name="Camera" type="Camera2D" parent="View"]
 current = true
 
-[node name="StartDialog" type="PopupDialog" parent="."]
+[node name="Start" type="PopupDialog" parent="."]
+visible = true
 margin_right = 280.0
 margin_bottom = 320.0
+popup_exclusive = true
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="VBoxContainer" type="VBoxContainer" parent="StartDialog"]
+[node name="VBoxContainer" type="VBoxContainer" parent="Start"]
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_left = 24.0
@@ -437,29 +472,39 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="CenterContainer" parent="StartDialog/VBoxContainer" instance=ExtResource( 6 )]
+[node name="CenterContainer" parent="Start/VBoxContainer" instance=ExtResource( 6 )]
 
-[node name="Button" parent="StartDialog/VBoxContainer/CenterContainer" index="0"]
+[node name="Button" parent="Start/VBoxContainer/CenterContainer" index="0"]
+margin_left = 84.0
+margin_right = 148.0
 text = "Resume"
 
-[node name="CenterContainer2" parent="StartDialog/VBoxContainer" instance=ExtResource( 6 )]
+[node name="CenterContainer2" parent="Start/VBoxContainer" instance=ExtResource( 6 )]
+margin_top = 69.0
+margin_bottom = 134.0
 
-[node name="Button" parent="StartDialog/VBoxContainer/CenterContainer2" index="0"]
+[node name="Button" parent="Start/VBoxContainer/CenterContainer2" index="0"]
+margin_left = 61.0
+margin_right = 170.0
 text = "New from Seed"
 
-[node name="CenterContainer3" parent="StartDialog/VBoxContainer" instance=ExtResource( 6 )]
+[node name="CenterContainer3" parent="Start/VBoxContainer" instance=ExtResource( 6 )]
+margin_top = 138.0
+margin_bottom = 203.0
 
-[node name="Button" parent="StartDialog/VBoxContainer/CenterContainer3" index="0"]
+[node name="Button" parent="Start/VBoxContainer/CenterContainer3" index="0"]
+margin_left = 66.0
+margin_right = 165.0
 text = "Random Seed"
 
-[node name="MarginContainer" type="MarginContainer" parent="StartDialog/VBoxContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="Start/VBoxContainer"]
 margin_top = 207.0
 margin_right = 232.0
 margin_bottom = 272.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="HBoxContainer" type="HBoxContainer" parent="StartDialog/VBoxContainer/MarginContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="Start/VBoxContainer/MarginContainer"]
 margin_top = 20.0
 margin_right = 232.0
 margin_bottom = 44.0
@@ -468,20 +513,48 @@ grow_vertical = 2
 size_flags_horizontal = 3
 size_flags_vertical = 4
 
-[node name="Label" type="Label" parent="StartDialog/VBoxContainer/MarginContainer/HBoxContainer"]
+[node name="Label" type="Label" parent="Start/VBoxContainer/MarginContainer/HBoxContainer"]
+margin_top = 5.0
+margin_right = 35.0
+margin_bottom = 19.0
 text = "Seed:"
 
-[node name="Seed" type="LineEdit" parent="StartDialog/VBoxContainer/MarginContainer/HBoxContainer"]
+[node name="Seed" type="LineEdit" parent="Start/VBoxContainer/MarginContainer/HBoxContainer"]
+margin_left = 39.0
+margin_right = 232.0
+margin_bottom = 24.0
 size_flags_horizontal = 3
 size_flags_vertical = 4
 placeholder_text = "seed"
+
+[node name="Quit" type="ConfirmationDialog" parent="."]
+visible = true
+margin_right = 200.0
+margin_bottom = 70.0
+popup_exclusive = true
+window_title = "Quit?"
+dialog_text = "Are you sure you want to quit? (Game will not be saved at this point.)"
+__meta__ = {
+"_edit_use_anchors_": false
+}
 [connection signal="move" from="Player" to="." method="view_to"]
-[connection signal="pressed" from="StartDialog/VBoxContainer/CenterContainer/Button" to="." method="_on_Resume_pressed"]
-[connection signal="pressed" from="StartDialog/VBoxContainer/CenterContainer2/Button" to="." method="_on_New_pressed"]
-[connection signal="pressed" from="StartDialog/VBoxContainer/CenterContainer3/Button" to="." method="_on_Random_pressed"]
+[connection signal="pressed" from="View/Panel/Split/UpperPanel/Menu/Save/Button" to="." method="_on_Save_pressed"]
+[connection signal="pressed" from="View/Panel/Split/UpperPanel/Menu/Restart/Button" to="." method="_on_Restart_pressed"]
+[connection signal="pressed" from="View/Panel/Split/UpperPanel/Menu/Quit/Button" to="." method="_on_Quit_pressed"]
+[connection signal="pressed" from="Start/VBoxContainer/CenterContainer/Button" to="." method="_on_Resume_pressed"]
+[connection signal="pressed" from="Start/VBoxContainer/CenterContainer2/Button" to="." method="_on_New_pressed"]
+[connection signal="pressed" from="Start/VBoxContainer/CenterContainer3/Button" to="." method="_on_Random_pressed"]
+[connection signal="confirmed" from="Quit" to="." method="_on_Quit_confirmed"]
+[connection signal="popup_hide" from="Quit" to="." method="_on_Quit_popup_hide"]
 
-[editable path="StartDialog/VBoxContainer/CenterContainer"]
+[editable path="View/Panel/Split/UpperPanel/Menu/Save"]
 
-[editable path="StartDialog/VBoxContainer/CenterContainer2"]
+[editable path="View/Panel/Split/UpperPanel/Menu/Restart"]
 
-[editable path="StartDialog/VBoxContainer/CenterContainer3"]
+[editable path="View/Panel/Split/UpperPanel/Menu/Quit"]
+
+[editable path="Start/VBoxContainer/CenterContainer"]
+
+[editable path="Start/VBoxContainer/CenterContainer2"]
+
+[editable path="Start/VBoxContainer/CenterContainer3"]

@@ -3,22 +3,26 @@ extends Node2D
 
 export(int) var game_seed
 export(int) var pan_speed = 8
-export(NodePath) var popup_path
+export(Vector2) var half_view = Vector2(640, 360)
 
-onready var popup = get_node(popup_path)
 onready var world_size = $World.world_size
 
 var turn = 1
 
 
 func _ready():
-	popup.popup_exclusive = true
-	popup.popup_centered(Vector2(280, 320))
+	show_dialog($Start)
+
+
+func show_dialog(dialog):
+	$World.set_visible(false)
+	view_to(half_view)
+	dialog.popup_centered()
 
 
 func new():
-	popup.popup_exclusive = false
-	popup.set_visible(false)
+	$Start.set_visible(false)
+	$World.set_visible(true)
 	seed(game_seed)
 	change_level($World.create($Player))
 	$World.set_value("Turn", 1, true)
@@ -100,9 +104,14 @@ func view_to(position):
 		clamp(position.y, 0, world_size.y))
 
 
+# warning-ignore:shadowed_variable
 func load_game(game_seed):
 	self.game_seed = game_seed
 	new()
+
+
+func save_game():
+	pass
 
 
 func _on_Resume_pressed():
@@ -115,3 +124,29 @@ func _on_New_pressed():
 
 func _on_Random_pressed():
 	pass # Replace with function body.
+
+
+func _on_Button_pressed():
+	pass # Replace with function body.
+
+
+func _on_Save_pressed():
+	save_game()
+
+
+func _on_Restart_pressed():
+	save_game()
+	show_dialog($Start)
+
+
+func _on_Quit_pressed():
+	show_dialog($Quit)
+
+
+func _on_Quit_confirmed():
+	get_tree().quit()
+
+
+func _on_Quit_popup_hide():
+	view_to($Player.position)
+	$World.set_visible(true)

@@ -1,9 +1,9 @@
 tool
 extends TileMap
 
-export(int)   var map_w           = 62
-export(int)   var map_h           = 62
-export(int)   var min_room_size   = 10
+export(int)   var map_w           = 32
+export(int)   var map_h           = 32
+export(int)   var min_room_size   = 5
 export(float, 0.2, 0.75) var min_room_factor = 0.5  # percent of leaf room can occupy (up to three-quarters)
 export(bool)  var redraw  setget redraw
 

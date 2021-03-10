@@ -2,7 +2,7 @@ extends Node2D
 
 
 export(int) var world_seed
-export(Vector2) var world_size = Vector2(2880, 2880)
+export(Vector2) var world_size = Vector2(1440, 1440)
 export(NodePath) var tab_container_path
 export(NodePath) var player_status_path
 export(NodePath) var rogue_status_path

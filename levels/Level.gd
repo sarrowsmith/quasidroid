@@ -88,23 +88,23 @@ func place_features():
 				Util.randi_range(1, map.map_w - 1),
 				Util.randi_range(1, map.map_h - 1))
 			for l in lifts:
-				if probe.distance_squared_to(l.location) < 400:
+				if probe.distance_squared_to(l.location) < 100:
 					probe = null
 					break
 			if probe and check_nearby(probe.x, probe.y, 2)[FLOOR] == 25:
 				lifts.append(new_lift(probe))
 				access[probe] = null
 				break
-	var n_access = Util.randi_range(5, 9)
-	for _i in n_access:
-		while true:
+	var n_access = Util.randi_range(4, 8)
+	for _n in n_access:
+		for _i in range($Caves.iterations):
 			var probe = Vector2(
 				Util.randi_range(1, map.map_w - 1),
 				Util.randi_range(1, map.map_h - 1))
 			if location_type(probe) != FLOOR:
 				continue
 			for a in access:
-				if probe.distance_squared_to(a) < 144:
+				if probe.distance_squared_to(a) < 36:
 					probe = null
 					break
 			if not probe:
@@ -123,7 +123,7 @@ func place_features():
 
 
 func generate_rogues():
-	var n_rogues = Util.randi_range(25, 50)
+	var n_rogues = Util.randi_range(15, 25)
 	while len(rogues) < n_rogues:
 		while true:
 			var probe = Vector2(

@@ -64,6 +64,7 @@ func turn():
 
 
 const facing_map = {
+	Vector2.ZERO: "Down",
 	Vector2.DOWN: "Down",
 	Vector2.UP: "Up",
 	Vector2.LEFT: "Left",
@@ -107,11 +108,14 @@ func move(direction):
 	var target = location + direction
 	match level.location_type(target):
 		Level.FLOOR, Level.ACCESS:
-			var debug = position
 			mode = "Move"
 			state = WAIT
 			moves -= 1
 			destination = target
+		Level.PLAYER:
+			moves -= 1
+			if not moves:
+				state = DONE
 	set_sprite()
 
 

@@ -16,10 +16,10 @@ func _ready():
 
 
 const view_map = {
-	"ui_up": Vector2(0, -1),
-	"ui_down": Vector2(0, 1),
-	"ui_left": Vector2(-1, 0),
-	"ui_right": Vector2(1, 0)
+	ui_up = Vector2(0, -1),
+	ui_down = Vector2(0, 1),
+	ui_left = Vector2(-1, 0),
+	ui_right = Vector2(1, 0)
 }
 # warning-ignore:unused_argument
 func _process(delta):
@@ -44,10 +44,10 @@ func _process(delta):
 
 
 const cursor_map = {
-	"cursor_up": Vector2(0, -1),
-	"cursor_down": Vector2(0, 1),
-	"cursor_left": Vector2(-1, 0),
-	"cursor_right": Vector2(1, 0)
+	cursor_up = Vector2(0, -1),
+	cursor_down = Vector2(0, 1),
+	cursor_left = Vector2(-1, 0),
+	cursor_right = Vector2(1, 0)
 }
 func _unhandled_input(event):
 	var move = Vector2.ZERO
@@ -58,6 +58,9 @@ func _unhandled_input(event):
 		$World.active_level.move_cursor(move)
 	if event.is_action_pressed("map_reset"):
 		view_to($Player.position)
+		return
+	if event.is_action_pressed("cursor_reset"):
+		$World.active_level.set_cursor($Player.location)
 		return
 	if event is InputEventKey and event.pressed:
 		var level = null

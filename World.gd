@@ -3,12 +3,10 @@ extends Node2D
 
 export(int) var world_seed
 export(Vector2) var world_size = Vector2(1440, 1440)
-export(NodePath) var tab_container_path
 export(NodePath) var player_status_path
 export(NodePath) var rogue_status_path
 export(NodePath) var info_path
 
-onready var tab_container = get_node(tab_container_path)
 onready var player_status_box = get_node(player_status_path)
 onready var rogue_status_box = get_node(rogue_status_path)
 onready var info_box = get_node(info_path)
@@ -47,5 +45,5 @@ func show_position(value):
 
 
 func show_stats(is_player):
-	var tabset = tab_container.get_node("UpperPanel" if is_player else "LowerPanel")
-	tabset.current_tab = 1
+	var status_box = player_status_box if is_player else rogue_status_box
+	status_box.find_parent("*").current_tab = 1

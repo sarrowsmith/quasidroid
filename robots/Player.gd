@@ -46,25 +46,41 @@ func change_level(level):
 
 
 const move_map = {
-	"move_up": Vector2.UP,
-	"move_down": Vector2.DOWN,
-	"move_left": Vector2.LEFT,
-	"move_right": Vector2.RIGHT
+	move_up = Vector2.UP,
+	move_down = Vector2.DOWN,
+	move_left = Vector2.LEFT,
+	move_right = Vector2.RIGHT
+}
+const click_map = {
+	cursor_select = BUTTON_LEFT,
+	cursor_option = BUTTON_RIGHT,
 }
 func _unhandled_input(event):
 	if state != IDLE:
 		return
 	for e in move_map:
 		if event.is_action_pressed(e):
-			if combat == WEAPON:
-				fire(move_map[e])
-				break
-			move(move_map[e])
+			action(move_map[e])
+			break
+	for e in click_map:
+		if event.is_action_pressed(e):
+			cursor_activate(click_map[e])
 	if event is InputEventKey and event.pressed:
 		match event.scancode:
 			KEY_Z:
 				combat = (combat + 1) % 3
 				equip()
+
+
+func action(direction=null):
+	if direction == null:
+		direction = level.cursor.location - location
+	if combat == WEAPON:
+		if direction == Vector2.ZERO:
+			direction = facing
+		fire(direction)
+	else:
+		move(direction)
 
 
 const cursor_types = {
@@ -106,19 +122,37 @@ func set_cursor():
 	level.cursor.set_mode(cursor_types[location_type])
 
 
-func cursor_active(button):
-	var location_type = level.location_type(level.cursor.location)
-	match level.cursor.mode:
-		"Info":
-			pass
-		"Move":
-			pass
-		"Target":
-			pass
+func cursor_activate(button):
+	if button == BUTTON_RIGHT:
+		show_info()
+	else:
+		match level.cursor.mode:
+			"Info":
+				show_info()
+			"Move", "Target": 
+				if state == IDLE:
+					action()
 
 
 func show_info():
-	pass
+	var info = "Nothing to see here"
+	var location_type = level.location_type(level.cursor.location)
+	match location_type:
+		Level.LIFT:
+			var lift = level.lift_at(level.cursor.location)
+			if lift:
+				info = lift.get_info()
+		Level.ACCESS:
+			var ap = level.access[level.cursor.location]
+			if ap:
+				info = """An access point
+
+Resetting all the access points on a level will unlock the lifts down.
+This access point %s.
+
+You can also recharge here.""" % ("has been reset" if ap.active else "needs resetting")
+		Level.PLAYER, Level.ROGUE:
+			show_stats(true)
 
 
 func show_combat_mode():

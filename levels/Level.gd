@@ -29,6 +29,7 @@ func _ready():
 		load("res://levels/AccessPoint.tscn"),
 		load("res://robots/Rogue.tscn")
 	]
+	world = find_parent("World")
 
 
 func create(from, rooms):
@@ -39,12 +40,10 @@ func create(from, rooms):
 	self.rooms = rooms
 	if parent == null:
 		level = 1
-		world = owner
 		map_name = "1"
 	else:
 		level = parent.level + 1
 		prototypes = parent.prototypes
-		world = parent.world
 		map_name = String(level)
 		if not rooms:
 			var depth = 1
@@ -213,7 +212,7 @@ func set_cursor(location=null):
 
 
 func _on_Background_click(position, button):
-	world.player.cursor_active(button)
+	world.player.cursor_activate(button)
 
 
 func _on_Background_move(position):

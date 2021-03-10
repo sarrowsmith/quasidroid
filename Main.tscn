@@ -10,7 +10,6 @@
 script = ExtResource( 2 )
 
 [node name="World" parent="." instance=ExtResource( 1 )]
-tab_container_path = NodePath("../View/Panel/Split")
 player_status_path = NodePath("../View/Panel/Split/UpperPanel/Status")
 rogue_status_path = NodePath("../View/Panel/Split/LowerPanel/Scan")
 info_path = NodePath("../View/Panel/Split/LowerPanel/Info/RichTextLabel")
@@ -152,7 +151,7 @@ default = "H, J, K, L"
 margin_top = 0.0
 margin_right = 338.0
 margin_bottom = 23.0
-label = "Toggle weapon"
+label = "Select combat mode"
 default = "Z"
 
 [node name="LabelledValue6" parent="View/Panel/Split/UpperPanel/Controls" instance=ExtResource( 5 )]
@@ -162,6 +161,27 @@ margin_bottom = 23.0
 label = "Move cursor"
 default = "W, A, S, D"
 
+[node name="LabelledValue2" parent="View/Panel/Split/UpperPanel/Controls" instance=ExtResource( 5 )]
+margin_top = 27.0
+margin_right = 338.0
+margin_bottom = 50.0
+label = "Action at cursor"
+default = "enter"
+
+[node name="LabelledValue10" parent="View/Panel/Split/UpperPanel/Controls" instance=ExtResource( 5 )]
+margin_top = 27.0
+margin_right = 338.0
+margin_bottom = 50.0
+label = "Info at cursor"
+default = "tab"
+
+[node name="LabelledValue11" parent="View/Panel/Split/UpperPanel/Controls" instance=ExtResource( 5 )]
+margin_top = 27.0
+margin_right = 338.0
+margin_bottom = 50.0
+label = "Reset cursor"
+default = "backspace"
+
 [node name="LabelledValue" parent="View/Panel/Split/UpperPanel/Controls" instance=ExtResource( 5 )]
 margin_top = 0.0
 margin_right = 338.0
@@ -169,12 +189,12 @@ margin_bottom = 23.0
 label = "Move view"
 default = "arrow keys"
 
-[node name="LabelledValue2" parent="View/Panel/Split/UpperPanel/Controls" instance=ExtResource( 5 )]
+[node name="LabelledValue9" parent="View/Panel/Split/UpperPanel/Controls" instance=ExtResource( 5 )]
 margin_top = 27.0
 margin_right = 338.0
 margin_bottom = 50.0
 label = "Reset view"
-default = "backspace"
+default = "delete"
 
 [node name="LabelledValue3" parent="View/Panel/Split/UpperPanel/Controls" instance=ExtResource( 5 )]
 margin_top = 54.0
@@ -220,14 +240,18 @@ custom_fonts/italics_font = ExtResource( 3 )
 custom_fonts/bold_font = ExtResource( 3 )
 custom_fonts/normal_font = ExtResource( 3 )
 bbcode_enabled = true
-bbcode_text = "Shut down the rogue robots on all
-7 levels of the mining complex to
+bbcode_text = "Shut down the [b]rogue[/b] robots on all
+[b]7[/b] levels of the mining complex and return to the surface to
 allow the automated systems to
-reboot safely."
+reboot safely.
+
+Reset all the access points on a level to unlock downward lifts."
 text = "Shut down the rogue robots on all
-7 levels of the mining complex to
+7 levels of the mining complex and return to the surface to
 allow the automated systems to
-reboot safely."
+reboot safely.
+
+Reset all the access points on a level to unlock downward lifts."
 fit_content_height = true
 selection_enabled = true
 

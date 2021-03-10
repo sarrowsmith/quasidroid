@@ -3,6 +3,7 @@ extends Node2D
 
 
 enum {DEAD, IDLE, WAIT, DONE}
+enum {GRAPPLE, MELEE, WEAPON}
 
 var location = Vector2.ZERO
 var level = null
@@ -14,6 +15,7 @@ var destination = Vector2.ZERO
 var sprite = null
 var weapon = null
 var fire = Vector2.ZERO
+var combat = GRAPPLE
 var equipment = {
 	weapon = null,
 	extras = [],
@@ -103,19 +105,48 @@ func set_location(destination):
 	position = level.location_to_position(location)
 
 
-func move(direction):
+func move(target):
+	mode = "Move"
+	state = WAIT
+	destination = target
+
+
+func action(direction):
+	var is_player = self == level.world.player
+	if direction == null:
+		if not is_player:
+			return
+		direction = level.cursor.location - location
+	if combat == WEAPON:
+		if direction == Vector2.ZERO:
+			direction = facing
+		fire(direction)
+		return
 	facing = direction
 	var target = location + direction
+	moves -= 1
 	match level.location_type(target):
 		Level.FLOOR, Level.ACCESS:
-			mode = "Move"
-			state = WAIT
-			moves -= 1
-			destination = target
+			move(target)
+		Level.LIFT:
+			if is_player:
+				var lift = level.lift_at(location)
+				if lift:
+					if lift.state == Lift.OPEN:
+						move(target)
+					else:
+						lift.open()
 		Level.PLAYER:
-			moves -= 1
-			if not moves:
-				state = DONE
+			if is_player:
+				if not moves:
+					state = DONE
+			else:
+				attack()
+		Level.ROGUE:
+			if is_player:
+				attack()
+		_:
+			moves += 1
 	set_sprite()
 
 
@@ -148,3 +179,14 @@ func show_stats(visible=false):
 	if visible:
 		level.world.show_stats(is_player)
 
+
+func attack():
+	grapple() if combat == GRAPPLE else melee()
+
+
+func grapple():
+	pass
+
+
+func melee():
+	pass

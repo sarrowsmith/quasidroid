@@ -4,11 +4,6 @@ extends Robot
 signal move(position)
 
 
-enum {GRAPPLE, MELEE, WEAPON}
-
-var combat = GRAPPLE
-
-
 func _ready():
 	base = "0"
 	equipment["weapon"] = "Plasma"
@@ -65,17 +60,6 @@ func _unhandled_input(event):
 				equip()
 
 
-func action(direction=null):
-	if direction == null:
-		direction = level.cursor.location - location
-	if combat == WEAPON:
-		if direction == Vector2.ZERO:
-			direction = facing
-		fire(direction)
-	else:
-		move(direction)
-
-
 const cursor_types = {
 	Level.FLOOR: "Default",
 	Level.WALL: "Wall",
@@ -124,7 +108,7 @@ func cursor_activate(button):
 				show_info()
 			"Move", "Target": 
 				if state == IDLE:
-					action()
+					action(null)
 
 
 func show_info():

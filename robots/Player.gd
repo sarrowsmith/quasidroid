@@ -26,6 +26,8 @@ func turn(init=false):
 	if combat == WEAPON:
 		combat = GRAPPLE
 	equip(init)
+	if not init:
+		check_location()
 	show_stats(false)
 
 
@@ -34,15 +36,6 @@ func equip(init=false):
 	if not init:
 		show_combat_mode()
 		set_cursor()
-
-
-func change_level(level):
-	self.level = level
-	set_location(level.lifts[0].location + Vector2.DOWN)
-	level.set_cursor(level.lifts[0].location)
-	show_combat_mode()
-	show_stats(true)
-	level.world.show_stats(true)
 
 
 const move_map = {
@@ -165,3 +158,23 @@ func show_combat_mode():
 	elif equipment.weapon and (combat == MELEE if $Weapons.melee else combat == WEAPON):
 		mode = equipment.weapon
 	level.world.set_value("Combat", mode, true)
+
+
+func change_level(level):
+	self.level = level
+	set_location(level.lifts[0].location + Vector2.DOWN)
+	level.set_cursor(level.lifts[0].location)
+	show_combat_mode()
+	show_stats(true)
+	level.world.show_stats(true)
+
+
+func check_location():
+	if not level.access.has(location):
+		return
+	var lift =  level.lift_at(location)
+	if lift:
+		change_level(lift.to)
+	else:
+		#recharge
+		level.activate(location)

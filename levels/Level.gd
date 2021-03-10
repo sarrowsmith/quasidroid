@@ -157,6 +157,18 @@ func location_type(location):
 	return WALL if map.get_cellv(location) != TileMap.INVALID_CELL else FLOOR
 
 
+func activate(location):
+	access[location].active = true
+	for ap in access.values():
+		if ap and not ap.active:
+			return
+	for lift in lifts:
+		lift.unlock()
+	world.show_info("""All access points on level %s reset
+
+Downwards lifts unlocked.""" % map_name)
+
+
 func lift_at(location):
 	if not access.has(location) or access[location]:
 		return null
@@ -173,7 +185,7 @@ func new_lift(location):
 	if len(lifts) == 0:
 		lift.to = parent
 		if level > 1:
-			lift.state = Lift.CLOSED
+			lift.unlock()
 		lift.direction = "up"
 	else:
 		lift.to = children[len(lifts) - 1]

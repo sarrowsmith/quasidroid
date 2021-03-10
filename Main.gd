@@ -12,6 +12,7 @@ var turn = 1
 func _ready():
 	seed(game_seed)
 	change_level($World.create($Player))
+	$World.set_value("Turn", 1, true)
 
 
 const view_map = {
@@ -39,6 +40,7 @@ func _process(delta):
 				return
 		$Player.turn()
 		turn += 1
+		$World.set_value("Turn", (turn + 1) / 2, true)
 
 
 const cursor_map = {
@@ -76,11 +78,7 @@ func change_level(level):
 		$World.change_level(level)
 	$Player.change_level(level)
 	view_to($Player.position)
-	set_value("Level", level.map_name)
-
-
-func set_value(name, value):
-	$World.set_value(name, value)
+	#$World.set_value("Level", level.map_name)
 
 
 func view_to(position):

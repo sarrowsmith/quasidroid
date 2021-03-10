@@ -25,6 +25,10 @@ func turn():
 	equip(equipped)
 
 
+func update():
+	level.world.set_value("Position", location, true)
+
+
 func change_level(level):
 	self.level = level
 	set_location(level.lifts[0].location + Vector2.DOWN)
@@ -70,7 +74,7 @@ func set_cursor():
 			if lift and lift.open:
 				location_type = Level.Type.PLAYER
 		Level.Type.FLOOR, Level.Type.ACCESS:
-			if location.distance_squared_to(level.cursor.location) <= stats["move"]:
+			if location.distance_squared_to(level.cursor.location) <= stats["speed"]:
 				location_type = Level.Type.PLAYER
 		Level.Type.ROGUE:
 			if not equipped:

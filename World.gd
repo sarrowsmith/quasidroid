@@ -3,10 +3,12 @@ extends Node2D
 
 export(int) var world_seed
 export(Vector2) var world_size = Vector2(2880, 2880)
-export(NodePath) var status_path
+export(NodePath) var player_status_path
+export(NodePath) var rogue_status_path
 export(NodePath) var info_path
 
-onready var status_box = get_node(status_path)
+onready var player_status_box = get_node(player_status_path)
+onready var rogue_status_box = get_node(rogue_status_path)
 onready var info_box = get_node(info_path)
 onready var active_level = $Level
 
@@ -30,5 +32,12 @@ func change_level(level):
 	active_level = level
 
 
-func set_value(name, value):
-	status_box.get_node(name).set_value(value)
+func set_value(name, value, is_player):
+	var lv = (player_status_box if is_player else rogue_status_box).get_node(name)
+	if lv:
+		lv.set_value(value)
+
+
+func show_position(value):
+	rogue_status_box.get_node("Position").set_value(value)
+	# set other items invisible

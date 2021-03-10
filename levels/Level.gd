@@ -212,8 +212,7 @@ func set_cursor(location=null):
 
 func _on_Background_click(position, button):
 	var location = position_to_location(position) + Vector2(1, 1)
-	world.set_value("DEBUG", location_type(location))
-	world.set_value("Position", location)
+	world.show_position(location)
 
 
 func _on_Background_move(position):

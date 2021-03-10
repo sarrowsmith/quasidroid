@@ -10,8 +10,9 @@
 script = ExtResource( 2 )
 
 [node name="World" parent="." instance=ExtResource( 1 )]
-status_path = NodePath("../View/Panel/VSplitContainer/TabContainer/Status")
-info_path = NodePath("../View/Panel/VSplitContainer/TabContainer/Info")
+player_status_path = NodePath("../View/Panel/VSplitContainer/TabContainer/Status")
+rogue_status_path = NodePath("../View/Panel/VSplitContainer/TabContainer2/Scan")
+info_path = NodePath("../View/Panel/VSplitContainer/TabContainer2/Info/RichTextLabel")
 
 [node name="ColorRectBottom" type="ColorRect" parent="."]
 anchor_top = 1.0
@@ -75,7 +76,7 @@ __meta__ = {
 
 [node name="TabContainer" type="TabContainer" parent="View/Panel/VSplitContainer"]
 margin_right = 346.0
-margin_bottom = 706.0
+margin_bottom = 347.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
@@ -100,12 +101,11 @@ margin_bottom = -4.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="Level" parent="View/Panel/VSplitContainer/TabContainer/Status" instance=ExtResource( 5 )]
-margin_top = 0.0
+[node name="Turn" parent="View/Panel/VSplitContainer/TabContainer/Status" instance=ExtResource( 5 )]
+margin_top = 27.0
 margin_right = 338.0
-margin_bottom = 23.0
-label = "Level:"
-default = "0"
+margin_bottom = 50.0
+label = "Turn:"
 
 [node name="Position" parent="View/Panel/VSplitContainer/TabContainer/Status" instance=ExtResource( 5 )]
 margin_top = 27.0
@@ -113,32 +113,8 @@ margin_right = 338.0
 margin_bottom = 50.0
 label = "Position:"
 
-[node name="Info" type="VBoxContainer" parent="View/Panel/VSplitContainer/TabContainer"]
-visible = false
-anchor_right = 1.0
-anchor_bottom = 1.0
-margin_left = 4.0
-margin_top = 32.0
-margin_right = -4.0
-margin_bottom = -4.0
-size_flags_horizontal = 3
-size_flags_vertical = 3
-
-[node name="RichTextLabel" type="RichTextLabel" parent="View/Panel/VSplitContainer/TabContainer/Info"]
-margin_right = 338.0
-margin_bottom = 670.0
-rect_clip_content = false
-focus_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-custom_fonts/mono_font = ExtResource( 3 )
-custom_fonts/bold_italics_font = ExtResource( 3 )
-custom_fonts/italics_font = ExtResource( 3 )
-custom_fonts/bold_font = ExtResource( 3 )
-custom_fonts/normal_font = ExtResource( 3 )
-bbcode_enabled = true
-fit_content_height = true
-selection_enabled = true
+[node name="speed" parent="View/Panel/VSplitContainer/TabContainer/Status" instance=ExtResource( 5 )]
+label = "Speed:"
 
 [node name="Controls" type="VBoxContainer" parent="View/Panel/VSplitContainer/TabContainer"]
 visible = false
@@ -240,6 +216,78 @@ allow the automated systems to
 reboot safely."
 fit_content_height = true
 selection_enabled = true
+
+[node name="TabContainer2" type="TabContainer" parent="View/Panel/VSplitContainer"]
+margin_top = 359.0
+margin_right = 346.0
+margin_bottom = 706.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Scan" type="VBoxContainer" parent="View/Panel/VSplitContainer/TabContainer2"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 4.0
+margin_top = 32.0
+margin_right = -4.0
+margin_bottom = -4.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Position" parent="View/Panel/VSplitContainer/TabContainer2/Scan" instance=ExtResource( 5 )]
+margin_top = 0.0
+margin_right = 338.0
+margin_bottom = 23.0
+label = "Position:"
+
+[node name="Info" type="VBoxContainer" parent="View/Panel/VSplitContainer/TabContainer2"]
+visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 4.0
+margin_top = 32.0
+margin_right = -4.0
+margin_bottom = -4.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="RichTextLabel" type="RichTextLabel" parent="View/Panel/VSplitContainer/TabContainer2/Info"]
+margin_right = 338.0
+margin_bottom = 670.0
+rect_clip_content = false
+focus_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_fonts/mono_font = ExtResource( 3 )
+custom_fonts/bold_italics_font = ExtResource( 3 )
+custom_fonts/italics_font = ExtResource( 3 )
+custom_fonts/bold_font = ExtResource( 3 )
+custom_fonts/normal_font = ExtResource( 3 )
+bbcode_enabled = true
+fit_content_height = true
+selection_enabled = true
+
+[node name="Levels" type="VBoxContainer" parent="View/Panel/VSplitContainer/TabContainer2"]
+visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 4.0
+margin_top = 32.0
+margin_right = -4.0
+margin_bottom = -4.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Map" type="VBoxContainer" parent="View/Panel/VSplitContainer/TabContainer2"]
+visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 4.0
+margin_top = 32.0
+margin_right = -4.0
+margin_bottom = -4.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
 
 [node name="ColorRectBottom" type="ColorRect" parent="View"]
 anchor_top = 1.0

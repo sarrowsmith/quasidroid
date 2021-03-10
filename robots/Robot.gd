@@ -19,7 +19,7 @@ var equipment = {
 	extras = [],
 }
 var stats = {
-	move = 1,
+	speed = 1,
 	weapon = 12,
 	sight = 12,
 }
@@ -31,7 +31,6 @@ func _process(_delta):
 	if level == null:
 		return
 	if mode == "Move":
-		level.world.set_value("Position", location)
 		position += facing
 		if position == level.location_to_position(destination):
 			location = destination
@@ -61,7 +60,7 @@ func _process(_delta):
 
 func turn():
 	state = State.IDLE
-	moves = stats["move"]
+	moves = stats["speed"]
 
 
 const facing_map = {
@@ -123,3 +122,17 @@ func fire(direction):
 	state = State.WAIT
 	moves -= 1
 	equip(true)
+
+
+func item_to_string(item):
+	return equipment[item]
+
+
+func show_stats():
+	var is_player = self == level.world.player
+	for stat in stats:
+		level.world.set_value(stat, stats[stat], is_player)
+	for item in equipment:
+		level.world.set_value(item, item_to_string(item), is_player)
+	level.world.set_value("Position", location, is_player)
+	

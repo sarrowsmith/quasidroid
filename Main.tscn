@@ -99,7 +99,7 @@ size_flags_vertical = 3
 margin_top = 0.0
 margin_right = 338.0
 margin_bottom = 23.0
-label = "Game Seed"
+label = "Game Seed:"
 
 [node name="CenterContainer" type="CenterContainer" parent="View/Panel/Split/UpperPanel/Menu"]
 margin_top = 27.0

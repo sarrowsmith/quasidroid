@@ -1,7 +1,7 @@
 extends Node2D
 
 
-export(int) var game_seed
+export(int) var game_seed = 0
 export(int) var pan_speed = 8
 export(Vector2) var half_view = Vector2(640, 360)
 
@@ -11,6 +11,8 @@ var turn = 1
 
 
 func _ready():
+	if game_seed:
+		$Start.find_node("Seed").text = String(game_seed)
 	show_dialog($Start)
 
 
@@ -20,10 +22,12 @@ func show_dialog(dialog):
 	dialog.popup_centered()
 
 
+# TODO: need to instantiate Player here, taking care with render order
 func new():
 	$Start.set_visible(false)
 	$World.set_visible(true)
 	seed(game_seed)
+	$View.find_node("Seed").set_value(game_seed)
 	change_level($World.create($Player))
 	$World.set_value("Turn", 1, true)
 	$Player.turn()
@@ -112,9 +116,7 @@ func view_to(position):
 		clamp(position.y, 0, world_size.y))
 
 
-# warning-ignore:shadowed_variable
-func load_game(game_seed):
-	self.game_seed = game_seed
+func load_game():
 	new()
 
 
@@ -123,15 +125,18 @@ func save_game():
 
 
 func _on_Resume_pressed():
-	load_game(game_seed)
+	load_game()
 
 
 func _on_New_pressed():
+	var seed_text = $Start.find_node("Seed").text
+	game_seed = seed_text.to_int() if seed_text.is_valid_integer() else seed_text.hash()
 	new()
 
 
 func _on_Random_pressed():
-	pass # Replace with function body.
+	randomize()
+	$Start.find_node("Seed").text = String(randi())
 
 
 func _on_Save_pressed():

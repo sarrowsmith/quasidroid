@@ -18,6 +18,7 @@ onready var active_level = $Level
 var player = null
 
 
+# TODO: need to instantiate Level 1 on demand so that starting anew works
 func create(player):
 	self.player = player
 	world_seed = randi()

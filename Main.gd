@@ -78,6 +78,14 @@ func _unhandled_input(event):
 		return
 	if event is InputEventKey and event.pressed:
 		var level = null
+		if event.control:
+			match event.scancode:
+				KEY_S:
+					_on_Save_pressed()
+				KEY_R:
+					_on_Restart_pressed()
+				KEY_Q:
+					_on_Quit_pressed()
 		match event.scancode:
 			KEY_U:
 				level = $World.active_level.parent
@@ -123,10 +131,6 @@ func _on_New_pressed():
 
 
 func _on_Random_pressed():
-	pass # Replace with function body.
-
-
-func _on_Button_pressed():
 	pass # Replace with function body.
 
 

@@ -38,10 +38,15 @@ func set_value(name, value, is_player):
 		lv.set_value(value)
 
 
-func show_position(value):
-	rogue_status_box.get_node("Position").set_value(value)
+func show_position():
+	rogue_status_box.get_node("Position").set_value(active_level.cursor.location)
 	# set other items invisible
 	show_stats(false)
+
+
+func show_info(text):
+	info_box.text = text
+	rogue_status_box.find_parent("*").current_tab = 0
 
 
 func show_stats(is_player):

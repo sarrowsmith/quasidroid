@@ -294,17 +294,23 @@ visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_left = 4.0
-margin_top = 32.0
+margin_top = -327.0
 margin_right = -4.0
-margin_bottom = -4.0
+margin_bottom = -363.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="Position" parent="View/Panel/Split/LowerPanel/Scan" instance=ExtResource( 5 )]
-margin_top = 0.0
+margin_top = 27.0
 margin_right = 338.0
-margin_bottom = 23.0
+margin_bottom = 50.0
 label = "Position:"
+
+[node name="speed" parent="View/Panel/Split/LowerPanel/Scan" instance=ExtResource( 5 )]
+label = "Speed:"
+
+[node name="weapon" parent="View/Panel/Split/LowerPanel/Scan" instance=ExtResource( 5 )]
+label = "Weapon:"
 
 [node name="Levels" type="VBoxContainer" parent="View/Panel/Split/LowerPanel"]
 visible = false

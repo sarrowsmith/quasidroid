@@ -153,6 +153,9 @@ This access point %s.
 You can also recharge here.""" % ("has been reset" if ap.active else "needs resetting")
 		Level.PLAYER, Level.ROGUE:
 			show_stats(true)
+			return
+	level.world.show_position()
+	level.world.show_info(info)
 
 
 func show_combat_mode():

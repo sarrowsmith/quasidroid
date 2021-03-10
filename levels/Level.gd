@@ -176,6 +176,8 @@ func new_lift(location):
 	lift.from = self
 	if len(lifts) == 0:
 		lift.to = parent
+		if level > 1:
+			lift.state = Lift.CLOSED
 	else:
 		lift.to = children[len(lifts) - 1]
 	for o in [Vector2.ZERO, Vector2.UP]:

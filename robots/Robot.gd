@@ -114,6 +114,7 @@ func move(direction):
 			destination = target
 	set_sprite()
 
+
 func fire(direction):
 	facing = direction
 	firing = "Fire"

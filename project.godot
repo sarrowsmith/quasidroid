@@ -15,12 +15,18 @@ _global_script_classes=[ {
 "path": "res://levels/Level.gd"
 }, {
 "base": "Node2D",
+"class": "Lift",
+"language": "GDScript",
+"path": "res://levels/Lift.gd"
+}, {
+"base": "Node2D",
 "class": "Robot",
 "language": "GDScript",
 "path": "res://robots/Robot.gd"
 } ]
 _global_script_class_icons={
 "Level": "",
+"Lift": "",
 "Robot": ""
 }
 

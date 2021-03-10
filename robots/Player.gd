@@ -80,7 +80,7 @@ func set_cursor():
 	match location_type:
 		Level.LIFT:
 			var lift = level.lift_at(level.cursor.location)
-			if lift and lift.open:
+			if lift and lift.state == Lift.OPEN:
 				location_type = Level.PLAYER
 		Level.FLOOR, Level.ACCESS:
 			if location.distance_squared_to(level.cursor.location) <= stats["speed"]:

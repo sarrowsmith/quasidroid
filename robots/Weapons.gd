@@ -23,7 +23,7 @@ func shoot():
 
 
 func splash():
-	match owner.stats.equipment.weapon:
+	match owner.get_weapon():
 		"Dual":
 			for r in owner.level.rogues:
 				if location.distance_squared_to(r.location) == 1:

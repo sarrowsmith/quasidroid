@@ -80,12 +80,12 @@ func set_sprite():
 		path += "-X"
 	sprite = get_node(path) if dead else get_sprite("Robot/%s/%s" % [path, mode])
 	sprite.set_visible(true)
-	if dead or stats.equipment.weapon == null:
+	if dead or combat < WEAPON:
 		if weapon:
 			weapon.set_visible(false)
 			weapon = null
 		return
-	weapon = get_sprite("Weapons/%s/%s" % [stats.equipment.weapon, firing])
+	weapon = get_sprite("Weapons/%s/%s" % [get_weapon(), firing])
 
 
 func equip(on):
@@ -93,6 +93,10 @@ func equip(on):
 	if weapon:
 		weapon.position = Vector2.ZERO
 		weapon.set_visible(on)
+
+
+func get_weapon():
+	return stats.equipment.weapons[combat]
 
 
 # warning-ignore:shadowed_variable
@@ -113,7 +117,7 @@ func action(direction):
 		if not is_player:
 			return
 		direction = level.cursor.location - location
-	if combat == WEAPON:
+	if combat >= WEAPON:
 		if direction == Vector2.ZERO:
 			direction = facing
 		shoot(direction)
@@ -166,12 +170,17 @@ func shoot(direction):
 	equip(true)
 
 
+const item_name_map = {
+	drive = ["none", "Basic", "Improved", "Advanced"],
+	armour = ["none", "Standard", "Ablative", "Active"],
+}
 func item_to_string(item):
-	if stats.equipment[item]:
-		if item == "extras":
+	match item:
+		"extras":
 			return PoolStringArray(stats.equipment.extras).join(", ")
-		return stats.equipment[item]
-	return "none"
+		"weapons":
+			return get_weapon()
+	return item_name_map[item][stats.equipment[item]]
 
 
 func show_stats(visible=false):
@@ -181,7 +190,6 @@ func show_stats(visible=false):
 		level.world.set_value(stat, stats.stats[stat], is_player)
 	for item in stats.equipment:
 		level.world.set_value(item, item_to_string(item), is_player)
-	level.world.set_value("Position", location, is_player)
 	if is_player:
 		level.world.set_value("Moves", moves, true)
 	if visible:

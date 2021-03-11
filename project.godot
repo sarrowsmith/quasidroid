@@ -27,7 +27,7 @@ _global_script_classes=[ {
 "base": "Reference",
 "class": "Stats",
 "language": "GDScript",
-"path": "res://Stats.gd"
+"path": "res://robots/Stats.gd"
 } ]
 _global_script_class_icons={
 "Level": "",

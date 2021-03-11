@@ -73,13 +73,14 @@ margin_right = 353.0
 margin_bottom = 713.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
+split_offset = 16
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="UpperPanel" type="TabContainer" parent="View/Panel/Split"]
 margin_right = 346.0
-margin_bottom = 347.0
+margin_bottom = 363.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 tab_align = 0
@@ -103,50 +104,50 @@ label = "Game Seed:"
 [node name="CenterContainer" type="CenterContainer" parent="View/Panel/Split/UpperPanel/Menu"]
 margin_top = 27.0
 margin_right = 338.0
-margin_bottom = 80.0
+margin_bottom = 83.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="Save" parent="View/Panel/Split/UpperPanel/Menu" instance=ExtResource( 6 )]
-margin_top = 84.0
+margin_top = 87.0
 margin_right = 338.0
-margin_bottom = 138.0
+margin_bottom = 144.0
 
 [node name="Button" parent="View/Panel/Split/UpperPanel/Menu/Save" index="0"]
 margin_left = 148.0
-margin_top = 17.0
+margin_top = 18.0
 margin_right = 189.0
-margin_bottom = 37.0
+margin_bottom = 38.0
 text = "Save"
 
 [node name="Restart" parent="View/Panel/Split/UpperPanel/Menu" instance=ExtResource( 6 )]
-margin_top = 142.0
+margin_top = 148.0
 margin_right = 338.0
-margin_bottom = 195.0
+margin_bottom = 205.0
 
 [node name="Button" parent="View/Panel/Split/UpperPanel/Menu/Restart" index="0"]
 margin_left = 140.0
-margin_top = 16.0
+margin_top = 18.0
 margin_right = 197.0
-margin_bottom = 36.0
+margin_bottom = 38.0
 text = "Restart"
 
 [node name="Quit" parent="View/Panel/Split/UpperPanel/Menu" instance=ExtResource( 6 )]
-margin_top = 199.0
+margin_top = 209.0
 margin_right = 338.0
-margin_bottom = 253.0
+margin_bottom = 266.0
 
 [node name="Button" parent="View/Panel/Split/UpperPanel/Menu/Quit" index="0"]
 margin_left = 149.0
-margin_top = 17.0
+margin_top = 18.0
 margin_right = 189.0
-margin_bottom = 37.0
+margin_bottom = 38.0
 text = "Quit"
 
 [node name="CenterContainer2" type="CenterContainer" parent="View/Panel/Split/UpperPanel/Menu"]
-margin_top = 257.0
+margin_top = 270.0
 margin_right = 338.0
-margin_bottom = 311.0
+margin_bottom = 327.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
@@ -164,7 +165,7 @@ scroll_horizontal_enabled = false
 
 [node name="Status" type="VBoxContainer" parent="View/Panel/Split/UpperPanel/Status"]
 margin_right = 338.0
-margin_bottom = 347.0
+margin_bottom = 327.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
@@ -180,9 +181,9 @@ margin_right = 338.0
 margin_bottom = 50.0
 label = "Moves left:"
 
-[node name="Combat" parent="View/Panel/Split/UpperPanel/Status/Status" instance=ExtResource( 5 )]
+[node name="weapons" parent="View/Panel/Split/UpperPanel/Status/Status" instance=ExtResource( 5 )]
 margin_bottom = 715.0
-label = "Combat:"
+label = "Weapon:"
 
 [node name="name" parent="View/Panel/Split/UpperPanel/Status/Status" instance=ExtResource( 5 )]
 visible = false
@@ -205,23 +206,17 @@ label = "Drive:"
 [node name="armour" parent="View/Panel/Split/UpperPanel/Status/Status" instance=ExtResource( 5 )]
 label = "Armour:"
 
+[node name="protection" parent="View/Panel/Split/UpperPanel/Status/Status" instance=ExtResource( 5 )]
+label = "Proection:"
+
 [node name="strength" parent="View/Panel/Split/UpperPanel/Status/Status" instance=ExtResource( 5 )]
 label = "Strength:"
 
 [node name="speed" parent="View/Panel/Split/UpperPanel/Status/Status" instance=ExtResource( 5 )]
 label = "Speed:"
 
-[node name="weapon" parent="View/Panel/Split/UpperPanel/Status/Status" instance=ExtResource( 5 )]
-label = "Weapon:"
-
 [node name="extras" parent="View/Panel/Split/UpperPanel/Status/Status" instance=ExtResource( 5 )]
 label = "Equipment:"
-
-[node name="Position" parent="View/Panel/Split/UpperPanel/Status/Status" instance=ExtResource( 5 )]
-margin_top = 27.0
-margin_right = 338.0
-margin_bottom = 50.0
-label = "Position:"
 
 [node name="Controls" type="VBoxContainer" parent="View/Panel/Split/UpperPanel"]
 visible = false
@@ -245,7 +240,7 @@ default = "H, J, K, L"
 margin_top = 0.0
 margin_right = 338.0
 margin_bottom = 23.0
-label = "Select combat mode"
+label = "Select weapon"
 default = "Z"
 
 [node name="LabelledValue6" parent="View/Panel/Split/UpperPanel/Controls" instance=ExtResource( 5 )]
@@ -351,7 +346,7 @@ fit_content_height = true
 selection_enabled = true
 
 [node name="LowerPanel" type="TabContainer" parent="View/Panel/Split"]
-margin_top = 359.0
+margin_top = 375.0
 margin_right = 346.0
 margin_bottom = 706.0
 size_flags_horizontal = 3
@@ -392,15 +387,9 @@ scroll_horizontal_enabled = false
 
 [node name="Scan" type="VBoxContainer" parent="View/Panel/Split/LowerPanel/Scan"]
 margin_right = 338.0
-margin_bottom = 311.0
+margin_bottom = 295.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
-
-[node name="Position" parent="View/Panel/Split/LowerPanel/Scan/Scan" instance=ExtResource( 5 )]
-margin_top = 27.0
-margin_right = 338.0
-margin_bottom = 50.0
-label = "Position:"
 
 [node name="name" parent="View/Panel/Split/LowerPanel/Scan/Scan" instance=ExtResource( 5 )]
 margin_bottom = 715.0
@@ -422,13 +411,16 @@ label = "Drive:"
 [node name="armour" parent="View/Panel/Split/LowerPanel/Scan/Scan" instance=ExtResource( 5 )]
 label = "Armour:"
 
+[node name="protection" parent="View/Panel/Split/LowerPanel/Scan/Scan" instance=ExtResource( 5 )]
+label = "Protection:"
+
 [node name="strength" parent="View/Panel/Split/LowerPanel/Scan/Scan" instance=ExtResource( 5 )]
 label = "Strength:"
 
 [node name="speed" parent="View/Panel/Split/LowerPanel/Scan/Scan" instance=ExtResource( 5 )]
 label = "Speed:"
 
-[node name="weapon" parent="View/Panel/Split/LowerPanel/Scan/Scan" instance=ExtResource( 5 )]
+[node name="weapons" parent="View/Panel/Split/LowerPanel/Scan/Scan" instance=ExtResource( 5 )]
 label = "Weapon:"
 
 [node name="extras" parent="View/Panel/Split/LowerPanel/Scan/Scan" instance=ExtResource( 5 )]

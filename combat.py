@@ -147,22 +147,6 @@ def emp(attacker, defender):
 		defender['logic'] -= attack
 
 
-standard_types = {
-	'base': Bot('base'),
-	'probe': Bot('probe', drive_type=2, weapon_type=probe, weapon=2, logic=9),
-	'scout': Bot('scout', drive_type=3, logic=6),
-	'sniper': Bot('sniper', drive_type=2, weapon_type=plasma, weapon=3),
-	'security1': Bot('security1', weapon_type=multi, weapon=3, armour_type=1, armour=2),
-	'security2': Bot('security2', weapon_type=ion_cannon, weapon=3, armour_type=1, armour=2),
-	'security3': Bot('security3', weapon_type=laser, weapon=3, armour_type=1, armour=2),
-	'grunt': Bot('grunt', weapon_type=blade, weapon=3, armour_type=2, armour=2),
-	'fighter1': Bot('fighter1', weapon_type=multi, weapon=2, armour_type=2, armour=2),
-	'fighter2': Bot('fighter2', weapon_type=ion_cannon, weapon=2, armour_type=2, armour=2),
-	'fighter3': Bot('fighter3', weapon_type=laser, weapon=2, armour_type=2, armour=2),
-	'tank': Bot('tank', weapon_type=projectile, weapon=2, armour_type=3, armour=2),
-	'killer': Bot('killer', weapon_type=emp, weapon=2, armour_type=1, armour=2)
-}
-
 print("Attacker", *standard_types, sep=",")
 for attacker_level in range(1, 4):
 	for attacker_name, attacker_class in standard_types.items():

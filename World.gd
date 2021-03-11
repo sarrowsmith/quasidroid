@@ -23,6 +23,10 @@ var player = null
 var active_level = null
 
 
+func _ready():
+	upper_panel.current_tab = MAP
+
+
 # TODO: need to instantiate Level 1 on demand so that starting anew works
 # warning-ignore:shadowed_variable
 func create(player):
@@ -44,12 +48,6 @@ func set_value(name, value, is_player):
 	var lv = (player_status_box if is_player else rogue_status_box).get_node(name)
 	if lv:
 		lv.set_value(value)
-
-
-func show_position():
-	rogue_status_box.get_node("Position").set_value(active_level.cursor.location)
-	# set other items invisible
-	show_stats(false)
 
 
 func show_info(text, append=false):

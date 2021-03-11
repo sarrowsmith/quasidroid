@@ -10,7 +10,8 @@ func _ready():
 	is_player = true
 	base = "0"
 	stats = Stats.new()
-	stats.equipment.weapon = "Laser"
+	for w in ["Plasma", "Laser", "Dual"]:
+		stats.equipment.weapons.append(w)
 
 
 func _process(delta):
@@ -21,7 +22,7 @@ func _process(delta):
 
 func turn():
 	.turn()
-	if combat == WEAPON:
+	if combat >= WEAPON:
 		combat = GRAPPLE
 	equip()
 	check_location()
@@ -29,7 +30,7 @@ func turn():
 
 
 func equip(_auto=true):
-	.equip(combat == WEAPON and not $Weapons.melee)
+	.equip(combat >= WEAPON)
 	show_combat_mode()
 	set_cursor()
 
@@ -57,7 +58,7 @@ func _unhandled_input(event):
 	if event is InputEventKey and event.pressed:
 		match event.scancode:
 			KEY_Z:
-				combat = (combat + 1) % 3
+				combat = (combat + 1) % len(stats.equipment.weapons)
 				equip()
 
 
@@ -138,17 +139,11 @@ You can also recharge here.
 			if rogue:
 				rogue.show_stats(true)
 				return
-	level.world.show_position()
 	level.world.show_info(info)
 
 
 func show_combat_mode():
-	var mode = "Ram"
-	if combat == GRAPPLE:
-		mode = "Grapple"
-	elif stats.equipment.weapon and (combat == MELEE if $Weapons.melee else combat == WEAPON):
-		mode = stats.equipment.weapon
-	level.world.set_value("Combat", mode, true)
+	level.world.set_value("weapons", stats.equipment.weapons[combat], true)
 
 
 func change_level(level):

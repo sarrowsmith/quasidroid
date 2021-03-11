@@ -156,7 +156,10 @@ func change_level(level):
 
 func check_location():
 	if not level.access.has(location):
-		return
+		for r in level.rogues:
+			if r.state == DEAD and r.location == location:
+				scavange(r)
+				return
 	var lift =  level.lift_at(location)
 	if lift:
 		emit_signal("change_level", lift.to)
@@ -165,3 +168,7 @@ func check_location():
 		level.set_cursor(location)
 		show_info()
 		level.activate(location)
+
+
+func scavange(other):
+	pass

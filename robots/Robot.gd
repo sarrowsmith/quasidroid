@@ -152,7 +152,11 @@ func action(direction):
 			if is_player:
 				for r in level.rogues:
 					if r.location == target:
-						attack(r)
+						if r.state == DEAD:
+							move(target)
+						else:
+							attack(r)
+						break
 		_:
 			moves += 1 # because we've already paid for the move, pay back the no-op
 	set_sprite()

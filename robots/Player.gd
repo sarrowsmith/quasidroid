@@ -4,6 +4,8 @@ extends Robot
 signal move(position)
 signal change_level(level)
 
+var hit_semaphore = 0
+
 
 func _ready():
 	weapons = $Weapons
@@ -60,6 +62,7 @@ func _unhandled_input(event):
 			KEY_Z:
 				combat = (combat + 1) % len(stats.equipment.weapons)
 				equip()
+				show_stats(true)
 
 
 const cursor_types = {
@@ -169,6 +172,7 @@ func check_location():
 		return
 	var lift =  level.lift_at(location)
 	if lift:
+		state = DONE
 		emit_signal("change_level", lift.to)
 	else:
 		#recharge

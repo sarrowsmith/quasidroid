@@ -37,7 +37,7 @@ func _process(_delta):
 			if not moves:
 				state = DONE
 			level.set_cursor()
-			return
+		return
 	if firing == "Fire":
 		weapon.position += facing * 4
 		var target = level.position_to_location(weapon.global_position)
@@ -49,8 +49,8 @@ func _process(_delta):
 		firing = "Idle"
 		weapons.location = location
 		equip(true)
-		if not moves:
-			state = DONE
+	if state == WAIT and not (level.world.player.hit_semaphore or moves):
+		state = DONE
 
 
 func turn():
@@ -201,6 +201,7 @@ func shot():
 
 
 func attack(other):
+	state = WAIT
 	return grapple(other) if combat == GRAPPLE else melee(other)
 
 
@@ -218,6 +219,7 @@ func hit(count=0):
 		zapped = get_sprite("Robot/Hit")
 		if not zapped or count == hit_count:
 			return
+		level.world.player.hit_semaphore += 1
 		zapped.connect("animation_finished", self, "hit", [], CONNECT_DEFERRED)
 		hit_count = count
 		zapped.set_visible(true)
@@ -231,3 +233,4 @@ func hit(count=0):
 			zapped.stop()
 			zapped.set_visible(false)
 			zapped.disconnect("animation_finished", self, "hit")
+			level.world.player.hit_semaphore -= 1

@@ -10,6 +10,7 @@ onready var world = $World
 onready var world_size = $World.world_size
 
 var turn = 1
+var target = 0
 
 
 func _ready():
@@ -33,6 +34,8 @@ func new():
 	change_level(world.create(player))
 	world.set_value("Turn", 1, true)
 	player.turn()
+	world.upper_panel.current_tab = world.LEVELS
+	world.lower_panel.current_tab = world.LEVELS
 
 
 const view_map = {
@@ -135,9 +138,14 @@ func save_game():
 
 
 func check_end():
+	world.set_info("""Level %s has been cleared""" % world.active_level.map_name)
 	if not world.level_one.is_clear():
 		return
+	target = turn + 100
 	world.level_one.lifts[0].unlock()
+	world.set_info("""All the levels have now been cleared.
+
+Make your way to the surface before the systems reboot in on turn %d.""" % target, true)
 
 
 func game_over():

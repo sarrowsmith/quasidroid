@@ -5,6 +5,7 @@ signal move(position)
 
 
 func _ready():
+	weapons = $Weapons
 	is_player = true
 	base = "0"
 	equipment.weapon = "Laser"

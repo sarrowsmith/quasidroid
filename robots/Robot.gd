@@ -29,8 +29,8 @@ var moves = 0
 var hit_count = 0
 var state = DEAD
 var is_player = false
-
-onready var weapons = $Weapons
+# This *must* be overridden by derived classes
+var weapons = null
 
 
 func _process(_delta):
@@ -207,9 +207,9 @@ func melee(other):
 func hit(count=0):
 	if count > 0:
 		zapped = get_sprite("Robot/Hit")
-		if not zapped:
+		if not zapped or count == hit_count:
 			return
-		zapped.connect("animation_finished", self, "hit")
+		zapped.connect("animation_finished", self, "hit", [], CONNECT_DEFERRED)
 		hit_count = count
 		zapped.set_visible(true)
 		zapped.play()

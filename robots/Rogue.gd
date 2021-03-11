@@ -2,6 +2,7 @@ extends Robot
 
 
 func _ready():
+	weapons = $Weapons
 	state = DONE
 
 

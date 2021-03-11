@@ -7,6 +7,7 @@ var mode = null
 var location = Vector2.ZERO
 
 
+# warning-ignore:shadowed_variable
 func set_mode(mode):
 	self.mode = mode
 	current.set_visible(false)

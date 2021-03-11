@@ -140,24 +140,28 @@ animations = [ {
 [node name="Down" type="AnimatedSprite" parent="Idle"]
 visible = false
 frames = SubResource( 4 )
+frame = 1
 playing = true
 centered = false
 
 [node name="Up" type="AnimatedSprite" parent="Idle"]
 visible = false
 frames = SubResource( 8 )
+frame = 1
 playing = true
 centered = false
 
 [node name="Left" type="AnimatedSprite" parent="Idle"]
 visible = false
 frames = SubResource( 12 )
+frame = 1
 playing = true
 centered = false
 
 [node name="Right" type="AnimatedSprite" parent="Idle"]
 visible = false
 frames = SubResource( 16 )
+frame = 1
 playing = true
 centered = false
 

@@ -5,8 +5,9 @@ signal move(position)
 
 
 func _ready():
+	is_player = true
 	base = "0"
-	equipment["weapon"] = "Plasma"
+	equipment.weapon = "Laser"
 
 
 func _process(delta):

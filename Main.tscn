@@ -189,6 +189,9 @@ label = "Weapon:"
 [node name="Combat" parent="View/Panel/Split/UpperPanel/Status" instance=ExtResource( 5 )]
 label = "Combat:"
 
+[node name="extras" parent="View/Panel/Split/UpperPanel/Status" instance=ExtResource( 5 )]
+label = "Equipment:"
+
 [node name="Controls" type="VBoxContainer" parent="View/Panel/Split/UpperPanel"]
 visible = false
 anchor_right = 1.0

@@ -14,7 +14,7 @@ var facing = Vector2.DOWN
 var destination = Vector2.ZERO
 var sprite = null
 var weapon = null
-var fire = Vector2.ZERO
+var zapped = null
 var combat = GRAPPLE
 var equipment = {
 	weapon = null,
@@ -22,11 +22,15 @@ var equipment = {
 }
 var stats = {
 	speed = 1,
-	weapon = 12,
-	sight = 12,
+	_weapon = 6,
+	_sight = 6,
 }
 var moves = 0
+var hit_count = 0
 var state = DEAD
+var is_player = false
+
+onready var weapons = $Weapons
 
 
 func _process(_delta):
@@ -43,18 +47,15 @@ func _process(_delta):
 			level.set_cursor()
 			return
 	if firing == "Fire":
-		weapon.position += facing
+		weapon.position += facing * 4
 		var target = level.position_to_location(weapon.global_position)
-		if level.position_to_location(weapon.position) == fire:
+		if level.position_to_location(weapon.position) == weapons.location:
 			return
-		fire = target
-		match level.location_type(fire):
-			Level.FLOOR:
-				if position.distance_squared_to(weapon.position) > stats["weapon"] * stats["weapon"]:
-					return
+		weapons.location = target
+		if not weapons.shoot():
+			return 
 		firing = "Idle"
-		weapon.position = position
-		fire = location
+		weapons.location = location
 		equip(true)
 		if not moves:
 			state = DONE
@@ -62,7 +63,7 @@ func _process(_delta):
 
 func turn():
 	state = IDLE
-	moves = stats["speed"]
+	moves = stats.speed
 
 
 const facing_map = {
@@ -72,6 +73,10 @@ const facing_map = {
 	Vector2.LEFT: "Left",
 	Vector2.RIGHT: "Right",
 }
+func get_sprite(path):
+	return get_node("%s/%s" % [path, facing_map[facing]])
+
+
 func set_sprite():
 	if sprite:
 		sprite.set_visible(false)
@@ -81,24 +86,24 @@ func set_sprite():
 	var path = "Robot/Dead" if dead else base
 	if equipment.extras:
 		path += "-X"
-	if not dead:
-		path = "Robot/%s/%s/%s" % [path, mode, facing_map[facing]]
-	sprite = get_node(path)
+	sprite = get_node(path) if dead else get_sprite("Robot/%s/%s" % [path, mode])
 	sprite.set_visible(true)
-	if dead or equipment["weapon"] == null:
+	if dead or equipment.weapon == null:
 		if weapon:
 			weapon.set_visible(false)
 			weapon = null
 		return
-	weapon = get_node("Weapons/%s/%s/%s" % [equipment["weapon"], firing, facing_map[facing]])
+	weapon = get_sprite("Weapons/%s/%s" % [equipment.weapon, firing])
 
 
 func equip(on):
 	set_sprite()
 	if weapon:
+		weapon.position = Vector2.ZERO
 		weapon.set_visible(on)
 
 
+# warning-ignore:shadowed_variable
 func set_location(destination):
 	self.destination = destination
 	location = destination
@@ -112,7 +117,6 @@ func move(target):
 
 
 func action(direction):
-	var is_player = self == level.world.player
 	if direction == null:
 		if not is_player:
 			return
@@ -120,7 +124,7 @@ func action(direction):
 	if combat == WEAPON:
 		if direction == Vector2.ZERO:
 			direction = facing
-		fire(direction)
+		shoot(direction)
 		return
 	facing = direction
 	var target = location + direction
@@ -141,20 +145,21 @@ func action(direction):
 				if not moves:
 					state = DONE
 			else:
-				attack()
+				attack(level.world.player)
 		Level.ROGUE:
 			if is_player:
-				attack()
+				for r in level.rogues:
+					if r.location == target:
+						attack(r)
 		_:
 			moves += 1
 	set_sprite()
 
 
-func fire(direction):
+func shoot(direction):
 	facing = direction
 	firing = "Fire"
-	fire = location + direction
-	weapon.position = level.location_to_position(fire)
+	weapons.location = location + direction
 	state = WAIT
 	moves -= 1
 	equip(true)
@@ -162,6 +167,8 @@ func fire(direction):
 
 func item_to_string(item):
 	if equipment[item]:
+		if item == "extras":
+			return PoolStringArray(equipment.extras).join(", ")
 		return equipment[item]
 	return "none"
 
@@ -169,9 +176,9 @@ func item_to_string(item):
 func show_stats(visible=false):
 	if not level:
 		return
-	var is_player = self == level.world.player
 	for stat in stats:
-		level.world.set_value(stat, stats[stat], is_player)
+		if stat[0] != "_":
+			level.world.set_value(stat, stats[stat], is_player)
 	for item in equipment:
 		level.world.set_value(item, item_to_string(item), is_player)
 	level.world.set_value("Moves", moves, is_player)
@@ -180,13 +187,38 @@ func show_stats(visible=false):
 		level.world.show_stats(is_player)
 
 
-func attack():
-	grapple() if combat == GRAPPLE else melee()
+func shot():
+	hit(3)
 
 
-func grapple():
-	pass
+func attack(other):
+	return grapple(other) if combat == GRAPPLE else melee(other)
 
 
-func melee():
-	pass
+func grapple(other):
+	other.hit(1)
+	hit(1)
+
+
+func melee(other):
+	other.hit(2)
+
+
+func hit(count=0):
+	if count > 0:
+		zapped = get_sprite("Robot/Hit")
+		if not zapped:
+			return
+		zapped.connect("animation_finished", self, "hit")
+		hit_count = count
+		zapped.set_visible(true)
+		zapped.play()
+	else:
+		if hit_count:
+			hit_count -= 1
+		else:
+			if not zapped:
+				return
+			zapped.stop()
+			zapped.set_visible(false)
+			zapped.disconnect("animation_finished", self, "hit")

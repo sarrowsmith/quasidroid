@@ -18,11 +18,6 @@ func randi_range(low, high):
 
 # shuffle the order of an array
 func shuffle(array):
-	var size = len(array)
-	var shuffled = []
-	var indexes = range(size)
-	for _i in size:
-		var x = randi() % len(indexes)
-		shuffled.append(array[indexes[x]])
-		indexes.remove(x)
+	var shuffled = array.duplicate()
+	shuffled.shuffle()
 	return shuffled

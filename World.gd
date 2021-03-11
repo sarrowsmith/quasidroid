@@ -19,6 +19,7 @@ var player = null
 
 
 # TODO: need to instantiate Level 1 on demand so that starting anew works
+# warning-ignore:shadowed_variable
 func create(player):
 	self.player = player
 	world_seed = randi()

@@ -32,6 +32,7 @@ func _ready():
 	world = find_parent("World")
 
 
+# warning-ignore:shadowed_variable
 func create(from, rooms):
 	set_visible(false)
 	map = get_node("Rooms" if rooms else "Caves")
@@ -221,7 +222,7 @@ func set_cursor(location=null):
 	world.player.set_cursor()
 
 
-func _on_Background_click(position, button):
+func _on_Background_click(_position, button):
 	world.player.cursor_activate(button)
 
 

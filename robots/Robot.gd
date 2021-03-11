@@ -16,15 +16,7 @@ var sprite = null
 var weapon = null
 var zapped = null
 var combat = GRAPPLE
-var equipment = {
-	weapon = null,
-	extras = [],
-}
-var stats = {
-	speed = 1,
-	_weapon = 6,
-	_sight = 6,
-}
+var stats = null
 var moves = 0
 var hit_count = 0
 var state = DEAD
@@ -63,7 +55,7 @@ func _process(_delta):
 
 func turn():
 	state = IDLE
-	moves = stats.speed
+	moves = stats.stats.speed
 
 
 const facing_map = {
@@ -84,16 +76,16 @@ func set_sprite():
 		weapon.set_visible(false)
 	var dead = state == DEAD
 	var path = "Robot/Dead" if dead else base
-	if equipment.extras:
+	if stats.equipment.extras:
 		path += "-X"
 	sprite = get_node(path) if dead else get_sprite("Robot/%s/%s" % [path, mode])
 	sprite.set_visible(true)
-	if dead or equipment.weapon == null:
+	if dead or stats.equipment.weapon == null:
 		if weapon:
 			weapon.set_visible(false)
 			weapon = null
 		return
-	weapon = get_sprite("Weapons/%s/%s" % [equipment.weapon, firing])
+	weapon = get_sprite("Weapons/%s/%s" % [stats.equipment.weapon, firing])
 
 
 func equip(on):
@@ -150,13 +142,12 @@ func action(direction):
 				attack(level.world.player)
 		Level.ROGUE:
 			if is_player:
-				for r in level.rogues:
-					if r.location == target:
-						if r.state == DEAD:
-							move(target)
-						else:
-							attack(r)
-						break
+				var rogue = level.rogue_at(target)
+				if rogue:
+					if rogue.state == DEAD:
+						move(target)
+					else:
+						attack(rogue)
 		_:
 			moves += 1 # because we've already paid for the move, pay back the no-op
 	set_sprite()
@@ -176,23 +167,23 @@ func shoot(direction):
 
 
 func item_to_string(item):
-	if equipment[item]:
+	if stats.equipment[item]:
 		if item == "extras":
-			return PoolStringArray(equipment.extras).join(", ")
-		return equipment[item]
+			return PoolStringArray(stats.equipment.extras).join(", ")
+		return stats.equipment[item]
 	return "none"
 
 
 func show_stats(visible=false):
 	if not level:
 		return
-	for stat in stats:
-		if stat[0] != "_":
-			level.world.set_value(stat, stats[stat], is_player)
-	for item in equipment:
+	for stat in stats.stats:
+		level.world.set_value(stat, stats.stats[stat], is_player)
+	for item in stats.equipment:
 		level.world.set_value(item, item_to_string(item), is_player)
-	level.world.set_value("Moves", moves, is_player)
 	level.world.set_value("Position", location, is_player)
+	if is_player:
+		level.world.set_value("Moves", moves, true)
 	if visible:
 		level.world.show_stats(is_player)
 

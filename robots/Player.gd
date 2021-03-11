@@ -9,7 +9,8 @@ func _ready():
 	weapons = $Weapons
 	is_player = true
 	base = "0"
-	equipment.weapon = "Laser"
+	stats = Stats.new()
+	stats.equipment.weapon = "Laser"
 
 
 func _process(delta):
@@ -76,7 +77,7 @@ func set_cursor():
 			if lift and lift.state == Lift.OPEN:
 				location_type = Level.PLAYER
 		Level.FLOOR, Level.ACCESS:
-			if location.distance_squared_to(level.cursor.location) <= stats["speed"]:
+			if location.distance_squared_to(level.cursor.location) <= stats.stats.speed:
 				location_type = Level.PLAYER
 		Level.ROGUE:
 			if location.x == level.cursor.location.x or location.y == level.cursor.location.y:
@@ -129,9 +130,14 @@ This access point %s.
 
 You can also recharge here.
 """ % ("has been reset" if ap.active else "is being reset" if level.cursor.location == location else "needs resetting")
-		Level.PLAYER, Level.ROGUE:
+		Level.PLAYER:
 			show_stats(true)
 			return
+		Level.ROGUE:
+			var rogue = level.rogue_at()
+			if rogue:
+				rogue.show_stats(true)
+				return
 	level.world.show_position()
 	level.world.show_info(info)
 
@@ -140,8 +146,8 @@ func show_combat_mode():
 	var mode = "Ram"
 	if combat == GRAPPLE:
 		mode = "Grapple"
-	elif equipment.weapon and (combat == MELEE if $Weapons.melee else combat == WEAPON):
-		mode = equipment.weapon
+	elif stats.equipment.weapon and (combat == MELEE if $Weapons.melee else combat == WEAPON):
+		mode = stats.equipment.weapon
 	level.world.set_value("Combat", mode, true)
 
 
@@ -156,10 +162,10 @@ func change_level(level):
 
 func check_location():
 	if not level.access.has(location):
-		for r in level.rogues:
-			if r.state == DEAD and r.location == location:
-				scavange(r)
-				return
+		var rogue = level.rogue_at(location)
+		if rogue and rogue.state == DEAD:
+			scavange(rogue)
+			return
 	var lift =  level.lift_at(location)
 	if lift:
 		emit_signal("change_level", lift.to)
@@ -171,4 +177,4 @@ func check_location():
 
 
 func scavange(other):
-	pass
+	other.show_stats(true)

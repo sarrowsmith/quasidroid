@@ -17,4 +17,6 @@ func generate(level, location):
 	set_location(location)
 	facing = Util.choose(facing_map.keys())
 
+	stats = Stats.new()
+
 	equip(true)

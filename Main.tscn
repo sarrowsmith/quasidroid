@@ -13,6 +13,8 @@ script = ExtResource( 2 )
 [node name="World" parent="." instance=ExtResource( 1 )]
 upper_panel_path = NodePath("../View/Panel/Split/UpperPanel")
 lower_panel_path = NodePath("../View/Panel/Split/LowerPanel")
+player_status_path = NodePath("../View/Panel/Split/UpperPanel/Status/Status")
+rogue_status_path = NodePath("../View/Panel/Split/LowerPanel/Scan/Scan")
 
 [node name="Level" parent="World" index="0"]
 visible = true
@@ -151,7 +153,7 @@ margin_bottom = 311.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="Status" type="VBoxContainer" parent="View/Panel/Split/UpperPanel"]
+[node name="Status" type="ScrollContainer" parent="View/Panel/Split/UpperPanel"]
 visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -161,36 +163,68 @@ margin_right = -4.0
 margin_bottom = -4.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
+scroll_horizontal_enabled = false
 
-[node name="Turn" parent="View/Panel/Split/UpperPanel/Status" instance=ExtResource( 5 )]
+[node name="Status" type="VBoxContainer" parent="View/Panel/Split/UpperPanel/Status"]
+margin_right = 338.0
+margin_bottom = 374.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Turn" parent="View/Panel/Split/UpperPanel/Status/Status" instance=ExtResource( 5 )]
 margin_top = 27.0
 margin_right = 338.0
 margin_bottom = 50.0
 label = "Turn:"
 
-[node name="Moves" parent="View/Panel/Split/UpperPanel/Status" instance=ExtResource( 5 )]
+[node name="Moves" parent="View/Panel/Split/UpperPanel/Status/Status" instance=ExtResource( 5 )]
 margin_top = 27.0
 margin_right = 338.0
 margin_bottom = 50.0
 label = "Moves left:"
 
-[node name="Position" parent="View/Panel/Split/UpperPanel/Status" instance=ExtResource( 5 )]
+[node name="Combat" parent="View/Panel/Split/UpperPanel/Status/Status" instance=ExtResource( 5 )]
+margin_bottom = 715.0
+label = "Combat:"
+
+[node name="name" parent="View/Panel/Split/UpperPanel/Status/Status" instance=ExtResource( 5 )]
+visible = false
+margin_bottom = 715.0
+size_flags_horizontal = 0
+size_flags_vertical = 0
+
+[node name="power" parent="View/Panel/Split/UpperPanel/Status/Status" instance=ExtResource( 5 )]
+label = "Power:"
+
+[node name="logic" parent="View/Panel/Split/UpperPanel/Status/Status" instance=ExtResource( 5 )]
+label = "Logic:"
+
+[node name="chassis" parent="View/Panel/Split/UpperPanel/Status/Status" instance=ExtResource( 5 )]
+label = "Chassis:"
+
+[node name="drive" parent="View/Panel/Split/UpperPanel/Status/Status" instance=ExtResource( 5 )]
+label = "Drive:"
+
+[node name="armour" parent="View/Panel/Split/UpperPanel/Status/Status" instance=ExtResource( 5 )]
+label = "Armour:"
+
+[node name="strength" parent="View/Panel/Split/UpperPanel/Status/Status" instance=ExtResource( 5 )]
+label = "Strength:"
+
+[node name="speed" parent="View/Panel/Split/UpperPanel/Status/Status" instance=ExtResource( 5 )]
+label = "Speed:"
+
+[node name="weapon" parent="View/Panel/Split/UpperPanel/Status/Status" instance=ExtResource( 5 )]
+label = "Weapon:"
+
+[node name="extras" parent="View/Panel/Split/UpperPanel/Status/Status" instance=ExtResource( 5 )]
+label = "Equipment:"
+
+[node name="Position" parent="View/Panel/Split/UpperPanel/Status/Status" instance=ExtResource( 5 )]
 margin_top = 27.0
 margin_right = 338.0
 margin_bottom = 50.0
 label = "Position:"
-
-[node name="speed" parent="View/Panel/Split/UpperPanel/Status" instance=ExtResource( 5 )]
-label = "Speed:"
-
-[node name="weapon" parent="View/Panel/Split/UpperPanel/Status" instance=ExtResource( 5 )]
-label = "Weapon:"
-
-[node name="Combat" parent="View/Panel/Split/UpperPanel/Status" instance=ExtResource( 5 )]
-label = "Combat:"
-
-[node name="extras" parent="View/Panel/Split/UpperPanel/Status" instance=ExtResource( 5 )]
-label = "Equipment:"
 
 [node name="Controls" type="VBoxContainer" parent="View/Panel/Split/UpperPanel"]
 visible = false
@@ -327,19 +361,13 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 tab_align = 0
 
-[node name="Info" type="VBoxContainer" parent="View/Panel/Split/LowerPanel"]
+[node name="Info" type="RichTextLabel" parent="View/Panel/Split/LowerPanel"]
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_left = 4.0
 margin_top = 32.0
 margin_right = -4.0
 margin_bottom = -4.0
-size_flags_horizontal = 3
-size_flags_vertical = 3
-
-[node name="RichTextLabel" type="RichTextLabel" parent="View/Panel/Split/LowerPanel/Info"]
-margin_right = 338.0
-margin_bottom = 311.0
 rect_clip_content = false
 focus_mode = 2
 size_flags_horizontal = 3
@@ -353,7 +381,7 @@ bbcode_enabled = true
 fit_content_height = true
 selection_enabled = true
 
-[node name="Scan" type="VBoxContainer" parent="View/Panel/Split/LowerPanel"]
+[node name="Scan" type="ScrollContainer" parent="View/Panel/Split/LowerPanel"]
 visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -363,18 +391,51 @@ margin_right = -4.0
 margin_bottom = -4.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
+scroll_horizontal_enabled = false
 
-[node name="Position" parent="View/Panel/Split/LowerPanel/Scan" instance=ExtResource( 5 )]
+[node name="Scan" type="VBoxContainer" parent="View/Panel/Split/LowerPanel/Scan"]
+margin_right = 338.0
+margin_bottom = 311.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Position" parent="View/Panel/Split/LowerPanel/Scan/Scan" instance=ExtResource( 5 )]
 margin_top = 27.0
 margin_right = 338.0
 margin_bottom = 50.0
 label = "Position:"
 
-[node name="speed" parent="View/Panel/Split/LowerPanel/Scan" instance=ExtResource( 5 )]
+[node name="name" parent="View/Panel/Split/LowerPanel/Scan/Scan" instance=ExtResource( 5 )]
+margin_bottom = 715.0
+size_flags_horizontal = 1
+label = "Type:"
+
+[node name="power" parent="View/Panel/Split/LowerPanel/Scan/Scan" instance=ExtResource( 5 )]
+label = "Power:"
+
+[node name="logic" parent="View/Panel/Split/LowerPanel/Scan/Scan" instance=ExtResource( 5 )]
+label = "Logic:"
+
+[node name="chassis" parent="View/Panel/Split/LowerPanel/Scan/Scan" instance=ExtResource( 5 )]
+label = "Chassis:"
+
+[node name="drive" parent="View/Panel/Split/LowerPanel/Scan/Scan" instance=ExtResource( 5 )]
+label = "Drive:"
+
+[node name="armour" parent="View/Panel/Split/LowerPanel/Scan/Scan" instance=ExtResource( 5 )]
+label = "Armour:"
+
+[node name="strength" parent="View/Panel/Split/LowerPanel/Scan/Scan" instance=ExtResource( 5 )]
+label = "Strength:"
+
+[node name="speed" parent="View/Panel/Split/LowerPanel/Scan/Scan" instance=ExtResource( 5 )]
 label = "Speed:"
 
-[node name="weapon" parent="View/Panel/Split/LowerPanel/Scan" instance=ExtResource( 5 )]
+[node name="weapon" parent="View/Panel/Split/LowerPanel/Scan/Scan" instance=ExtResource( 5 )]
 label = "Weapon:"
+
+[node name="extras" parent="View/Panel/Split/LowerPanel/Scan/Scan" instance=ExtResource( 5 )]
+label = "Equipment:"
 
 [node name="Levels" type="VBoxContainer" parent="View/Panel/Split/LowerPanel"]
 visible = false

@@ -147,6 +147,15 @@ func generate_rogues():
 				break
 
 
+func rogue_at(location=null):
+	if not location:
+		location = cursor.location
+	for r in rogues:
+		if r.location == location:
+			return r
+	return null
+
+
 func check_nearby(x, y, r):
 	var counts = [0, 0, 0, 0, 0, 0]
 	for i in 2*r+1:
@@ -161,13 +170,14 @@ func location_type(location):
 		return ACCESS if access[location] else LIFT
 	if location == world.player.location:
 		return PLAYER
-	for r in rogues:
-		if location == r.location:
-			return ROGUE
+	if rogue_at(location):
+		return ROGUE
 	return WALL if map.get_cellv(location) != TileMap.INVALID_CELL else FLOOR
 
 
 func activate(location):
+	if not access.has(location):
+		return # Shouldn't be possible, but apparently is
 	access[location].active = true
 	for ap in access.values():
 		if ap and not ap.active:

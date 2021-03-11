@@ -5,11 +5,15 @@ export(int) var world_seed
 export(Vector2) var world_size = Vector2(1440, 1440)
 export(NodePath) var upper_panel_path
 export(NodePath) var lower_panel_path
+export(NodePath) var player_status_path
+export(NodePath) var rogue_status_path
 
 enum {INFO, STATUS, LEVELS, MAP}
 
 onready var upper_panel = get_node(upper_panel_path)
 onready var lower_panel = get_node(lower_panel_path)
+onready var player_status_box = get_node(player_status_path)
+onready var rogue_status_box = get_node(player_status_path)
 onready var level_one = $Level
 
 
@@ -37,13 +41,13 @@ func change_level(level):
 
 
 func set_value(name, value, is_player):
-	var lv = (upper_panel if is_player else lower_panel).get_tab_control(STATUS).get_node(name)
+	var lv = (player_status_box if is_player else rogue_status_box).get_node(name)
 	if lv:
 		lv.set_value(value)
 
 
 func show_position():
-	lower_panel.get_tab_control(STATUS).get_node("Position").set_value(active_level.cursor.location)
+	rogue_status_box.get_node("Position").set_value(active_level.cursor.location)
 	# set other items invisible
 	show_stats(false)
 
@@ -55,4 +59,5 @@ func show_info(text, append=false):
 
 
 func show_stats(is_player):
-	(upper_panel if is_player else lower_panel).current_tab = STATUS
+	var p = (upper_panel if is_player else lower_panel)
+	p.current_tab = STATUS

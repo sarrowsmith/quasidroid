@@ -8,6 +8,7 @@ export(int) var level = 0
 
 enum Prototype {LEVEL, LIFT, ACCESS, ROGUE}
 enum {FLOOR, WALL, LIFT, ACCESS, PLAYER, ROGUE}
+enum {LOCKED, OPEN, RESET, CLEAR}
 
 onready var cursor = $Cursor
 
@@ -20,6 +21,7 @@ var lifts = []
 var access = {}
 var map_name = ""
 var rogues = []
+var state = LOCKED
 
 
 func _ready():
@@ -32,6 +34,12 @@ func _ready():
 	world = find_parent("World")
 
 
+func is_clear():
+	return (state == CLEAR and children and
+		children[0] and children[0].is_clear() and
+		children[1] and children[1].is_clear())
+
+
 # warning-ignore:shadowed_variable
 func create(from, rooms):
 	set_visible(false)
@@ -42,6 +50,7 @@ func create(from, rooms):
 	if parent == null:
 		level = 1
 		map_name = "1"
+		state = OPEN
 	else:
 		level = parent.level + 1
 		prototypes = parent.prototypes
@@ -163,8 +172,11 @@ func activate(location):
 	for ap in access.values():
 		if ap and not ap.active:
 			return
+	state = RESET
 	for lift in lifts:
 		lift.unlock()
+		if lift.to and lift.to.state == LOCKED:
+			lift.to.state = OPEN
 	world.show_info("""All access points on level %s reset
 
 Downwards lift%s unlocked.

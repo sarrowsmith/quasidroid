@@ -11,9 +11,8 @@
 script = ExtResource( 2 )
 
 [node name="World" parent="." instance=ExtResource( 1 )]
-player_status_path = NodePath("../View/Panel/Split/UpperPanel/Status")
-rogue_status_path = NodePath("../View/Panel/Split/LowerPanel/Scan")
-info_path = NodePath("../View/Panel/Split/LowerPanel/Info/RichTextLabel")
+upper_panel_path = NodePath("../View/Panel/Split/UpperPanel")
+lower_panel_path = NodePath("../View/Panel/Split/LowerPanel")
 
 [node name="Level" parent="World" index="0"]
 visible = true

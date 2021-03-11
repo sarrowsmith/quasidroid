@@ -5,6 +5,8 @@ export(int) var game_seed = 0
 export(int) var pan_speed = 8
 export(Vector2) var half_view = Vector2(640, 360)
 
+onready var player = $Player
+onready var world = $World
 onready var world_size = $World.world_size
 
 var turn = 1
@@ -17,7 +19,7 @@ func _ready():
 
 
 func show_dialog(dialog):
-	$World.set_visible(false)
+	world.set_visible(false)
 	view_to(half_view, 0)
 	dialog.popup_centered()
 
@@ -25,12 +27,12 @@ func show_dialog(dialog):
 # TODO: need to instantiate Player here, taking care with render order
 func new():
 	$Start.set_visible(false)
-	$World.set_visible(true)
+	world.set_visible(true)
 	seed(game_seed)
 	$View.find_node("Seed").set_value(game_seed)
-	change_level($World.create($Player))
-	$World.set_value("Turn", 1, true)
-	$Player.turn()
+	change_level(world.create(player))
+	world.set_value("Turn", 1, true)
+	player.turn()
 
 
 const view_map = {
@@ -47,18 +49,25 @@ func _process(delta):
 			position += pan_speed * view_map[e]
 	view_to(position, 0)
 	if turn % 2:
-		if $Player.state == Robot.DONE:
+		if player.state == Robot.DONE:
 			turn += 1
-			for r in $World.active_level.rogues:
-				if r.state != Robot.DEAD:
+			var dead = 0
+			for r in world.active_level.rogues:
+				if r.state == Robot.DEAD:
+					dead += 1
+				else:
 					r.turn()
+			if dead == len(world.active_level.rogues):
+				if world.active_level.state != Level.CLEAR:
+					world.active_level.state = Level.CLEAR
+					check_end()
 	else:
-		for r in $World.active_level.rogues:
+		for r in world.active_level.rogues:
 			if r.state == Robot.IDLE or r.state == Robot.WAIT:
 				return
-		$Player.turn()
+		player.turn()
 		turn += 1
-		$World.set_value("Turn", (turn + 1) / 2, true)
+		world.set_value("Turn", (turn + 1) / 2, true)
 
 
 const cursor_map = {
@@ -73,12 +82,12 @@ func _unhandled_input(event):
 		if event.is_action_pressed(e, true):
 			move += cursor_map[e]
 	if move != Vector2.ZERO:
-		$World.active_level.move_cursor(move)
+		world.active_level.move_cursor(move)
 	if event.is_action_pressed("map_reset"):
-		view_to($Player.position)
+		view_to(player.position)
 		return
 	if event.is_action_pressed("cursor_reset"):
-		$World.active_level.set_cursor($Player.location)
+		world.active_level.set_cursor(player.location)
 		return
 	if event is InputEventKey and event.pressed:
 		var level = null
@@ -92,22 +101,23 @@ func _unhandled_input(event):
 					_on_Quit_pressed()
 		match event.scancode:
 			KEY_U:
-				level = $World.active_level.parent
+				level = world.active_level.parent
 			KEY_O:
-				level = $World.active_level.children[0]
+				level = world.active_level.children[0]
 			KEY_P:
-				level = $World.active_level.children[1]
-		change_level(level)
+				level = world.active_level.children[1]
+		if level:
+			change_level(level)
 
 
 func change_level(level):
 	if not level:
-		return
-	if level != $World.active_level:
-		$World.change_level(level)
-	$Player.change_level(level)
-	view_to($Player.position)
-	#$World.set_value("Level", level.map_name)
+		if world.level_one.is_clear():
+			game_over()
+	if level != world.active_level:
+		world.change_level(level)
+	player.change_level(level)
+	view_to(player.position)
 
 
 func view_to(position, offset=180):
@@ -122,6 +132,17 @@ func load_game():
 
 func save_game():
 	pass
+
+
+func check_end():
+	if not world.level_one.is_clear():
+		return
+	world.level_one.lifts[0].unlock()
+
+
+func game_over():
+	# TODO: something better than this
+	_on_Restart_pressed()
 
 
 func _on_Resume_pressed():
@@ -157,5 +178,5 @@ func _on_Quit_confirmed():
 
 
 func _on_Quit_popup_hide():
-	view_to($Player.position)
-	$World.set_visible(true)
+	view_to(player.position)
+	world.set_visible(true)

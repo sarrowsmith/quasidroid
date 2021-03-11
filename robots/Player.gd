@@ -2,6 +2,7 @@ extends Robot
 
 
 signal move(position)
+signal change_level(level)
 
 
 func _ready():
@@ -158,7 +159,7 @@ func check_location():
 		return
 	var lift =  level.lift_at(location)
 	if lift:
-		change_level(lift.to)
+		emit_signal("change_level", lift.to)
 	else:
 		#recharge
 		level.set_cursor(location)

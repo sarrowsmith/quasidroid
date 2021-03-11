@@ -15,6 +15,9 @@ player_status_path = NodePath("../View/Panel/Split/UpperPanel/Status")
 rogue_status_path = NodePath("../View/Panel/Split/LowerPanel/Scan")
 info_path = NodePath("../View/Panel/Split/LowerPanel/Info/RichTextLabel")
 
+[node name="Level" parent="World" index="0"]
+visible = true
+
 [node name="ColorRectBottom" type="ColorRect" parent="."]
 anchor_top = 1.0
 anchor_bottom = 1.0
@@ -27,7 +30,6 @@ __meta__ = {
 }
 
 [node name="ColorRectTop" type="ColorRect" parent="."]
-visible = false
 margin_right = 1536.0
 margin_bottom = 48.0
 color = Color( 0.0235294, 0.0627451, 0.0666667, 1 )
@@ -36,7 +38,6 @@ __meta__ = {
 }
 
 [node name="ColorRectLeft" type="ColorRect" parent="."]
-visible = false
 margin_right = 48.0
 margin_bottom = 1536.0
 color = Color( 0.0235294, 0.0627451, 0.0666667, 1 )
@@ -541,6 +542,7 @@ dialog_text = "Are you sure you want to quit? (Game will not be saved at this po
 __meta__ = {
 "_edit_use_anchors_": false
 }
+[connection signal="change_level" from="Player" to="." method="change_level"]
 [connection signal="move" from="Player" to="." method="view_to"]
 [connection signal="pressed" from="View/Panel/Split/UpperPanel/Menu/Save/Button" to="." method="_on_Save_pressed"]
 [connection signal="pressed" from="View/Panel/Split/UpperPanel/Menu/Restart/Button" to="." method="_on_Restart_pressed"]
@@ -550,6 +552,8 @@ __meta__ = {
 [connection signal="pressed" from="Start/VBoxContainer/CenterContainer3/Button" to="." method="_on_Random_pressed"]
 [connection signal="confirmed" from="Quit" to="." method="_on_Quit_confirmed"]
 [connection signal="popup_hide" from="Quit" to="." method="_on_Quit_popup_hide"]
+
+[editable path="World"]
 
 [editable path="View/Panel/Split/UpperPanel/Menu/Save"]
 

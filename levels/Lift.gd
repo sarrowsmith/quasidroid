@@ -45,3 +45,4 @@ func close():
 	if state != OPEN:
 		return
 	$Open.play("default", true)
+	state = CLOSED

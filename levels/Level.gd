@@ -58,7 +58,9 @@ func create(from, rooms):
 
 func generate():
 	set_visible(true)
-	if children:
+	if children: # ie already generated
+		for l in lifts:
+			l.close()
 		return
 	seed(level_seed)
 	map.generate()

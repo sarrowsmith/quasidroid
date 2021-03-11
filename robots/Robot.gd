@@ -140,6 +140,8 @@ func action(direction):
 						move(target)
 					else:
 						lift.open()
+						lift.get_node("Open").connect("animation_finished", self, "lift_open", [], CONNECT_DEFERRED|CONNECT_ONESHOT)
+						state = WAIT
 		Level.PLAYER:
 			if is_player:
 				if not moves:
@@ -152,8 +154,12 @@ func action(direction):
 					if r.location == target:
 						attack(r)
 		_:
-			moves += 1
+			moves += 1 # because we've already paid for the move, pay back the no-op
 	set_sprite()
+
+
+func lift_open():
+	state = DONE
 
 
 func shoot(direction):

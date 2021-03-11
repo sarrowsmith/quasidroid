@@ -147,12 +147,18 @@ func show_combat_mode():
 
 
 func change_level(level):
+	var lift = level.lifts[0]
+	if self.level and self.level.parent == level:
+		for i in len(level.children):
+			if level.children[i] == self.level:
+				lift = level.lifts[i+1]
+				break
 	self.level = level
-	set_location(level.lifts[0].location + Vector2.DOWN)
-	level.set_cursor(level.lifts[0].location)
-	show_combat_mode()
+	set_location(lift.location + Vector2.DOWN)
+	level.set_cursor(lift.location)
 	show_stats(true)
 	level.world.show_stats(true)
+	show_info()
 
 
 func check_location():
@@ -160,7 +166,7 @@ func check_location():
 		var rogue = level.rogue_at(location)
 		if rogue and rogue.state == DEAD:
 			scavange(rogue)
-			return
+		return
 	var lift =  level.lift_at(location)
 	if lift:
 		emit_signal("change_level", lift.to)
@@ -168,7 +174,12 @@ func check_location():
 		#recharge
 		level.set_cursor(location)
 		show_info()
-		level.activate(location)
+		if level.activate(location):
+			level.world.show_info("""All access points on level %s reset
+
+Downwards lift%s unlocked.
+""" % [level.map_name, "s" if level.rooms else ""], true)
+
 
 
 func scavange(other):

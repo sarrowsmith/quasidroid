@@ -3,6 +3,7 @@ extends Node2D
 
 export(int) var world_seed
 export(Vector2) var world_size = Vector2(1440, 1440)
+export(int) var world_depth = 7
 export(NodePath) var upper_panel_path
 export(NodePath) var lower_panel_path
 export(NodePath) var player_status_path
@@ -52,7 +53,11 @@ func set_value(name, value, is_player):
 
 func show_info(text, append=false):
 	var info_box = lower_panel.get_tab_control(INFO)
-	info_box.text = (info_box.text + "\n") if append else text
+	if append:
+		var new_text = "%s\n%s" % [info_box.text, text]
+		info_box.text = new_text
+	else:
+		info_box.text = text
 	lower_panel.current_tab = INFO
 
 

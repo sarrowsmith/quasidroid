@@ -73,13 +73,13 @@ func generate():
 		return
 	seed(level_seed)
 	map.generate()
-	if level == 7:
+	if level == world.world_depth:
 		children = [null, null]
 	else:
 		children = []
 		for i in 2:
 			var child = prototypes[Prototype.LEVEL].instance()
-			child.create(self, i == 1 and level < 6)
+			child.create(self, i == 1 and level < world.world_depth - 1)
 			world.add_child(child)
 			children.append(child)
 			if not rooms:
@@ -90,7 +90,7 @@ func generate():
 
 
 func place_features():
-	var n_lifts = (3 if rooms else 2) if level < 7 else 1
+	var n_lifts = (3 if rooms else 2) if level < world.world_depth else 1
 	while len(lifts) < n_lifts:
 		while true:
 			var probe = Vector2(
@@ -177,21 +177,17 @@ func location_type(location):
 
 func activate(location):
 	if not access.has(location):
-		return # Shouldn't be possible, but apparently is
+		return false# Shouldn't be possible, but apparently is
 	access[location].active = true
 	for ap in access.values():
 		if ap and not ap.active:
-			return
+			return false
 	state = RESET
 	for lift in lifts:
 		lift.unlock()
 		if lift.to and lift.to.state == LOCKED:
 			lift.to.state = OPEN
-	world.show_info("""All access points on level %s reset
-
-Downwards lift%s unlocked.
-""" % [map_name, "s" if rooms else ""], true)
-
+	return true
 
 func lift_at(location):
 	if not access.has(location) or access[location]:

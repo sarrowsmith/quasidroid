@@ -11,6 +11,7 @@
 script = ExtResource( 2 )
 
 [node name="World" parent="." instance=ExtResource( 1 )]
+world_depth = 2
 upper_panel_path = NodePath("../View/Panel/Split/UpperPanel")
 lower_panel_path = NodePath("../View/Panel/Split/LowerPanel")
 player_status_path = NodePath("../View/Panel/Split/UpperPanel/Status/Status")

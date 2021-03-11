@@ -10,10 +10,12 @@ func shoot():
 		Level.FLOOR:
 			if location.distance_squared_to(owner.location) < owner.stats.weapon * owner.stats.weapon:
 				return false
+			else:
+				owner.state = Robot.IDLE if owner.moves else Robot.DONE # Otherwise handled by shot->hit
 		Level.PLAYER:
 			if owner.is_player:
 				return false
-			owner.shot()
+			owner.level.world.player.shot()
 		Level.ROGUE:
 			var rogue = owner.level.rogue_at(location)
 			if rogue:
@@ -26,7 +28,7 @@ func splash():
 	match owner.get_weapon():
 		"Dual":
 			for r in owner.level.rogues:
-				if location.distance_squared_to(r.location) == 1:
+				if location.distance_squared_to(r.location) < 4:
 					r.shot()
 		"Laser":
 			return false

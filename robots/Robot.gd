@@ -14,11 +14,9 @@ var facing = Vector2.DOWN
 var destination = Vector2.ZERO
 var sprite = null
 var weapon = null
-var zapped = null
 var combat = GRAPPLE
 var stats = null
 var moves = 0
-var hit_count = 0
 var state = DEAD
 var is_player = false
 # This *must* be overridden by derived classes
@@ -49,8 +47,6 @@ func _process(_delta):
 		firing = "Idle"
 		weapons.location = location
 		equip(true)
-	if state == WAIT and not (level.world.player.hit_semaphore or moves):
-		state = DONE
 
 
 func turn():
@@ -214,23 +210,17 @@ func melee(other):
 	other.hit(2)
 
 
-func hit(count=0):
-	if count > 0:
-		zapped = get_sprite("Robot/Hit")
-		if not zapped or count == hit_count:
-			return
-		level.world.player.hit_semaphore += 1
-		zapped.connect("animation_finished", self, "hit", [], CONNECT_DEFERRED)
-		hit_count = count
-		zapped.set_visible(true)
-		zapped.play()
-	else:
-		if hit_count:
-			hit_count -= 1
-		else:
-			if not zapped:
-				return
-			zapped.stop()
-			zapped.set_visible(false)
-			zapped.disconnect("animation_finished", self, "hit")
-			level.world.player.hit_semaphore -= 1
+func hit(count):
+	var zapped = get_sprite("Robot/Hit")
+	if not zapped:
+		return
+	level.world.player.state == WAIT
+	zapped.set_visible(true)
+	zapped.play()
+	while count > 0:
+		yield(zapped, "animation_finished")
+		count -= 1
+	zapped.stop()
+	zapped.set_visible(false)
+	level.world.player.state = IDLE if level.world.player.moves else DONE
+	state = IDLE if moves else DONE

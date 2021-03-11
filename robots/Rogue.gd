@@ -4,11 +4,12 @@ extends Robot
 func _ready():
 	weapons = $Weapons
 	state = DONE
+	add_to_group("rogue")
 
 
 func turn():
 	.turn()
-	# AI goes here
+	# AI goes here, asynchronously
 	state = DONE
 
 

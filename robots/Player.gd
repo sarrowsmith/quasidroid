@@ -12,8 +12,8 @@ func _ready():
 	is_player = true
 	base = "0"
 	stats = Stats.new()
-	for w in ["Plasma", "Laser", "Dual"]:
-		stats.equipment.weapons.append(w)
+	stats.equipment.weapons.append("Plasma")
+	add_to_group("player")
 
 
 func _process(delta):

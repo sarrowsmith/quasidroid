@@ -16,9 +16,6 @@ lower_panel_path = NodePath("../View/Panel/Split/LowerPanel")
 player_status_path = NodePath("../View/Panel/Split/UpperPanel/Status/Status")
 rogue_status_path = NodePath("../View/Panel/Split/LowerPanel/Scan/Scan")
 
-[node name="Level" parent="World" index="0"]
-visible = true
-
 [node name="ColorRectBottom" type="ColorRect" parent="."]
 anchor_top = 1.0
 anchor_bottom = 1.0
@@ -167,7 +164,7 @@ scroll_horizontal_enabled = false
 
 [node name="Status" type="VBoxContainer" parent="View/Panel/Split/UpperPanel/Status"]
 margin_right = 338.0
-margin_bottom = 374.0
+margin_bottom = 347.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
@@ -612,8 +609,6 @@ __meta__ = {
 [connection signal="pressed" from="Start/VBoxContainer/CenterContainer3/Button" to="." method="_on_Random_pressed"]
 [connection signal="confirmed" from="Quit" to="." method="_on_Quit_confirmed"]
 [connection signal="popup_hide" from="Quit" to="." method="_on_Quit_popup_hide"]
-
-[editable path="World"]
 
 [editable path="View/Panel/Split/UpperPanel/Menu/Save"]
 

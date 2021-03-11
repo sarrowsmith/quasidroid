@@ -45,7 +45,7 @@ func _process(_delta):
 			return
 		weapons.location = target
 		if not weapons.shoot():
-			return 
+			return
 		firing = "Idle"
 		weapons.location = location
 		equip(true)

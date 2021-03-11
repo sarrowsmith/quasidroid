@@ -13,7 +13,7 @@ enum {INFO, STATUS, LEVELS, MAP}
 onready var upper_panel = get_node(upper_panel_path)
 onready var lower_panel = get_node(lower_panel_path)
 onready var player_status_box = get_node(player_status_path)
-onready var rogue_status_box = get_node(player_status_path)
+onready var rogue_status_box = get_node(rogue_status_path)
 onready var level_one = $Level
 
 

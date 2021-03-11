@@ -134,7 +134,7 @@ func action(direction):
 			move(target)
 		Level.LIFT:
 			if is_player:
-				var lift = level.lift_at(location)
+				var lift = level.lift_at(target)
 				if lift:
 					if lift.state == Lift.OPEN:
 						move(target)

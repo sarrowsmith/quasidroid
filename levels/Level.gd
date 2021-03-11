@@ -52,9 +52,7 @@ func create(from, rooms):
 			while up and not up.rooms:
 				depth += 1
 				up = up.parent
-			var A = "-A".to_ascii()
-			A.set(1, A[1]+depth-1)
-			map_name += A.get_string_from_ascii()
+			map_name += "-%s" % char("A".ord_at(0) + depth - 1)
 	level_seed = randi()
 
 
@@ -167,7 +165,8 @@ func activate(location):
 		lift.unlock()
 	world.show_info("""All access points on level %s reset
 
-Downwards lifts unlocked.""" % map_name)
+Downwards lift%s unlocked.
+""" % [map_name, "s" if rooms else ""], true)
 
 
 func lift_at(location):

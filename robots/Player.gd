@@ -123,10 +123,11 @@ func show_info():
 			if ap:
 				info = """An access point
 
-Resetting all the access points on a level will unlock the lifts down.
+Resetting all the access points on a level will unlock downwards lifts.
 This access point %s.
 
-You can also recharge here.""" % ("has been reset" if ap.active else "needs resetting")
+You can also recharge here.
+""" % ("has been reset" if ap.active else "is being reset" if level.cursor.location == location else "needs resetting")
 		Level.PLAYER, Level.ROGUE:
 			show_stats(true)
 			return
@@ -160,4 +161,6 @@ func check_location():
 		change_level(lift.to)
 	else:
 		#recharge
+		level.set_cursor(location)
+		show_info()
 		level.activate(location)

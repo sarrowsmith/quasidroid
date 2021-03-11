@@ -18,7 +18,7 @@ func _ready():
 
 func show_dialog(dialog):
 	$World.set_visible(false)
-	view_to(half_view)
+	view_to(half_view, 0)
 	dialog.popup_centered()
 
 
@@ -45,7 +45,7 @@ func _process(delta):
 	for e in view_map:
 		if Input.is_action_pressed(e):
 			position += pan_speed * view_map[e]
-	view_to(position)
+	view_to(position, 0)
 	if turn % 2:
 		if $Player.state == Robot.DONE:
 			turn += 1
@@ -110,9 +110,9 @@ func change_level(level):
 	#$World.set_value("Level", level.map_name)
 
 
-func view_to(position):
+func view_to(position, offset=180):
 	$View.position = Vector2(
-		clamp(position.x, 0, world_size.x),
+		clamp(position.x + offset, 0, world_size.x),
 		clamp(position.y, 0, world_size.y))
 
 

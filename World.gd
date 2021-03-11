@@ -46,8 +46,8 @@ func show_position():
 	show_stats(false)
 
 
-func show_info(text):
-	info_box.text = text
+func show_info(text, append=false):
+	info_box.text = (info_box.text + "\n") if append else text
 	rogue_status_box.find_parent("*").current_tab = 0
 
 

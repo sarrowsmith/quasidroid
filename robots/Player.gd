@@ -5,6 +5,7 @@ signal move(position)
 signal change_level(level)
 
 var baseline = null
+var scavenge_location = Vector2.ZERO
 
 
 func _ready():
@@ -12,8 +13,6 @@ func _ready():
 	is_player = true
 	base = "0"
 	stats = Stats.new()
-	stats.equipment.weapons.append("Plasma")
-	stats.stats.speed = 3
 	baseline = stats.stats.duplicate()
 	add_to_group("player")
 
@@ -26,7 +25,8 @@ func _process(delta):
 
 func update():
 	if weapons.get_range() > 1:
-		combat = 0
+		pass # This only makes sense if grappling is available
+		#combat = 0
 	equip()
 	check_location()
 	show_stats(false)
@@ -121,6 +121,8 @@ func cursor_activate(button):
 
 
 func show_info(optional=false):
+	var turn = level.world.turn
+	var ct = level.world.combat_turn
 	if optional and level.world.turn - level.world.combat_turn < 2:
 		return
 	var info = "Nothing to see here"
@@ -163,6 +165,7 @@ func change_level(level):
 				lift = level.lifts[i+1]
 				break
 	self.level = level
+	scavenge_location = Vector2.ZERO
 	level_up((level.level + 1) / 2)
 	set_location(lift.location + Vector2.DOWN)
 	level.set_cursor(lift.location)
@@ -173,11 +176,13 @@ func change_level(level):
 
 func check_location():
 	if not level.access.has(location):
-		var rogue = level.rogue_at(location)
-		if rogue and rogue.state == DEAD:
-			scavenge(rogue)
 		if level.access.has(level.cursor.location):
 			show_info(true)
+		if location != scavenge_location:
+			var rogue = level.rogue_at(location)
+			if rogue and rogue.state == DEAD:
+				scavenge(rogue)
+				scavenge_location = location
 		return
 	var lift =  level.lift_at(location)
 	if lift:
@@ -202,15 +207,14 @@ func recharge():
 
 
 func scavenge(other):
+	level.world.combat_turn = level.world.turn + 1
 	other.show_stats(true)
 	var scavenged = stats.scavenge(other)
 	if len(scavenged):
 		level.world.show_info("""You have scavenged:
 \t%s""" % scavenged.join("\n\t"))
-		level.world.combat_turn = level.world.turn
 	moves -= 1
-	if not moves:
-		state = DONE
+	state = WAIT if moves > 0 else DONE
 	show_stats(true)
 
 

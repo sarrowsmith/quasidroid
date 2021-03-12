@@ -9,6 +9,7 @@ export(NodePath) var lower_panel_path
 export(NodePath) var player_status_path
 export(NodePath) var rogue_status_path
 
+
 enum {INFO, STATUS, LEVELS, MAP}
 
 onready var upper_panel = get_node(upper_panel_path)
@@ -81,6 +82,7 @@ func report_death(display_name, is_player):
 
 
 func report_attack(attacker, defender, attackers, defenders):
+	var continuation = combat_turn == turn
 	combat_turn = turn
 	var a_name = first_capital("you" if attacker.is_player else ("the " + attacker.stats.type_name))
 	var d_name = "you" if defender.is_player else ("the " + defender.stats.type_name)
@@ -117,7 +119,7 @@ func report_attack(attacker, defender, attackers, defenders):
 Damage inflicted:
 %s
 """ % [first_capital(a_name), attack, d_name, with, damages.join("\n")]
-	show_info(text)
+	show_info(text, continuation)
 	if defender.check_stats():
 		report_death(first_capital(d_name), defender.is_player)
 	if attacker.check_stats():

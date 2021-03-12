@@ -4,7 +4,7 @@ extends Reference
 
 const critical_stats = ["chassis", "power", "logic"]
 const types = [
-	{ name = "Basic unit" },
+	{ name = "Basic unit", weapon = "Blade" },
 	{ name = "Scout", drive = 3, logic = 6 },
 	{ name = "Probe", drive = 2, weapon = "Probe", strength = 2, logic = 9 },
 	{ name = "Security model A", weapon = "Dual", strength = 3, armour = 1, protection = 2},

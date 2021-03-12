@@ -51,22 +51,24 @@ func shoot():
 			attack(owner.level.world.player)
 		Level.ROGUE:
 			var rogue = owner.level.rogue_at(location)
-			if rogue and rogue != owner:
-				attack(rogue)
-				return splash()
+			if rogue and rogue != owner and rogue.state != Robot.DEAD:
+				return splash(rogue)
 		_:
 			owner.state = Robot.IDLE if owner.moves else Robot.DONE
 	return true
 
 
-func splash():
+func splash(rogue):
 	match owner.get_weapon():
 		"Dual", "Ion":
 			for r in owner.level.rogues:
 				if location.distance_squared_to(r.location) < 4:
 					attack(r)
 		"Laser":
+			attack(rogue)
 			return false
+		_:
+			attack(rogue)
 	return true
 
 
@@ -159,7 +161,7 @@ func probe(other):
 func projectile(other):
 	var attack = modify_attack(other.stats)
 	if attack > 0:
-		other.stats.protection -= owner.level.rng.randfn(attack, 0.1 + other.stats.equipment.armour)
+		other.stats.stats.protection -= owner.level.rng.randfn(attack, 0.1 + other.stats.equipment.armour)
 		other.stats.stats.chassis -= owner.level.rng.randfn(attack, log(1.1 + other.stats.stats.protection))
 		if other.stats.equipment.armour > 0 and owner.level.rng.randfn(attack) > attack:
 			other.stats.equipment.armour -= 1

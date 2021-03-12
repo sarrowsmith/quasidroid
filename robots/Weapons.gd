@@ -19,8 +19,10 @@ const stats_map = {
 var location = Vector2.ZERO
 
 
-func get_weapon_name():
-	return stats_map[owner.get_weapon()][0]
+func get_weapon_name(weapon=null):
+	if not weapon:
+		weapon = owner.get_weapon()
+	return stats_map[weapon][0]
 
 
 func get_damage_type():
@@ -67,10 +69,11 @@ func splash():
 
 
 func attack(other):
-	var ours = owner.stats.stats.duplicate()
+	var ours = null
 	var theirs = other.stats.stats.duplicate()
 	match get_damage_type():
 		GRAPPLE:
+			ours = owner.stats.stats.duplicate()
 			other.hit(1)
 			owner.hit(1)
 			grapple(other)
@@ -99,7 +102,7 @@ func attack(other):
 
 func grapple_effect(stats, initiative=0):
 	# weight penalty is effectively a trade off against armour and speed
-	return owner.level.rng(stats.logic * (initiative +  stats.power) / stats.weight(), 0.1 + log(stats.health()))
+	return owner.level.rng.randfn(stats.stats.logic * (initiative +  stats.stats.power) / stats.weight(), 0.1 + log(stats.health()))
 
 
 func modify_attack(theirs):
@@ -107,27 +110,27 @@ func modify_attack(theirs):
 	var ac = get_armour_required()
 	var attack = 1 + ours.stats.strength - theirs.equipment.armour
 	if theirs.equipment.armour >= ac:
-		attack -= theirs.protection - 2
+		attack -= theirs.stats.protection - 2
 	return attack
 
 
 func attack_a(other):
 	var attack = modify_attack(other.stats)
-	for k in other.stats:
-		var defence = other.stats[k] / 3.0 if k in Stats.critical_stats else other.stats[k]
-		if defence > 0 and owner.level.rng(attack / defence) > 0.5:
-			other.stats[k] -= 1
+	for k in other.stats.stats:
+		var defence = other.stats.stats[k] / 3.0 if k in Stats.critical_stats else other.stats.stats[k]
+		if defence > 0 and owner.level.rng.randfn(attack / defence) > 0.5:
+			other.stats.stats[k] -= 1
 
 
 func attack_b(other):
 	var attack = modify_attack(other.stats)
 	var vulnerabilities = []
-	for stat in other.stats:
-		vulnerabilities.append([other.stats[stat], stat])
+	for stat in other.stats.stats:
+		vulnerabilities.append([other.stats.stats[stat], stat])
 	vulnerabilities.sort()
 	while attack > 0 and not other.stats.disabled():
 		for v in vulnerabilities:
-			other[v[1]] -= (owner.level.rng(attack, 0.1 + log(other.stats.health())) if v[1] in Stats.critical_stats else 1)
+			other.stats.stats[v[1]] -= (owner.level.rng.randfn(attack, 0.1 + log(other.stats.health())) if v[1] in Stats.critical_stats else 1)
 			if attack == 0 or other.stats.disabled():
 				break
 			attack -= 1
@@ -146,15 +149,15 @@ func probe(other):
 func projectile(other):
 	var attack = modify_attack(other.stats)
 	if attack > 0:
-		other.stats.protection -= owner.level.rng(attack, 0.1 + other.equipment.armour)
-		other.stats.chassis -= owner.level.rng(attack, log(1.1 + other.equipment.protection))
-		if other.equipment.armour > 0 and owner.level.rng(attack) > attack:
+		other.stats.protection -= owner.level.rng.randfn(attack, 0.1 + other.equipment.armour)
+		other.stats.chassis -= owner.level.rng.randfn(attack, log(1.1 + other.equipment.protection))
+		if other.equipment.armour > 0 and owner.level.rng.randfn(attack) > attack:
 			other.equipment.armour -= 1
 
 
 func emp(other):
 	var attack = modify_attack(other.stats)
 	if attack > 0:
-		other.stats.logic -= owner.level.rng(attack, log(other.stats.logic))
-		other.stats.power -= owner.level.rng(attack, log(other.stats.chassis))
+		other.stats.logic -= owner.level.rng.randfn(attack, log(other.stats.logic))
+		other.stats.power -= owner.level.rng.randfn(attack, log(other.stats.chassis))
 

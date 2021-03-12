@@ -240,6 +240,13 @@ margin_bottom = 23.0
 label = "Select weapon"
 default = "Z"
 
+[node name="LabelledValue12" parent="View/Panel/Split/UpperPanel/Controls" instance=ExtResource( 5 )]
+margin_top = 0.0
+margin_right = 338.0
+margin_bottom = 23.0
+label = "Rest"
+default = "space"
+
 [node name="LabelledValue6" parent="View/Panel/Split/UpperPanel/Controls" instance=ExtResource( 5 )]
 margin_top = 0.0
 margin_right = 338.0

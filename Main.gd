@@ -9,9 +9,6 @@ onready var player = $Player
 onready var world = $World
 onready var world_size = $World.world_size
 
-var turn = 1
-var target = 0
-
 
 func _ready():
 	if game_seed:
@@ -36,6 +33,7 @@ func new(depth=0):
 	change_level(world.create(player))
 	world.set_value("Turn", 1, true)
 	player.turn()
+	player.update()
 	world.upper_panel.current_tab = world.LEVELS
 	world.lower_panel.current_tab = world.LEVELS
 
@@ -48,31 +46,32 @@ const view_map = {
 }
 # warning-ignore:unused_argument
 func _process(_delta):
+	if not world.active_level:
+		return
 	var position = $View.position
 	for e in view_map:
 		if Input.is_action_pressed(e):
 			position += pan_speed * view_map[e]
 	view_to(position, 0)
-	if turn % 2:
+	if world.turn % 2:
 		if player.state == Robot.DONE:
-			turn += 1
+			world.turn += 1
 			var dead = 0
 			for r in world.active_level.rogues:
-				if r.state == Robot.DEAD:
+				if r.turn():
 					dead += 1
-				else:
-					r.turn()
 			if dead == len(world.active_level.rogues):
 				if world.active_level.state != Level.CLEAR:
 					world.active_level.state = Level.CLEAR
-					check_end()
+					world.check_end()
 	else:
 		for r in world.active_level.rogues:
 			if r.state == Robot.IDLE or r.state == Robot.WAIT:
 				return
 		player.turn()
-		turn += 1
-		world.set_value("Turn", (turn + 1) / 2, true)
+		player.update()
+		world.turn += 1
+		world.set_value("Turn", (world.turn + 1) / 2, true)
 
 
 const cursor_map = {
@@ -82,18 +81,6 @@ const cursor_map = {
 	cursor_right = Vector2(1, 0)
 }
 func _unhandled_input(event):
-	var move = Vector2.ZERO
-	for e in cursor_map:
-		if event.is_action_pressed(e, true):
-			move += cursor_map[e]
-	if move != Vector2.ZERO:
-		world.active_level.move_cursor(move)
-	if event.is_action_pressed("map_reset"):
-		view_to(player.position)
-		return
-	if event.is_action_pressed("cursor_reset"):
-		world.active_level.set_cursor(player.location)
-		return
 	if event is InputEventKey and event.pressed:
 		var level = null
 		if event.control:
@@ -113,6 +100,20 @@ func _unhandled_input(event):
 				level = world.active_level.children[1]
 		if level:
 			change_level(level)
+	if world.active_level == null:
+		return
+	var move = Vector2.ZERO
+	for e in cursor_map:
+		if event.is_action_pressed(e, true):
+			move += cursor_map[e]
+	if move != Vector2.ZERO:
+		world.active_level.move_cursor(move)
+	if event.is_action_pressed("map_reset"):
+		view_to(player.position)
+		return
+	if event.is_action_pressed("cursor_reset"):
+		world.active_level.set_cursor(player.location)
+		return
 
 
 func change_level(level):
@@ -137,17 +138,6 @@ func load_game():
 
 func save_game():
 	pass
-
-
-func check_end():
-	world.set_info("""Level %s has been cleared""" % world.active_level.map_name)
-	if not world.level_one.is_clear():
-		return
-	target = turn + 25 * world.world_depth
-	world.level_one.lifts[0].unlock()
-	world.set_info("""All the levels have now been cleared.
-
-Make your way to the surface before the systems reboot in on turn %d.""" % target, true)
 
 
 func game_over():

@@ -23,6 +23,9 @@ var rng = RandomNumberGenerator.new()
 # to make render order easier
 var player = null
 var active_level = null
+var combat_turn = 0
+var turn = 1
+var target = 0
 
 
 func _ready():
@@ -66,3 +69,61 @@ func show_info(text, append=false):
 func show_stats(is_player):
 	var p = (upper_panel if is_player else lower_panel)
 	p.current_tab = STATUS
+
+
+static func first_capital(string):
+	return string.substr(0, 1).capitalize() + string.substr(1)
+
+
+func report_death(display_name, is_player):
+	var past = "have" if is_player else "has"
+	show_info("%s %s been deactivated!" % [first_capital(display_name), past], true)
+
+
+func report_attack(attacker, defender, attackers, defenders):
+	combat_turn = turn
+	var a_name = first_capital("you" if attacker.is_player else ("the " + attacker.stats.type_name))
+	var d_name = "you" if defender.is_player else ("the " + defender.stats.type_name)
+	var weapon = attacker.weapons.get_weapon_name()
+	var with = "with a " + weapon
+	var attack = "shoot"
+	var damages = PoolStringArray()
+	for stat in defenders:
+		var delta = defenders[stat] - defender.stats.stats[stat]
+		if delta:
+			damages.append("\t%s: %d" % [stat, round(delta)])
+	if attackers:
+		damages.append("\nDamage received:")
+		for stat in attackers:
+			var delta = attackers[stat] - attacker.stats.stats[stat]
+			if delta:
+				damages.append("\t%s: %d", round(delta))
+	if attacker.weapons.get_range() == 1:
+		if attacker.combat >= Robot.WEAPON:
+			attack = "attack"
+		else:
+			attack = weapon
+			with = ""
+	if defender.is_player:
+		attack += "s"
+	var text = """%s %s %s%s!
+
+Damage inflicted:
+%s
+""" % [first_capital(a_name), attack, d_name, with, damages.join("\n")]
+	show_info(text)
+	if defender.check_stats():
+		report_death(first_capital(d_name), defender.is_player)
+	if attacker.check_stats():
+		report_death(a_name, attacker.is_player)
+
+
+func check_end():
+	show_info("""Level %s has been cleared""" % active_level.map_name)
+	if not level_one.is_clear():
+		return
+	target = turn + 25 * world_depth
+	level_one.lifts[0].unlock()
+	show_info("""All the levels have now been cleared.
+
+Make your way to the surface before the systems reboot in on turn %d.""" % target, true)

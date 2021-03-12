@@ -67,14 +67,14 @@ func create(level, rng):
 
 
 func disabled():
-	var highest = 0
+	var lowest = stats[critical_stats[0]]
 	for stat in critical_stats:
-		highest = min(highest, -stats[stat])
-	return highest == 0
+		lowest = min(lowest, stats[stat])
+	return lowest == 0
 
 
 func weight():
-	return stats.drive + stats.armour + log(equipment.chassis)
+	return equipment.drive + equipment.armour + log(stats.chassis)
 
 
 func health():

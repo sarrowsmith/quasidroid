@@ -24,14 +24,9 @@ func _process(delta):
 		emit_signal("move", position)
 
 
-func turn():
-	.turn()
-	update()
-
-
 func update():
-	if combat >= WEAPON:
-		combat = GRAPPLE
+	if weapons.get_range() > 1:
+		combat = 0
 	equip()
 	check_location()
 	show_stats(false)
@@ -69,6 +64,8 @@ func _unhandled_input(event):
 				combat = (combat + 1) % len(stats.equipment.weapons)
 				equip()
 				show_stats(true)
+			KEY_SPACE:
+				action(Vector2.ZERO)
 
 
 const cursor_types = {
@@ -122,7 +119,9 @@ func cursor_activate(button):
 					action(null)
 
 
-func show_info():
+func show_info(optional=false):
+	if optional and level.world.turn - level.world.combat_turn < 2:
+		return
 	var info = "Nothing to see here"
 	var location_type = level.location_type(level.cursor.location)
 	match location_type:
@@ -177,7 +176,7 @@ func check_location():
 		if rogue and rogue.state == DEAD:
 			scavenge(rogue)
 		if level.access.has(level.cursor.location):
-			show_info()
+			show_info(true)
 		return
 	var lift =  level.lift_at(location)
 	if lift:
@@ -186,7 +185,7 @@ func check_location():
 	else:
 		recharge()
 		level.set_cursor(location)
-		show_info()
+		show_info(true)
 		if level.activate(location):
 			level.world.show_info("""All access points on level %s reset
 
@@ -205,18 +204,31 @@ func scavenge(other):
 	other.show_stats(true)
 	var theirs = other.stats.equipment.duplicate()
 	var ours = stats.equipment
+	var scavenged = PoolStringArray()
 	for i in len(theirs.weapons):
 		if not theirs.weapons[i] in ours.weapons:
+			scavenged.append(weapons.get_weapon_name(theirs.weapons[i]))
 			ours.weapons.append(theirs.weapons[i])
 			other.stats.equipment.weapons.remove(i)
-	for i in len(theirs.equipment):
-		if not theirs.equipment[i] in ours.equipment:
-			ours.equipment.append(theirs.equipment[i])
-			other.stats.equipment.equipment.remove(i)
+	for i in len(theirs.extras):
+		var extra = theirs.extras[i]
+		if extra  =="none":
+			continue
+		if not theirs.extras[i] in ours.extras:
+			scavenged.append(extra)
+			ours.extras.append(extra)
+			other.stats.extras.extras.remove(i)
 	if theirs.drive > ours.drive:
 		ours.drive = theirs.drive
+		scavenged.append("drive upgrade")
 	if theirs.armour > ours.armour:
 		ours.armour = theirs.armour
+		scavenged.append("armour upgrade")
+	if len(scavenged):
+		level.world.show_info("""You have scavenged:
+\t%s""" % scavenged.join("\n\t"))
+		show_stats(true)
+		level.world.combat_turn = level.world.turn
 
 
 func level_up(to):

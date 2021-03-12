@@ -17,7 +17,7 @@ var weapon = null
 var combat = GRAPPLE
 var stats = null
 var moves = 0
-var state = DEAD
+var state = DONE
 var is_player = false
 # This *must* be overridden by derived classes
 var weapons = null
@@ -51,8 +51,11 @@ func _process(_delta):
 
 
 func turn():
+	if state == DEAD:
+		return true
 	state = IDLE
 	moves = stats.stats.speed
+	return false
 
 
 const facing_map = {
@@ -146,7 +149,7 @@ func action(direction):
 			if is_player:
 				var rogue = level.rogue_at(target)
 				if rogue:
-					if rogue.state == DEAD:
+					if rogue.state == DEAD || rogue.check_stats():
 						move(target)
 					else:
 						weapons.attack(rogue)
@@ -208,3 +211,14 @@ func hit(count):
 	zapped.set_visible(false)
 	level.world.player.state = IDLE if level.world.player.moves else DONE
 	state = IDLE if moves else DONE
+
+
+func check_stats():
+	if stats.disabled():
+		state = DEAD
+		combat = GRAPPLE
+		hit(5)
+		set_sprite()
+		return true
+	state = IDLE if moves else DONE
+	return false

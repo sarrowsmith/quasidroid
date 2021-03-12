@@ -8,9 +8,11 @@ func _ready():
 
 
 func turn():
-	.turn()
+	if .turn():
+		return true
 	# AI goes here, asynchronously
 	state = DONE
+	return false
 
 
 func generate(level, location):

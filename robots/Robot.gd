@@ -35,6 +35,8 @@ func _process(_delta):
 			state = IDLE if moves else DONE
 			if is_player and moves:
 				show_stats(true)
+				# Yes, this is us, but the indirection sorts the type out
+				level.world.player.check_location()
 			level.set_cursor()
 		return
 	if firing == "Fire":
@@ -136,9 +138,9 @@ func action(direction):
 						move(target)
 					else:
 						state = WAIT
-						lift.open()
-						yield(lift.get_node("Open"), "animation_finished")
-						state = DONE
+						if lift.open():
+							yield(lift.get_node("Open"), "animation_finished")
+							state = IDLE if moves else DONE
 		Level.PLAYER:
 			if is_player:
 				if not moves:

@@ -4,7 +4,7 @@ extends Reference
 
 const critical_stats = ["chassis", "power", "logic"]
 const types = [
-	{ name = "Basic" },
+	{ name = "Basic unit" },
 	{ name = "Scout", drive = 3, logic = 6 },
 	{ name = "Probe", drive = 2, weapon = "Probe", strength = 2, logic = 9 },
 	{ name = "Security model A", weapon = "Dual", strength = 3, armour = 1, protection = 2},
@@ -82,3 +82,40 @@ func health():
 	for critical in critical_stats:
 		health += stats[critical]
 	return health
+
+
+func normalise(reference):
+	for stat in stats:
+		var normalised = int(round(stats[stat]))
+		if normalised < 0:
+			normalised = 0
+		elif normalised > reference[stat]:
+			normalised = reference[stat]
+		stats[stat] = normalised
+
+
+func scavenge(other):
+	var theirs = other.stats.equipment.duplicate()
+	var scavenged = PoolStringArray()
+	for i in len(theirs.weapons):
+		if not theirs.weapons[i] in equipment.weapons:
+			scavenged.append(other.weapons.get_weapon_name(theirs.weapons[i]))
+			equipment.weapons.append(theirs.weapons[i])
+			other.stats.equipment.weapons.remove(i)
+	for i in len(theirs.extras):
+		var extra = theirs.extras[i]
+		if extra  =="none":
+			continue
+		if not theirs.extras[i] in equipment.extras:
+			scavenged.append(extra)
+			equipment.extras.append(extra)
+			other.stats.extras.extras.remove(i)
+	if theirs.drive > equipment.drive:
+		equipment.drive = theirs.drive
+		scavenged.append("drive upgrade")
+		theirs.drive = 1
+	if theirs.armour > equipment.armour:
+		equipment.armour = theirs.armour
+		scavenged.append("armour upgrade")
+		theirs.armour = 0
+	return scavenged

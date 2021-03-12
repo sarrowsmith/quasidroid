@@ -27,22 +27,25 @@ It is currently %s.""" % [direction, level_name(from), level_name(to), state_nam
 
 func unlock():
 	if state != LOCKED:
-		return
+		return false
 	$Unlock.play()
 	state = CLOSED
+	return true
 
 
 func open():
 	if state != CLOSED:
-		return
+		return false
 	$Open.set_visible(true)
 	$Unlock.set_visible(false)
 	$Open.play()
 	state = OPEN
+	return true
 
 
 func close():
 	if state != OPEN:
-		return
+		return false
 	$Open.play("default", true)
 	state = CLOSED
+	return true

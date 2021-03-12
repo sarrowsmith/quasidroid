@@ -54,6 +54,8 @@ func shoot():
 			if rogue and rogue != owner:
 				attack(rogue)
 				return splash()
+		_:
+			owner.state = Robot.IDLE if owner.moves else Robot.DONE
 	return true
 
 
@@ -92,6 +94,9 @@ func attack(other):
 		EMP:
 			other.hit(4)
 			emp(other)
+	other.stats.normalise(theirs)
+	if ours:
+		owner.stats.normalise(ours)
 	owner.level.world.report_attack(owner, other, ours, theirs)
 
 
@@ -117,6 +122,8 @@ func modify_attack(theirs):
 func attack_a(other):
 	var attack = modify_attack(other.stats)
 	for k in other.stats.stats:
+		if other.stats.stats[k] <= 0:
+			continue
 		var defence = other.stats.stats[k] / 3.0 if k in Stats.critical_stats else other.stats.stats[k]
 		if defence > 0 and owner.level.rng.randfn(attack / defence) > 0.5:
 			other.stats.stats[k] -= 1
@@ -130,7 +137,10 @@ func attack_b(other):
 	vulnerabilities.sort()
 	while attack > 0 and not other.stats.disabled():
 		for v in vulnerabilities:
-			other.stats.stats[v[1]] -= (owner.level.rng.randfn(attack, 0.1 + log(other.stats.health())) if v[1] in Stats.critical_stats else 1)
+			var k = v[1]
+			if other.stats.stats[k] <= 0:
+				continue
+			other.stats.stats[k] -= (owner.level.rng.randfn(attack, 0.1 + log(other.stats.health())) if v[1] in Stats.critical_stats else 1)
 			if attack == 0 or other.stats.disabled():
 				break
 			attack -= 1
@@ -143,21 +153,21 @@ func grapple(other):
 
 
 func probe(other):
-	other.stats.logic -= owner.level.rng.randfn(owner.stats.strength, 0.1 + log(other.stats.health))
+	other.stats.stats.logic -= owner.level.rng.randfn(owner.stats.stats.strength, 0.1 + log(other.stats.health()))
 
 
 func projectile(other):
 	var attack = modify_attack(other.stats)
 	if attack > 0:
-		other.stats.protection -= owner.level.rng.randfn(attack, 0.1 + other.equipment.armour)
-		other.stats.chassis -= owner.level.rng.randfn(attack, log(1.1 + other.equipment.protection))
-		if other.equipment.armour > 0 and owner.level.rng.randfn(attack) > attack:
-			other.equipment.armour -= 1
+		other.stats.protection -= owner.level.rng.randfn(attack, 0.1 + other.stats.equipment.armour)
+		other.stats.stats.chassis -= owner.level.rng.randfn(attack, log(1.1 + other.stats.stats.protection))
+		if other.stats.equipment.armour > 0 and owner.level.rng.randfn(attack) > attack:
+			other.stats.equipment.armour -= 1
 
 
 func emp(other):
 	var attack = modify_attack(other.stats)
 	if attack > 0:
-		other.stats.logic -= owner.level.rng.randfn(attack, log(other.stats.logic))
-		other.stats.power -= owner.level.rng.randfn(attack, log(other.stats.chassis))
+		other.stats.stats.logic -= owner.level.rng.randfn(attack, log(other.stats.stats.logic))
+		other.stats.stats.power -= owner.level.rng.randfn(attack, log(other.stats.stats.chassis))
 

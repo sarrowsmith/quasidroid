@@ -85,19 +85,25 @@ func report_attack(attacker, defender, attackers, defenders):
 	var a_name = first_capital("you" if attacker.is_player else ("the " + attacker.stats.type_name))
 	var d_name = "you" if defender.is_player else ("the " + defender.stats.type_name)
 	var weapon = attacker.weapons.get_weapon_name()
-	var with = "with a " + weapon
+	var with = " with a " + weapon
 	var attack = "shoot"
 	var damages = PoolStringArray()
 	for stat in defenders:
 		var delta = defenders[stat] - defender.stats.stats[stat]
 		if delta:
 			damages.append("\t%s: %d" % [stat, round(delta)])
+	if not len(damages):
+		damages.append("\tnone")
 	if attackers:
 		damages.append("\nDamage received:")
+		var count = 0
 		for stat in attackers:
 			var delta = attackers[stat] - attacker.stats.stats[stat]
 			if delta:
 				damages.append("\t%s: %d", round(delta))
+				count += 1
+		if not count:
+			damages.append("\tnone")
 	if attacker.weapons.get_range() == 1:
 		if attacker.combat >= Robot.WEAPON:
 			attack = "attack"

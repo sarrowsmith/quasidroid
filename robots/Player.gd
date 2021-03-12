@@ -66,6 +66,7 @@ func _unhandled_input(event):
 				show_stats(true)
 			KEY_SPACE:
 				action(Vector2.ZERO)
+				show_stats(true)
 
 
 const cursor_types = {
@@ -202,33 +203,15 @@ func recharge():
 
 func scavenge(other):
 	other.show_stats(true)
-	var theirs = other.stats.equipment.duplicate()
-	var ours = stats.equipment
-	var scavenged = PoolStringArray()
-	for i in len(theirs.weapons):
-		if not theirs.weapons[i] in ours.weapons:
-			scavenged.append(weapons.get_weapon_name(theirs.weapons[i]))
-			ours.weapons.append(theirs.weapons[i])
-			other.stats.equipment.weapons.remove(i)
-	for i in len(theirs.extras):
-		var extra = theirs.extras[i]
-		if extra  =="none":
-			continue
-		if not theirs.extras[i] in ours.extras:
-			scavenged.append(extra)
-			ours.extras.append(extra)
-			other.stats.extras.extras.remove(i)
-	if theirs.drive > ours.drive:
-		ours.drive = theirs.drive
-		scavenged.append("drive upgrade")
-	if theirs.armour > ours.armour:
-		ours.armour = theirs.armour
-		scavenged.append("armour upgrade")
+	var scavenged = stats.scavenge(other)
 	if len(scavenged):
 		level.world.show_info("""You have scavenged:
 \t%s""" % scavenged.join("\n\t"))
-		show_stats(true)
 		level.world.combat_turn = level.world.turn
+	moves -= 1
+	if not moves:
+		state = DONE
+	show_stats(true)
 
 
 func level_up(to):

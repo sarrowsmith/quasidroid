@@ -34,8 +34,6 @@ func new(depth=0):
 	world.set_value("Turn", 1, true)
 	player.turn()
 	player.update()
-	world.upper_panel.current_tab = world.LEVELS
-	world.lower_panel.current_tab = world.LEVELS
 
 
 const view_map = {

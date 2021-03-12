@@ -10,7 +10,7 @@ export(NodePath) var player_status_path
 export(NodePath) var rogue_status_path
 
 
-enum {INFO, STATUS, LEVELS, MAP}
+enum {INFO, STATUS, ABOUT, MAP}
 
 onready var upper_panel = get_node(upper_panel_path)
 onready var lower_panel = get_node(lower_panel_path)
@@ -30,7 +30,8 @@ var target = 0
 
 
 func _ready():
-	upper_panel.current_tab = MAP
+	upper_panel.current_tab = ABOUT
+	lower_panel.current_tab = ABOUT
 
 
 # TODO: need to instantiate Level 1 on demand so that starting anew works

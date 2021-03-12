@@ -41,13 +41,17 @@ var type_name = ""
 var level = 1
 
 
+static func choose(choices, rng):
+	return choices[rng.randi_range(0, len(choices) - 1)]
+
+
 # warning-ignore:shadowed_variable
-func create(level):
+func create(level, rng):
 	var template = types[0]
 	if level < len(level_limits):
-		template = types[Util.randi_range(0, level_limits[level-1])]
+		template = types[rng.randi_range(0, level_limits[level-1])]
 	else:
-		template = Util.choose(types)
+		template = choose(types, rng)
 		self.level = 1 + level - len(level_limits)
 	for item in template:
 		match item:

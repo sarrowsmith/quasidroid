@@ -74,15 +74,15 @@ func generate():
 			l.close()
 		return
 	rng.seed = level_seed
-	map.generate()
+	map.generate(rng)
 	if level == world.world_depth:
 		children = [null, null]
 	else:
 		children = []
 		for i in 2:
 			var child = prototypes[Prototype.LEVEL].instance()
-			child.create(self, i == 1 and level < world.world_depth - 1)
 			world.add_child(child)
+			child.create(self, i == 1 and level < world.world_depth - 1)
 			children.append(child)
 			if not rooms:
 				children.append(null)

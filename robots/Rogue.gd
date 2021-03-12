@@ -16,11 +16,11 @@ func turn():
 func generate(level, location):
 	self.level = level
 	set_location(location)
-	facing = Util.choose(facing_map.keys())
 
 	stats = Stats.new()
-	stats.create(level.level)
+	stats.create(level.level, level.rng)
 	stats.equipment.extras.append("none")
 	combat = len(stats.equipment.weapons) - 1
 
+	facing = Stats.choose(facing_map.keys(), level.rng)
 	equip(true)

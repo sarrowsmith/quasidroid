@@ -24,15 +24,15 @@ func redraw(value = null):
 	# only do this if we are working in the editor
 	if !Engine.is_editor_hint(): return
 
-	generate()
+	#generate()
 
 
-func generate():
+func generate(rng):
 	clear()
 	fill_roof()
 	start_tree()     # Start Generation
-	create_leaf(0)   # Create Tree
-	create_rooms()   # Create rooms in the leaf leaves of the tree
+	create_leaf(0, rng)   # Create Tree
+	create_rooms(rng)   # Create rooms in the leaf leaves of the tree
 	join_rooms()     # Ensure all rooms connected
 	clear_deadends() # Remove deadend corridors
 	update_bitmask_region(Vector2(0, 0), Vector2(map_w, map_h)) # autotile
@@ -59,7 +59,7 @@ func start_tree():
 
 # Recursively build the tree by spliting the map into
 # rectangles (leaves), that we then place our rooms in
-func create_leaf(parent_id):
+func create_leaf(parent_id, rng):
 	var x = tree[parent_id].x
 	var y = tree[parent_id].y
 	var w = tree[parent_id].w
@@ -74,7 +74,7 @@ func create_leaf(parent_id):
 	# randomly split horizontal or vertical
 	# if not enough width, split horizontal
 	# if not enough height, split vertical
-	var split_type = Util.choose(["h", "v"])
+	var split_type = ["h", "v"][rng.randi_range(0, 1)]
 	if   (min_room_factor * w < min_room_size):  split_type = "h"
 	elif (min_room_factor * h < min_room_size):  split_type = "v"
 
@@ -86,7 +86,7 @@ func create_leaf(parent_id):
 	if (split_type == "v"):
 		var room_size = min_room_factor * w
 		if (room_size >= min_room_size):
-			var w1 = Util.randi_range(room_size, (w - room_size))
+			var w1 = rng.randi_range(room_size, (w - room_size) - 1)
 			var w2 = w - w1
 			leaf1 = { x = x, y = y, w = w1, h = h, split = 'v' }
 			leaf2 = { x = x+w1, y = y, w = w2, h = h, split = 'v' }
@@ -94,7 +94,7 @@ func create_leaf(parent_id):
 	else:
 		var room_size = min_room_factor * h
 		if (room_size >= min_room_size):
-			var h1 = Util.randi_range(room_size, (h - room_size))
+			var h1 = rng.randi_range(room_size, (h - room_size) - 1)
 			var h2 = h - h1
 			leaf1 = { x = x, y = y, w = w, h = h1, split = 'h' }
 			leaf2 = { x = x, y = y+h1, w = w, h = h2, split = 'h' }
@@ -116,21 +116,21 @@ func create_leaf(parent_id):
 		leaves.append([tree[parent_id].l, tree[parent_id].r])
 
 		# try and create more leaves
-		create_leaf(tree[parent_id].l)
-		create_leaf(tree[parent_id].r)
+		create_leaf(tree[parent_id].l, rng)
+		create_leaf(tree[parent_id].r, rng)
 
 
 # warning-ignore:shadowed_variable
-func create_rooms():
+func create_rooms(rng):
 	for leaf_id in tree:
 		var leaf = tree[leaf_id]
 		if leaf.has("l"): continue    # if the node has children, don't build rooms
 
-		if Util.chance(75):
+		if rng.randf() < 0.75:
 			var room = {}
 			room.id = leaf_id;
-			room.w  = Util.randi_range(min_room_size, leaf.w) - 1
-			room.h  = Util.randi_range(min_room_size, leaf.h) - 1
+			room.w  = rng.randi_range(min_room_size, leaf.w - 1) - 1
+			room.h  = rng.randi_range(min_room_size, leaf.h - 1) - 1
 			room.x  = leaf.x + floor((leaf.w-room.w)/2) + 1
 			room.y  = leaf.y + floor((leaf.h-room.h)/2) + 1
 			room.split = leaf.split

@@ -27,16 +27,20 @@ func redraw(value = null):
 	# only do this if we are working in the editor
 	if !Engine.is_editor_hint(): return
 
-	generate()
+	#generate()
 
 
-func generate():
+static func choose(choices, rng):
+	return choices[rng.randi_range(0, len(choices) - 1)]
+
+
+func generate(rng):
 	clear()
 	fill_roof()
-	random_ground()
-	dig_caves()
+	random_ground(rng)
+	dig_caves(rng)
 	get_caves()
-	connect_caves()
+	connect_caves(rng)
 	update_bitmask_region(Vector2(0, 0), Vector2(map_w, map_h)) # autotile
 
 
@@ -48,19 +52,20 @@ func fill_roof():
 
 
 # then randomly place ground tiles
-func random_ground():
+func random_ground(rng):
 	for x in range(2, map_w-3):
 		for y in range(2, map_h-3):
-			if Util.chance(ground_chance):
+			if rng.randf() < 0.01 * ground_chance:
 				set_cell(x, y, Tiles.GROUND)
 
 
-func dig_caves():
+func dig_caves(rng):
 
 	for _i in range(iterations):
 		# Pick a random point with a 1-tile buffer within the map
-		var x = Util.randi_range(1, map_w-1)
-		var y = Util.randi_range(1, map_h-1)
+		# randi_range is *inclusive*
+		var x = rng.randi_range(1, map_w-2)
+		var y = rng.randi_range(1, map_h-2)
 
 		# if nearby cells > neighbors, make it a roof tile
 		if check_nearby(x,y) > neighbors:
@@ -114,24 +119,24 @@ func flood_fill(tilex, tiley):
 		caves.append(cave)
 
 
-func connect_caves():
+func connect_caves(rng):
 	var prev_cave = null
 	var tunnel_caves = caves.duplicate()
 
 	for cave in tunnel_caves:
 		if prev_cave:
-			var new_point  = Util.choose(cave)
-			var prev_point = Util.choose(prev_cave)
+			var new_point  = choose(cave, rng)
+			var prev_point = choose(prev_cave, rng)
 
 			# ensure not the same point
 			if new_point != prev_point:
-				create_tunnel(new_point, prev_point, cave)
+				create_tunnel(new_point, prev_point, cave, rng)
 
 		prev_cave = cave
 
 
 # do a drunken walk from point1 to point2
-func create_tunnel(point1, point2, cave):
+func create_tunnel(point1, point2, cave, rng):
 	var max_steps = 500  # set a max_steps so editor won't hang if walk fails
 	var steps = 0
 	var drunk_x = point2[0]
@@ -168,7 +173,7 @@ func create_tunnel(point1, point2, cave):
 		var dy
 
 		# choose the direction
-		var choice = randf()
+		var choice = rng.randf()
 
 		if 0 <= choice and choice < n:
 			dx = 0

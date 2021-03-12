@@ -637,8 +637,6 @@ dialog_text = "Are you sure you want to quit? (Game will not be saved at this po
 __meta__ = {
 "_edit_use_anchors_": false
 }
-[connection signal="change_level" from="Player" to="." method="change_level"]
-[connection signal="move" from="Player" to="." method="view_to"]
 [connection signal="pressed" from="View/Panel/Split/UpperPanel/Menu/Save/Button" to="." method="_on_Save_pressed"]
 [connection signal="pressed" from="View/Panel/Split/UpperPanel/Menu/Restart/Button" to="." method="_on_Restart_pressed"]
 [connection signal="pressed" from="View/Panel/Split/UpperPanel/Menu/Quit/Button" to="." method="_on_Quit_pressed"]

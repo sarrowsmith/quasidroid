@@ -170,24 +170,14 @@ const item_name_map = {
 	drive = ["none", "basic", "improved", "advanced"],
 	armour = ["none", "standard", "ablative", "active"],
 }
-const weapon_name_map = {
-	Grapple = "grapple",
-	Ram = "ram",
-	Blade = "thermal lance",
-	Probe = "logic probe",
-	Plasma = "plasma beam",
-	Laser = "laser",
-	Dual = "plasma barrage",
-	Ion = "ion cannon",
-	Projectile = "rail gun",
-	EMP = "EMP",
-}
 func item_to_string(item):
 	match item:
 		"extras":
-			return PoolStringArray(stats.equipment.extras).join(", ")
+			if stats.equipment.extras:
+				return PoolStringArray(stats.equipment.extras).join(", ")
+			return "none"
 		"weapons":
-			return weapon_name_map[get_weapon()]
+			return weapons.get_weapon_name()
 	return item_name_map[item][stats.equipment[item]]
 
 
@@ -228,7 +218,7 @@ func hit(count):
 	var zapped = get_sprite("Robot/Hit")
 	if not zapped:
 		return
-	level.world.player.state == WAIT
+	level.world.player.state = WAIT
 	zapped.set_visible(true)
 	zapped.play()
 	while count > 0:

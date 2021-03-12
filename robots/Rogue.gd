@@ -20,6 +20,7 @@ func generate(level, location):
 
 	stats = Stats.new()
 	stats.create(level.level)
+	stats.equipment.extras.append("none")
 	combat = len(stats.equipment.weapons) - 1
 
 	equip(true)

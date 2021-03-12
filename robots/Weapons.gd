@@ -1,8 +1,30 @@
 extends Node2D
 
 
-var melee = false
+enum {GRAPPLE, RAM, BLADE, PROBE, PROJECTILE, EMP}
+
+const stats_map = {
+	Grapple = ["grapple", GRAPPLE],
+	Ram = ["ram", RAM],
+	Blade = ["thermal lance", BLADE],
+	Probe = ["logic probe", PROBE],
+	Plasma = ["plasma beam", BLADE],
+	Laser = ["laser", BLADE],
+	Dual = ["plasma barrage", BLADE],
+	Ion = ["ion cannon", RAM],
+	Projectile = ["rail gun", PROJECTILE],
+	EMP = ["EMP", EMP],
+}
+
 var location = Vector2.ZERO
+
+
+func get_weapon_name():
+	return stats_map[owner.get_weapon()][0]
+
+
+func get_damage_type():
+	return stats_map[owner.get_weapon()][1]
 
 
 func shoot():
@@ -33,3 +55,5 @@ func splash():
 		"Laser":
 			return false
 	return true
+
+

@@ -47,7 +47,7 @@ const view_map = {
 	ui_right = Vector2(1, 0)
 }
 # warning-ignore:unused_argument
-func _process(delta):
+func _process(_delta):
 	var position = $View.position
 	for e in view_map:
 		if Input.is_action_pressed(e):

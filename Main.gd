@@ -26,9 +26,11 @@ func show_dialog(dialog):
 
 
 # TODO: need to instantiate Player here, taking care with render order
-func new():
+func new(depth=0):
 	$Start.set_visible(false)
 	world.set_visible(true)
+	if depth:
+		world.world_depth = depth
 	seed(game_seed)
 	$View.find_node("Seed").set_value(game_seed)
 	change_level(world.create(player))
@@ -160,7 +162,8 @@ func _on_Resume_pressed():
 func _on_New_pressed():
 	var seed_text = $Start.find_node("Seed").text
 	game_seed = seed_text.to_int() if seed_text.is_valid_integer() else seed_text.hash()
-	new()
+	var depth = $Start.find_node("Depth").value
+	new(depth)
 
 
 func _on_Random_pressed():

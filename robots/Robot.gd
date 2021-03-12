@@ -118,22 +118,25 @@ func move(target):
 	destination = target
 
 
-func action(direction):
+func action(direction, really=true):
 	if direction == null:
 		if not is_player:
-			return
+			return Level.WALL
 		direction = level.cursor.location - location
-	if weapons.get_range() > 1:
+	if really and weapons.get_range() > 1:
 		if direction == Vector2.ZERO:
 			direction = facing
 		shoot(direction)
-		return
+		return Level.WALL
 	facing = direction
 	var target = location + direction
-	moves -= 1
+	if really:
+		moves -= 1
+	var target_type = level.location_type(target)
 	match level.location_type(target):
 		Level.FLOOR, Level.ACCESS:
-			move(target)
+			if really:
+				move(target)
 		Level.LIFT:
 			if is_player:
 				var lift = level.lift_at(target)
@@ -162,8 +165,10 @@ func action(direction):
 					else:
 						weapons.attack(rogue)
 		_:
-			moves += 1 # because we've already paid for the move, pay back the no-op
+			if really:
+				moves += 1 # because we've already paid for the move, pay back the no-op
 	set_sprite()
+	return target_type
 
 
 func shoot(direction):

@@ -139,7 +139,7 @@ func action(direction):
 				if not moves:
 					state = DONE
 			else:
-				attack(level.world.player)
+				weapons.attack(level.world.player)
 		Level.ROGUE:
 			if is_player:
 				var rogue = level.rogue_at(target)
@@ -147,7 +147,7 @@ func action(direction):
 					if rogue.state == DEAD:
 						move(target)
 					else:
-						attack(rogue)
+						weapons.attack(rogue)
 		_:
 			moves += 1 # because we've already paid for the move, pay back the no-op
 	set_sprite()
@@ -194,24 +194,6 @@ func show_stats(visible=false):
 		level.world.set_value("Type", "%s (%d)" % [stats.type_name, stats.level], false)
 	if visible:
 		level.world.show_stats(is_player)
-
-
-func shot():
-	hit(3)
-
-
-func attack(other):
-	state = WAIT
-	return grapple(other) if combat == GRAPPLE else melee(other)
-
-
-func grapple(other):
-	other.hit(1)
-	hit(1)
-
-
-func melee(other):
-	other.hit(2)
 
 
 func hit(count):

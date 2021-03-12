@@ -18,6 +18,7 @@ onready var rogue_status_box = get_node(rogue_status_path)
 onready var level_one = $Level
 
 
+var rng = RandomNumberGenerator.new()
 # This the "official" refrence to the player object, the Node is a sibling
 # to make render order easier
 var player = null
@@ -33,6 +34,7 @@ func _ready():
 func create(player):
 	self.player = player
 	world_seed = randi()
+	rng.seed = world_seed
 	level_one.create(null, true)
 	change_level(level_one)
 	return active_level

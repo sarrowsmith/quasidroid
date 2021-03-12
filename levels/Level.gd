@@ -12,6 +12,7 @@ enum {LOCKED, OPEN, RESET, CLEAR}
 
 onready var cursor = $Cursor
 
+var rng = RandomNumberGenerator.new()
 var map = null
 var world = null
 var parent = null
@@ -62,7 +63,8 @@ func create(from, rooms):
 				depth += 1
 				up = up.parent
 			map_name += "-%s" % char("A".ord_at(0) + depth - 1)
-	level_seed = randi()
+	level_seed = world.rng.randi()
+	rng.seed = level_seed
 
 
 func generate():
@@ -71,7 +73,7 @@ func generate():
 		for l in lifts:
 			l.close()
 		return
-	seed(level_seed)
+	rng.seed = level_seed
 	map.generate()
 	if level == world.world_depth:
 		children = [null, null]
@@ -97,8 +99,8 @@ func place_features():
 		while lift_n == len(lifts) and separation > 5:
 			for _i in $Caves.iterations:
 				var probe = Vector2(
-					Util.randi_range(1, map.map_w - 1),
-					Util.randi_range(1, map.map_h - 1))
+					rng.randi_range(1, map.map_w - 1),
+					rng.randi_range(1, map.map_h - 1))
 				for l in lifts:
 					if probe.distance_squared_to(l.location) < separation * separation:
 						probe = null
@@ -110,12 +112,12 @@ func place_features():
 			separation -= 1
 		if separation <= 5:
 			break # Better an incomplete game than a hung one?
-	var n_access = Util.randi_range(4, 8)
+	var n_access = rng.randi_range(4, 8)
 	for _n in n_access:
 		for _i in range($Caves.iterations):
 			var probe = Vector2(
-				Util.randi_range(1, map.map_w - 1),
-				Util.randi_range(1, map.map_h - 1))
+				rng.randi_range(1, map.map_w - 1),
+				rng.randi_range(1, map.map_h - 1))
 			if location_type(probe) != FLOOR:
 				continue
 			for a in access:
@@ -138,12 +140,12 @@ func place_features():
 
 
 func generate_rogues():
-	var n_rogues = Util.randi_range(15, 25)
+	var n_rogues = rng.randi_range(15, 25)
 	while len(rogues) < n_rogues:
 		for _i in $Caves.iterations:
 			var probe = Vector2(
-				Util.randi_range(1, map.map_w - 1),
-				Util.randi_range(1, map.map_h - 1))
+				rng.randi_range(1, map.map_w - 1),
+				rng.randi_range(1, map.map_h - 1))
 			if location_type(probe) != FLOOR:
 				continue
 			if probe.distance_squared_to(lifts[0].location) > 25:

@@ -62,6 +62,13 @@ func create(level):
 					stats[item] = template[item] * self.level
 
 
+func disabled():
+	var highest = 0
+	for stat in critical_stats:
+		highest = min(highest, -stats[stat])
+	return highest == 0
+
+
 func weight():
 	return stats.drive + stats.armour + log(equipment.chassis)
 

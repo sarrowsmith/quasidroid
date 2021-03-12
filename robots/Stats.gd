@@ -38,7 +38,6 @@ var stats = {
 	speed = 1,
 }
 var type_name = ""
-var weapon = 6
 var level = 1
 
 

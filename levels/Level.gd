@@ -91,19 +91,25 @@ func generate():
 
 func place_features():
 	var n_lifts = (3 if rooms else 2) if level < world.world_depth else 1
+	var separation = 10
 	while len(lifts) < n_lifts:
-		while true:
-			var probe = Vector2(
-				Util.randi_range(1, map.map_w - 1),
-				Util.randi_range(1, map.map_h - 1))
-			for l in lifts:
-				if probe.distance_squared_to(l.location) < 100:
-					probe = null
+		var lift_n = len(lifts)
+		while lift_n == len(lifts) and separation > 5:
+			for _i in $Caves.iterations:
+				var probe = Vector2(
+					Util.randi_range(1, map.map_w - 1),
+					Util.randi_range(1, map.map_h - 1))
+				for l in lifts:
+					if probe.distance_squared_to(l.location) < separation * separation:
+						probe = null
+						break
+				if probe and check_nearby(probe.x, probe.y, 2)[FLOOR] == 25:
+					lifts.append(new_lift(probe))
+					access[probe] = null
 					break
-			if probe and check_nearby(probe.x, probe.y, 2)[FLOOR] == 25:
-				lifts.append(new_lift(probe))
-				access[probe] = null
-				break
+			separation -= 1
+		if separation <= 5:
+			break # Better an incomplete game than a hung one?
 	var n_access = Util.randi_range(4, 8)
 	for _n in n_access:
 		for _i in range($Caves.iterations):
@@ -134,7 +140,7 @@ func place_features():
 func generate_rogues():
 	var n_rogues = Util.randi_range(15, 25)
 	while len(rogues) < n_rogues:
-		while true:
+		for _i in $Caves.iterations:
 			var probe = Vector2(
 				Util.randi_range(1, map.map_w - 1),
 				Util.randi_range(1, map.map_h - 1))

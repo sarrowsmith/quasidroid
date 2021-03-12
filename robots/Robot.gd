@@ -113,7 +113,7 @@ func action(direction):
 		if not is_player:
 			return
 		direction = level.cursor.location - location
-	if combat >= WEAPON:
+	if weapons.get_range() > 1:
 		if direction == Vector2.ZERO:
 			direction = facing
 		shoot(direction)

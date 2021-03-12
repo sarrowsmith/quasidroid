@@ -4,16 +4,16 @@ extends Node2D
 enum {GRAPPLE, RAM, BLADE, PROBE, PROJECTILE, EMP}
 
 const stats_map = {
-	Grapple = ["grapple", GRAPPLE],
-	Ram = ["ram", RAM],
-	Blade = ["thermal lance", BLADE],
-	Probe = ["logic probe", PROBE],
-	Plasma = ["plasma beam", BLADE],
-	Laser = ["laser", BLADE],
-	Dual = ["plasma barrage", BLADE],
-	Ion = ["ion cannon", RAM],
-	Projectile = ["rail gun", PROJECTILE],
-	EMP = ["EMP", EMP],
+	Grapple = ["grapple", GRAPPLE, 1],
+	Ram = ["ram", RAM, 1],
+	Blade = ["thermal lance", BLADE, 1],
+	Probe = ["logic probe", PROBE, 1],
+	Plasma = ["plasma beam", BLADE, 6],
+	Laser = ["laser", BLADE, 6],
+	Dual = ["plasma barrage", BLADE, 6],
+	Ion = ["ion cannon", RAM, 6],
+	Projectile = ["rail gun", PROJECTILE, 6],
+	EMP = ["EMP", EMP, 6],
 }
 
 var location = Vector2.ZERO
@@ -27,10 +27,15 @@ func get_damage_type():
 	return stats_map[owner.get_weapon()][1]
 
 
+func get_range():
+	return stats_map[owner.get_weapon()][2]
+
+
 func shoot():
 	match owner.level.location_type(location):
 		Level.FLOOR:
-			if location.distance_squared_to(owner.location) < owner.stats.weapon * owner.stats.weapon:
+			var weapon_range = get_range()
+			if location.distance_squared_to(owner.location) < weapon_range * weapon_range:
 				return false
 			else:
 				owner.state = Robot.IDLE if owner.moves else Robot.DONE # Otherwise handled by shot->hit

@@ -12,7 +12,7 @@ func _ready():
 	is_player = true
 	base = "0"
 	stats = Stats.new()
-	stats.equipment.weapons.append("Blade")
+	stats.equipment.weapons.append("Plasma")
 	baseline = stats.stats.duplicate()
 	add_to_group("player")
 

@@ -30,7 +30,10 @@ func equip(_auto=true):
 
 
 func new_direction():
-	facing = facing_map.keys()[level.rng.randi_range(1, 5)]
+	# By including NONE here, a change of direction can lead to
+	# a pause. target_type in behaviour will be ROGUE (us) and
+	# so trigger a new direction for next turn.
+	facing = facing_map.keys()[level.rng.randi_range(0, 4)]
 	equip()
 
 

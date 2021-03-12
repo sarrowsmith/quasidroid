@@ -213,6 +213,7 @@ label = "Strength:"
 label = "Speed:"
 
 [node name="extras" parent="View/Panel/Split/UpperPanel/Status/Status" instance=ExtResource( 5 )]
+visible = false
 label = "Equipment:"
 
 [node name="About" type="RichTextLabel" parent="View/Panel/Split/UpperPanel"]
@@ -335,6 +336,7 @@ label = "Speed:"
 label = "Weapon:"
 
 [node name="extras" parent="View/Panel/Split/LowerPanel/Scan/Scan" instance=ExtResource( 5 )]
+visible = false
 label = "Equipment:"
 
 [node name="Controls" type="VBoxContainer" parent="View/Panel/Split/LowerPanel"]

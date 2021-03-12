@@ -188,6 +188,8 @@ func show_stats(visible=false):
 		level.world.set_value(item, item_to_string(item), is_player)
 	if is_player:
 		level.world.set_value("Moves", moves, true)
+	else:
+		level.world.set_value("Type", stats.type_name, false)
 	if visible:
 		level.world.show_stats(is_player)
 

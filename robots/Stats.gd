@@ -30,7 +30,6 @@ var equipment = {
 	extras = [],
 }
 var stats = {
-	name = "",
 	chassis = 3,
 	power = 3,
 	logic = 3,
@@ -38,21 +37,27 @@ var stats = {
 	protection = 1,
 	speed = 1,
 }
+var type_name = ""
 var weapon = 6
+var level = 1
 
 
+# warning-ignore:shadowed_variable
 func create(level):
 	var template = types[0]
-	var boost = 1
 	if level < len(level_limits):
 		template = types[Util.randi_range(0, level_limits[level-1])]
 	else:
 		template = Util.choose(types)
-		boost = level - len(level_limits)
+		self.level = level - len(level_limits)
 	for item in template:
-		if item == "weapon":
-			equipment.weapons.append(template[item])
-		elif equipment.has(item):
-			equipment[item] = template[item]
-		else:
-			stats[item] = template[item] if item == "name" else template[item] * boost
+		match item:
+			"weapon":
+				equipment.weapons.append(template[item])
+			"name":
+				type_name = template[item]
+			_:
+				if equipment.has(item):
+					equipment[item] = template[item]
+				else:
+					stats[item] = template[item] * self.level

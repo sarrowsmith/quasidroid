@@ -4,7 +4,7 @@ extends Robot
 signal move(position)
 signal change_level(level)
 
-var hit_semaphore = 0
+var baseline = null
 
 
 func _ready():
@@ -13,6 +13,7 @@ func _ready():
 	base = "0"
 	stats = Stats.new()
 	stats.equipment.weapons.append("Plasma")
+	baseline = stats.stats.duplicate()
 	add_to_group("player")
 
 
@@ -157,6 +158,7 @@ func change_level(level):
 				lift = level.lifts[i+1]
 				break
 	self.level = level
+	level_up((level.level + 1) / 2)
 	set_location(lift.location + Vector2.DOWN)
 	level.set_cursor(lift.location)
 	show_stats(true)
@@ -175,7 +177,7 @@ func check_location():
 		state = DONE
 		emit_signal("change_level", lift.to)
 	else:
-		#recharge
+		recharge()
 		level.set_cursor(location)
 		show_info()
 		if level.activate(location):
@@ -185,6 +187,20 @@ Downwards lift%s unlocked.
 """ % [level.map_name, "s" if level.rooms else ""], true)
 
 
+func recharge():
+	for stat in stats.stats:
+		if stats.stats[stat] < baseline[stat]:
+			stats.stats[stat] = baseline[stat]
+	show_stats(true)
+
 
 func scavange(other):
 	other.show_stats(true)
+
+
+func level_up(to):
+	if to > stats.level:
+		stats.level += 1
+		for stat in baseline:
+			baseline[stat] += 3 if stat in stats.critical_stats else 1
+	recharge()

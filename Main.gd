@@ -143,7 +143,7 @@ func check_end():
 	world.set_info("""Level %s has been cleared""" % world.active_level.map_name)
 	if not world.level_one.is_clear():
 		return
-	target = turn + 100
+	target = turn + 25 * world.world_depth
 	world.level_one.lifts[0].unlock()
 	world.set_info("""All the levels have now been cleared.
 

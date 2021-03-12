@@ -67,8 +67,8 @@ func splash():
 
 
 func attack(other):
-	var ours = owner.stats.duplicate()
-	var theirs = other.stats.duplicate()
+	var ours = owner.stats.stats.duplicate()
+	var theirs = other.stats.stats.duplicate()
 	match get_damage_type():
 		GRAPPLE:
 			other.hit(1)

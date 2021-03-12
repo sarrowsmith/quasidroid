@@ -32,8 +32,9 @@ func _process(_delta):
 			location = destination
 			mode = "Idle"
 			set_sprite()
-			if not moves:
-				state = DONE
+			state = IDLE if moves else DONE
+			if is_player and moves:
+				show_stats(true)
 			level.set_cursor()
 		return
 	if firing == "Fire":
@@ -131,9 +132,10 @@ func action(direction):
 					if lift.state == Lift.OPEN:
 						move(target)
 					else:
-						lift.open()
-						lift.get_node("Open").connect("animation_finished", self, "lift_open", [], CONNECT_DEFERRED|CONNECT_ONESHOT)
 						state = WAIT
+						lift.open()
+						yield(lift.get_node("Open"), "animation_finished")
+						state = DONE
 		Level.PLAYER:
 			if is_player:
 				if not moves:
@@ -151,10 +153,6 @@ func action(direction):
 		_:
 			moves += 1 # because we've already paid for the move, pay back the no-op
 	set_sprite()
-
-
-func lift_open():
-	state = DONE
 
 
 func shoot(direction):

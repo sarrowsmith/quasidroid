@@ -167,15 +167,27 @@ func shoot(direction):
 
 
 const item_name_map = {
-	drive = ["none", "Basic", "Improved", "Advanced"],
-	armour = ["none", "Standard", "Ablative", "Active"],
+	drive = ["none", "basic", "improved", "advanced"],
+	armour = ["none", "standard", "ablative", "active"],
+}
+const weapon_name_map = {
+	Grapple = "grapple",
+	Ram = "ram",
+	Blade = "thermal lance",
+	Probe = "logic probe",
+	Plasma = "plasma beam",
+	Laser = "laser",
+	Dual = "plasma barrage",
+	Ion = "ion cannon",
+	Projectile = "rail gun",
+	EMP = "EMP",
 }
 func item_to_string(item):
 	match item:
 		"extras":
 			return PoolStringArray(stats.equipment.extras).join(", ")
 		"weapons":
-			return get_weapon()
+			return weapon_name_map[get_weapon()]
 	return item_name_map[item][stats.equipment[item]]
 
 
@@ -189,7 +201,7 @@ func show_stats(visible=false):
 	if is_player:
 		level.world.set_value("Moves", moves, true)
 	else:
-		level.world.set_value("Type", stats.type_name, false)
+		level.world.set_value("Type", "%s (%d)" % [stats.type_name, stats.level], false)
 	if visible:
 		level.world.show_stats(is_player)
 

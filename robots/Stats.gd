@@ -49,7 +49,7 @@ func create(level):
 		template = types[Util.randi_range(0, level_limits[level-1])]
 	else:
 		template = Util.choose(types)
-		self.level = level - len(level_limits)
+		self.level = 1 + level - len(level_limits)
 	for item in template:
 		match item:
 			"weapon":

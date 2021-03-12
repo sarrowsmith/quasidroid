@@ -303,7 +303,7 @@ margin_bottom = 131.0
 label = "Quit:"
 default = "^Q"
 
-[node name="About" type="VBoxContainer" parent="View/Panel/Split/UpperPanel"]
+[node name="About" type="RichTextLabel" parent="View/Panel/Split/UpperPanel"]
 visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -311,12 +311,6 @@ margin_left = 4.0
 margin_top = 32.0
 margin_right = -4.0
 margin_bottom = -4.0
-size_flags_horizontal = 3
-size_flags_vertical = 3
-
-[node name="RichTextLabel" type="RichTextLabel" parent="View/Panel/Split/UpperPanel/About"]
-margin_right = 338.0
-margin_bottom = 670.0
 rect_clip_content = false
 focus_mode = 2
 size_flags_horizontal = 3
@@ -332,11 +326,19 @@ bbcode_text = "Shut down the [b]rogue[/b] robots on all
 allow the automated systems to
 reboot safely.
 
+Robots are deactivated if power, logic or chassis falls to 0, or they are grappled into submission.
+
+Deactivated robots can be scavenged for upgrades.
+
 Reset all the access points on a level to unlock downward lifts."
 text = "Shut down the rogue robots on all
 7 levels of the mining complex and return to the surface to
 allow the automated systems to
 reboot safely.
+
+Robots are deactivated if power, logic or chassis falls to 0, or they are grappled into submission.
+
+Deactivated robots can be scavenged for upgrades.
 
 Reset all the access points on a level to unlock downward lifts."
 fit_content_height = true

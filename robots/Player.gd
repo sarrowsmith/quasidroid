@@ -170,7 +170,7 @@ func check_location():
 	if not level.access.has(location):
 		var rogue = level.rogue_at(location)
 		if rogue and rogue.state == DEAD:
-			scavange(rogue)
+			scavenge(rogue)
 		return
 	var lift =  level.lift_at(location)
 	if lift:
@@ -194,8 +194,22 @@ func recharge():
 	show_stats(true)
 
 
-func scavange(other):
+func scavenge(other):
 	other.show_stats(true)
+	var theirs = other.stats.equipment.duplicate()
+	var ours = stats.equipment
+	for i in len(theirs.weapons):
+		if not theirs.weapons[i] in ours.weapons:
+			ours.weapons.append(theirs.weapons[i])
+			other.stats.equipment.weapons.remove(i)
+	for i in len(theirs.equipment):
+		if not theirs.equipment[i] in ours.equipment:
+			ours.equipment.append(theirs.equipment[i])
+			other.stats.equipment.equipment.remove(i)
+	if theirs.drive > ours.drive:
+		ours.drive = theirs.drive
+	if theirs.armour > ours.armour:
+		ours.armour = theirs.armour
 
 
 func level_up(to):

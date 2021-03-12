@@ -15,21 +15,21 @@ func shoot():
 		Level.PLAYER:
 			if owner.is_player:
 				return false
-			owner.level.world.player.shot()
+			owner.level.world.player.shot(owner)
 		Level.ROGUE:
 			var rogue = owner.level.rogue_at(location)
-			if rogue:
-				rogue.shot()
+			if rogue and rogue != owner:
+				rogue.shot(owner)
 				return splash()
 	return true
 
 
 func splash():
 	match owner.get_weapon():
-		"Dual":
+		"Dual", "Ion":
 			for r in owner.level.rogues:
 				if location.distance_squared_to(r.location) < 4:
-					r.shot()
+					r.shot(owner)
 		"Laser":
 			return false
 	return true

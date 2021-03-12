@@ -32,8 +32,8 @@ func _process(_delta):
 			location = destination
 			mode = "Idle"
 			set_sprite()
-			state = IDLE if moves else DONE
-			if is_player and moves:
+			state = IDLE if moves > 0 else DONE
+			if is_player and moves > 0:
 				show_stats(true)
 				# Yes, this is us, but the indirection sorts the type out
 				level.world.player.check_location()
@@ -66,6 +66,10 @@ const facing_map = {
 	Vector2.UP: "Up",
 	Vector2.LEFT: "Left",
 	Vector2.RIGHT: "Right",
+	Vector2(1, 1): "Down",
+	Vector2(-1, 1): "Down",
+	Vector2(1, -1): "Right",
+	Vector2(-1, -1): "Left",
 }
 func get_sprite(path):
 	return get_node("%s/%s" % [path, facing_map[facing]])
@@ -140,10 +144,12 @@ func action(direction):
 						state = WAIT
 						if lift.open():
 							yield(lift.get_node("Open"), "animation_finished")
-							state = IDLE if moves else DONE
+							state = IDLE if moves > 0 else DONE
+						else:
+							state = IDLE
 		Level.PLAYER:
 			if is_player:
-				if not moves:
+				if not moves > 0:
 					state = DONE
 			else:
 				weapons.attack(level.world.player)
@@ -211,8 +217,8 @@ func hit(count):
 		count -= 1
 	zapped.stop()
 	zapped.set_visible(false)
-	level.world.player.state = IDLE if level.world.player.moves else DONE
-	state = IDLE if moves else DONE
+	level.world.player.state = IDLE if level.world.player.moves > 0 else DONE
+	state = IDLE if moves > 0 else DONE
 
 
 func check_stats():
@@ -222,5 +228,5 @@ func check_stats():
 		hit(5)
 		set_sprite()
 		return true
-	state = IDLE if moves else DONE
+	state = IDLE if moves > 0 else DONE
 	return false

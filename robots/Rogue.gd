@@ -24,5 +24,5 @@ func generate(level, location):
 	stats.equipment.extras.append("none")
 	combat = len(stats.equipment.weapons) - 1
 
-	facing = Stats.choose(facing_map.keys(), level.rng)
+	facing = facing_map.keys()[level.rng.randi_range(1, 5)]
 	equip(true)

@@ -25,7 +25,7 @@ const level_limits = [4, 9, 11, 13]
 
 var equipment = {
 	drive = 1,
-	weapons = ["Grapple", "Ram"],
+	weapons = ["Ram"],
 	armour = 0,
 	extras = [],
 }

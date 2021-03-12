@@ -3,7 +3,7 @@ extends Node2D
 
 
 enum {DEAD, IDLE, WAIT, DONE}
-enum {GRAPPLE, MELEE, WEAPON}
+enum {GRAPPLE=-1, MELEE, WEAPON}
 
 var location = Vector2.ZERO
 var level = null
@@ -14,7 +14,7 @@ var facing = Vector2.DOWN
 var destination = Vector2.ZERO
 var sprite = null
 var weapon = null
-var combat = GRAPPLE
+var combat = MELEE
 var stats = null
 var moves = 0
 var state = DONE
@@ -216,7 +216,7 @@ func hit(count):
 func check_stats():
 	if stats.disabled():
 		state = DEAD
-		combat = GRAPPLE
+		combat = MELEE
 		hit(5)
 		set_sprite()
 		return true

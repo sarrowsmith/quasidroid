@@ -118,6 +118,8 @@ func modify_attack(theirs):
 	var attack = 1 + ours.stats.strength - theirs.equipment.armour
 	if theirs.equipment.armour >= ac:
 		attack -= theirs.stats.protection - 2
+	if get_range() == 1:
+		attack += 1
 	return attack
 
 

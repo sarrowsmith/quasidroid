@@ -10,8 +10,7 @@ func _ready():
 func turn():
 	if .turn():
 		return true
-	# AI goes here, asynchronously
-	state = DONE
+	behaviour()
 	return false
 
 
@@ -26,3 +25,7 @@ func generate(level, location):
 
 	facing = facing_map.keys()[level.rng.randi_range(1, 5)]
 	equip(true)
+
+
+func behaviour():
+	state = DONE

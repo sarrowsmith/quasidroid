@@ -57,3 +57,90 @@ func splash():
 	return true
 
 
+#func grapple_effect(owner, initiative=0):
+#	# should be random with bias
+#	# weight penalty is effectively a trade off against armour and speed
+#	return owner['logic'] * (initiative +  owner['power']) / owner.weight()
+#
+#
+#func attack(owner, other):
+#	if owner.weapon is None:
+#		ram(owner, other)
+#	else:
+#		owner.weapon(owner, other)
+#
+#
+#func modify_attack(owner, other, ac):
+#	attack = 1 + owner['weapon'] - other.armour
+#	if other.armour >= ac:
+#		attack -= other['armour'] - 2
+#	return attack
+#
+#
+#func attack_a(owner, other, ac):
+#	var attack = modify_attack(owner, other, ac)
+#	for k in defender.stats:
+#		var defence = defender[k] / 3 if k in critical_stats else defender[k]
+#		if defence > 0 and attack / defence > 0.5: # should be probability
+#			defender[k] -= 1
+#
+#
+#func attack_b(owner, other, ac, reversed=false):
+#	# TODO: some randomness here would be nice (decrease effectiveness of attack)
+#	var attack = modify_attack(owner, other, ac)
+#	var vulnerabilities = other.stats.items #list(order(sorted( (v, k) for k, v in other.stats.items() )))
+#	while attack > 0 and not other.disabled():
+#		for v in vulnerabilities:
+#			other[v[1]] -= (attack if v[1] in critical_stats else 1)
+#			if attack == 0 or other.disabled():
+#				break
+#			attack -= 1
+#
+#
+#func ram(attacker, defender):
+#	attacker.attack_a(defender, 1)
+#
+#
+#func grapple(attacker, defender):
+#	var attack = grapple(attacker, 1)
+#	var defence = grapple(defender, 0)
+#	# TODO: work out how to turn attack - defence into damage
+#
+#
+#func probe(attacker, defender):
+#	defender['logic'] = defender['logic'] - attacker['weapon']
+#
+#
+#func blade(attacker, defender):
+#	attacker.attack_b(defender, 1)
+#
+#
+#func plasma(attacker, defender):
+#	attacker.attack_b(defender, 2)
+#
+#
+#func multi(attacker, defender):
+#	attacker.attack_b(defender, 2)
+#
+#
+#func laser(attacker, defender):
+#	attacker.attack_b(defender, 2, order=reversed)
+#
+#
+#func ion_cannon(attacker, defender):
+#	attacker.attack_a(defender, 3)
+#
+#
+#func projectile(attacker, defender):
+#	attack = attacker.modify_attack(defender, 1)
+#	if attack > 0:
+#		defender['chassis'] -= attack
+#		if defender['armour'] > 0:
+#			defender['armour'] -= 1
+#
+#
+#func emp(attacker, defender):
+#	attack = attacker.modify_attack(defender, 3)
+#	if attack > 0:
+#		defender['logic'] -= attack
+#

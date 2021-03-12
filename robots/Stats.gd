@@ -61,3 +61,14 @@ func create(level):
 					equipment[item] = template[item]
 				else:
 					stats[item] = template[item] * self.level
+
+
+func weight():
+	return stats.drive + stats.armour + log(equipment.chassis)
+
+
+func health():
+	var health = 0
+	for critical in critical_stats:
+		health += stats[critical]
+	return health

@@ -25,6 +25,10 @@ func _process(delta):
 
 func turn():
 	.turn()
+	update()
+
+
+func update():
 	if combat >= WEAPON:
 		combat = GRAPPLE
 	equip()
@@ -171,6 +175,8 @@ func check_location():
 		var rogue = level.rogue_at(location)
 		if rogue and rogue.state == DEAD:
 			scavenge(rogue)
+		if level.access.has(level.cursor.location):
+			show_info()
 		return
 	var lift =  level.lift_at(location)
 	if lift:

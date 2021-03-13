@@ -26,7 +26,7 @@ var player = null
 var active_level = null
 var combat_turn = 0
 var turn = 1
-var target = 12
+var target = 0
 
 
 func _ready():
@@ -83,7 +83,7 @@ func report_death(display_name, is_player):
 
 
 func report_attack(attacker, defender, attackers, defenders):
-	var continuation = combat_turn == turn
+	var continuation = (turn - combat_turn) < 2
 	combat_turn = turn
 	var a_name = first_capital("you" if attacker.is_player else ("the " + attacker.stats.type_name))
 	var d_name = "you" if defender.is_player else ("the " + defender.stats.type_name)

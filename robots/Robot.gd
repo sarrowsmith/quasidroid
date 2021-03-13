@@ -22,9 +22,15 @@ var is_player = false
 # This *must* be overridden by derived classes
 var weapons = null
 
+func set_state(value):
+	state = value
+
+func get_state():
+	return state
+
 
 func _process(_delta):
-	if level == null:
+	if level == null or get_state() == DEAD:
 		return
 	if mode == "Move":
 		position += facing
@@ -32,7 +38,7 @@ func _process(_delta):
 			location = destination
 			mode = "Idle"
 			set_sprite()
-			state = IDLE if moves > 0 else DONE
+			set_state(IDLE if moves > 0 else DONE)
 			if is_player and moves > 0:
 				show_stats(true)
 				# Yes, this is us, but the indirection sorts the type out
@@ -53,9 +59,9 @@ func _process(_delta):
 
 
 func turn():
-	if state == DEAD:
+	if get_state() == DEAD:
 		return true
-	state = IDLE
+	set_state(IDLE)
 	moves = stats.stats.speed
 	return false
 
@@ -80,7 +86,7 @@ func set_sprite():
 		sprite.set_visible(false)
 	if weapon:
 		weapon.set_visible(false)
-	var dead = state == DEAD
+	var dead = get_state() == DEAD
 	var path = "Robot/Dead" if dead else base
 	if stats.equipment.extras:
 		path += "-X"
@@ -114,7 +120,7 @@ func set_location(destination):
 
 func move(target):
 	mode = "Move"
-	state = WAIT
+	set_state(WAIT)
 	destination = target
 
 
@@ -141,26 +147,26 @@ func action(direction, really=true):
 			if is_player:
 				var lift = level.lift_at(target)
 				if lift:
-					if lift.state == Lift.OPEN:
+					if lift._state == Lift.OPEN:
 						move(target)
 					else:
-						state = WAIT
+						set_state(WAIT)
 						if lift.open():
 							yield(lift.get_node("Open"), "animation_finished")
-							state = IDLE if moves > 0 else DONE
+							set_state(IDLE if moves > 0 else DONE)
 						else:
-							state = IDLE
+							set_state(IDLE)
 		Level.PLAYER:
 			if is_player:
 				if not moves > 0:
-					state = DONE
+					set_state(DONE)
 			else:
 				weapons.attack(level.world.player)
 		Level.ROGUE:
 			if is_player:
 				var rogue = level.rogue_at(target)
 				if rogue:
-					if rogue.state == DEAD || rogue.check_stats():
+					if rogue.get_state() == DEAD:
 						move(target)
 					else:
 						weapons.attack(rogue)
@@ -175,7 +181,7 @@ func shoot(direction):
 	facing = direction
 	firing = "Fire"
 	weapons.location = location + direction
-	state = WAIT
+	set_state(WAIT)
 	moves -= 1
 	equip(true)
 
@@ -211,10 +217,12 @@ func show_stats(visible=false):
 
 
 func hit(count):
+	if get_state() == DEAD:
+		return
 	var zapped = get_sprite("Robot/Hit")
 	if not zapped:
 		return
-	level.world.player.state = WAIT
+	level.world.player.set_state(WAIT)
 	zapped.set_visible(true)
 	zapped.play()
 	while count > 0:
@@ -222,16 +230,17 @@ func hit(count):
 		count -= 1
 	zapped.stop()
 	zapped.set_visible(false)
-	level.world.player.state = IDLE if level.world.player.moves > 0 else DONE
-	state = IDLE if moves > 0 else DONE
+	level.world.player.set_state(IDLE if level.world.player.moves > 0 else DONE)
+	if get_state() != DEAD:
+		set_state(IDLE if moves > 0 else DONE)
 
 
 func check_stats():
 	if stats.disabled():
-		state = DEAD
-		combat = MELEE
 		hit(5)
+		set_state(DEAD)
+		combat = MELEE
 		set_sprite()
 		return true
-	state = IDLE if moves > 0 else DONE
+	set_state(IDLE if moves > 0 else DONE)
 	return false

@@ -19,7 +19,7 @@ func _ready():
 
 func _process(delta):
 	._process(delta)
-	if state == WAIT:
+	if get_state() == WAIT:
 		emit_signal("move", position)
 
 
@@ -49,7 +49,7 @@ const click_map = {
 	cursor_option = BUTTON_RIGHT,
 }
 func _unhandled_input(event):
-	if state != IDLE:
+	if get_state() != IDLE:
 		return
 	for e in move_map:
 		if event.is_action_pressed(e):
@@ -116,7 +116,7 @@ func cursor_activate(button):
 			"Info":
 				show_info()
 			"Move", "Target":
-				if state == IDLE:
+				if get_state() == IDLE:
 					action(null)
 
 
@@ -178,13 +178,13 @@ func check_location():
 			show_info(true)
 		if location != scavenge_location:
 			var rogue = level.rogue_at(location)
-			if rogue and rogue.state == DEAD:
+			if rogue and rogue.get_state() == DEAD:
 				scavenge(rogue)
 				scavenge_location = location
 		return
 	var lift =  level.lift_at(location)
 	if lift:
-		state = DONE
+		set_state(DONE)
 		emit_signal("change_level", lift.to)
 	else:
 		recharge()
@@ -212,7 +212,7 @@ func scavenge(other):
 		level.world.show_info("""You have scavenged:
 \t%s""" % scavenged.join("\n\t"))
 	moves -= 1
-	state = WAIT if moves > 0 else DONE
+	set_state(WAIT if moves > 0 else DONE)
 	show_stats(true)
 
 

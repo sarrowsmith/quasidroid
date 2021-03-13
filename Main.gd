@@ -54,7 +54,7 @@ func _process(_delta):
 	if world.target and world.turn > world.target:
 		timed_out()
 	if world.turn % 2:
-		if player.state == Robot.DONE:
+		if player.get_state() == Robot.DONE:
 			world.turn += 1
 			world.set_value("Moves", 0, true)
 			var dead = 0
@@ -67,7 +67,8 @@ func _process(_delta):
 					world.check_end()
 	else:
 		for r in world.active_level.rogues:
-			if r.state == Robot.IDLE or r.state == Robot.WAIT:
+			var state = r.get_state()
+			if state == Robot.IDLE or state == Robot.WAIT:
 				return
 		if player.turn():
 			$Lose.window_title = "You have been deactivated!"
@@ -168,7 +169,7 @@ func gather_stats(level, acc):
 	if level.state & Level.CLEAR:
 		acc["levels cleared"] += 1
 	for r in level.rogues:
-		if r.state == Robot.DEAD:
+		if r.get_state() == Robot.DEAD:
 			acc["rogues deactivated"] += 1
 	if level.children:
 		for child in level.children:
@@ -182,7 +183,7 @@ func timed_out():
 Systems rebooting ...
 
 All robots in the facility will be wiped.
-""" % (world.turn / 2))
+""" % ((world.turn + 1) / 2))
 	$Lose.window_title = "Facility systems reboot!"
 	game_over(false)
 

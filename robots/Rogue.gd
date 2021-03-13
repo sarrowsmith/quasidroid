@@ -3,7 +3,7 @@ extends Robot
 
 func _ready():
 	weapons = $Weapons
-	state = DONE
+	set_state(DONE)
 	add_to_group("rogue")
 
 
@@ -49,7 +49,7 @@ func behaviour():
 			return # Automatic attack
 		_:
 			new_direction()
-			state = DONE
+			set_state(DONE)
 	return target_type
 
 

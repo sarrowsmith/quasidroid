@@ -44,17 +44,17 @@ func shoot():
 			if location.distance_squared_to(owner.location) < weapon_range * weapon_range:
 				return false
 			else:
-				owner.state = Robot.IDLE if owner.moves else Robot.DONE # Otherwise handled by shot->hit
+				owner.set_state(Robot.IDLE if owner.moves else Robot.DONE) # Otherwise handled by shot->hit
 		Level.PLAYER:
 			if owner.is_player:
 				return false
 			attack(owner.level.world.player)
 		Level.ROGUE:
 			var rogue = owner.level.rogue_at(location)
-			if rogue and rogue != owner and rogue.state != Robot.DEAD:
+			if rogue and rogue != owner and rogue.get_state() != Robot.DEAD:
 				return splash(rogue)
 		_:
-			owner.state = Robot.IDLE if owner.moves else Robot.DONE
+			owner.set_state(Robot.IDLE if owner.moves else Robot.DONE)
 	return true
 
 

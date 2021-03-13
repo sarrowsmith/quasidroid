@@ -282,7 +282,7 @@ custom_fonts/italics_font = ExtResource( 3 )
 custom_fonts/bold_font = ExtResource( 3 )
 custom_fonts/normal_font = ExtResource( 3 )
 bbcode_enabled = true
-fit_content_height = true
+scroll_following = true
 selection_enabled = true
 
 [node name="Scan" type="ScrollContainer" parent="View/Panel/Split/LowerPanel"]

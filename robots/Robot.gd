@@ -29,7 +29,7 @@ func get_state():
 	return state
 
 func end_move():
-	if state != DEAD:
+	if state == WAIT:
 		state = IDLE if moves > 0 else DONE
 
 
@@ -103,9 +103,8 @@ func set_sprite():
 			weapon.set_visible(false)
 			weapon = null
 		return
-	if weapons.get_range() > 1:
-		# no sprites for melee weapons yet
-		weapon = get_sprite("Weapons/%s/%s" % [get_weapon(), firing])
+	# no sprites for melee weapons yet
+	weapon = get_sprite("Weapons/%s/%s" % [get_weapon(), firing]) if weapons.get_range() > 1 else null
 
 
 func equip(on):
@@ -230,7 +229,6 @@ func hit(count):
 	var zapped = get_sprite("Robot/Hit")
 	if not zapped:
 		return
-	level.world.player.set_state(WAIT)
 	zapped.set_visible(true)
 	zapped.play()
 	while count > 0:
@@ -238,13 +236,11 @@ func hit(count):
 		count -= 1
 	zapped.stop()
 	zapped.set_visible(false)
-	level.world.player.end_move()
-	end_move()
 
 
 func check_stats():
 	if stats.disabled():
-		hit(5)
+		# nice death animation here please
 		set_state(DEAD)
 		combat = MELEE
 		set_sprite()

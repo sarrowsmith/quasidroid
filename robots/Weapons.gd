@@ -75,33 +75,34 @@ func splash(rogue):
 func attack(other):
 	if other.get_state() == Robot.DEAD:
 		return
+	owner.set_state(Robot.WAIT)
+	var hit = 1
 	var ours = null
 	var theirs = other.stats.stats.duplicate()
 	match get_damage_type():
 		GRAPPLE:
 			ours = owner.stats.stats.duplicate()
-			other.hit(1)
 			owner.hit(1)
 			grapple(other)
 		RAM:
-			other.hit(2)
 			attack_a(other)
 		BLADE:
-			other.hit(3)
+			hit = 2
 			attack_b(other)
 		PROBE:
-			other.hit(2)
 			probe(other)
 		PROJECTILE:
-			other.hit(3)
+			hit = 2
 			projectile(other)
 		EMP:
-			other.hit(4)
+			hit = 3
 			emp(other)
 	other.stats.normalise(theirs)
 	if ours:
 		owner.stats.normalise(ours)
 	owner.level.world.report_attack(owner, other, ours, theirs)
+	other.hit(hit)
+	owner.end_move()
 
 
 # There's all sorts of possibilities for adjusting the deviation on

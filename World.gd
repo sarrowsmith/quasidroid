@@ -83,7 +83,7 @@ func report_death(display_name, is_player):
 
 
 func report_attack(attacker, defender, attackers, defenders):
-	var continuation = (turn - combat_turn) < 2
+	var continuation = (turn - combat_turn) < 3
 	combat_turn = turn
 	var a_name = first_capital("you" if attacker.is_player else ("the " + attacker.stats.type_name))
 	var d_name = "you" if defender.is_player else ("the " + defender.stats.type_name)
@@ -91,6 +91,7 @@ func report_attack(attacker, defender, attackers, defenders):
 	var with = " with a " + weapon
 	var attack = "shoot"
 	var damages = PoolStringArray()
+	var preamble = "Turn %d" % ((turn + 1) / 2)
 	for stat in defenders:
 		var delta = defenders[stat] - defender.stats.stats[stat]
 		if delta:
@@ -115,11 +116,12 @@ func report_attack(attacker, defender, attackers, defenders):
 			with = ""
 	if defender.is_player:
 		attack += "s"
-	var text = """%s %s %s%s!
+	var text = """%s
+%s %s %s%s!
 
 Damage inflicted:
 %s
-""" % [first_capital(a_name), attack, d_name, with, damages.join("\n")]
+""" % [preamble, first_capital(a_name), attack, d_name, with, damages.join("\n")]
 	show_info(text, continuation)
 	if defender.check_stats():
 		report_death(first_capital(d_name), defender.is_player)

@@ -103,9 +103,10 @@ margin_bottom = 23.0
 label = "Game Seed:"
 
 [node name="CenterContainer" type="CenterContainer" parent="View/Panel/Split/UpperPanel/Menu"]
+visible = false
 margin_top = 27.0
 margin_right = 338.0
-margin_bottom = 124.0
+margin_bottom = 99.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
@@ -116,6 +117,7 @@ margin_right = 338.0
 margin_bottom = 144.0
 
 [node name="Button" parent="View/Panel/Split/UpperPanel/Menu/Save" index="0"]
+visible = false
 margin_left = 148.0
 margin_top = 18.0
 margin_right = 189.0
@@ -123,16 +125,16 @@ margin_bottom = 38.0
 text = "Save"
 
 [node name="Restart" parent="View/Panel/Split/UpperPanel/Menu" instance=ExtResource( 6 )]
-visible = false
-margin_top = 103.0
+margin_top = 27.0
 margin_right = 338.0
-margin_bottom = 175.0
+margin_bottom = 124.0
 
 [node name="Button" parent="View/Panel/Split/UpperPanel/Menu/Restart" index="0"]
+visible = false
 margin_left = 140.0
-margin_top = 26.0
+margin_top = 38.0
 margin_right = 197.0
-margin_bottom = 46.0
+margin_bottom = 58.0
 text = "Restart"
 
 [node name="Quit" parent="View/Panel/Split/UpperPanel/Menu" instance=ExtResource( 6 )]

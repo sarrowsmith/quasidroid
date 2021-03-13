@@ -137,11 +137,21 @@ func view_to(position, offset=180):
 
 
 func load_game():
-	new()
+	var depth = 7
+	var save_game = File.new()
+	if save_game.file_exists("user://robolike.save"):
+		depth = save_game.get_32()
+		game_seed = save_game.get_32()
+		save_game.close()
+	new(depth)
 
 
 func save_game():
-	pass
+	var save_game = File.new()
+	save_game.open("user://robolike.save", File.WRITE)
+	save_game.store_32(world.world_depth)
+	save_game.store_32(game_seed)
+	save_game.close()
 
 
 func game_over(success):

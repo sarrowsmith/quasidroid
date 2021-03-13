@@ -51,22 +51,27 @@ func _process(_delta):
 		if Input.is_action_pressed(e):
 			position += pan_speed * view_map[e]
 	view_to(position, 0)
+	if world.target and world.turn > world.target:
+		timed_out()
 	if world.turn % 2:
 		if player.state == Robot.DONE:
 			world.turn += 1
+			world.set_value("Moves", 0, true)
 			var dead = 0
 			for r in world.active_level.rogues:
 				if r.turn():
 					dead += 1
 			if dead == len(world.active_level.rogues):
-				if world.active_level.state != Level.CLEAR:
-					world.active_level.state = Level.CLEAR
+				if not world.active_level.state & Level.CLEAR:
+					world.active_level.state |= Level.CLEAR
 					world.check_end()
 	else:
 		for r in world.active_level.rogues:
 			if r.state == Robot.IDLE or r.state == Robot.WAIT:
 				return
-		player.turn()
+		if player.turn():
+			$Lose.window_title = "You have been deactivated!"
+			game_over(false)
 		player.update()
 		world.turn += 1
 		world.set_value("Turn", (world.turn + 1) / 2, true)
@@ -117,7 +122,7 @@ func _unhandled_input(event):
 func change_level(level):
 	if not level:
 		if world.level_one.is_clear():
-			game_over()
+			game_over(true)
 	if level != world.active_level:
 		world.change_level(level)
 	player.change_level(level)
@@ -138,9 +143,48 @@ func save_game():
 	pass
 
 
-func game_over():
-	# TODO: something better than this
-	_on_Restart_pressed()
+func game_over(success):
+	var popup = $Win if success else $Lose
+	var messages = PoolStringArray()
+	if success:
+		messages.append("You succeeded!\n")
+	else:
+		messages.append("You failed \u2639")
+	var stats = {
+		"levels reset": 0,
+		"levels cleared": 0,
+		"rogues deactivated": 0,
+	}
+	gather_stats(world.level_one, stats)
+	for stat in stats:
+		messages.append("%s: %s" % [stat, stats[stat]])
+	popup.dialog_text = messages.join("\n")
+	show_dialog(popup)
+
+
+func gather_stats(level, acc):
+	if level.state & Level.RESET:
+		acc["levels reset"] += 1
+	if level.state & Level.CLEAR:
+		acc["levels cleared"] += 1
+	for r in level.rogues:
+		if r.state == Robot.DEAD:
+			acc["rogues deactivated"] += 1
+	if level.children:
+		for child in level.children:
+			if child:
+				gather_stats(child, acc)
+
+
+func timed_out():
+	world.show_info("""Turn %d
+
+Systems rebooting ...
+
+All robots in the facility will be wiped.
+""" % (world.turn / 2))
+	$Lose.window_title = "Facility systems reboot!"
+	game_over(false)
 
 
 func _on_Resume_pressed():
@@ -179,3 +223,8 @@ func _on_Quit_confirmed():
 func _on_Quit_popup_hide():
 	view_to(player.position)
 	world.set_visible(true)
+
+
+func _on_game_over():
+	# TODO: should be restart
+	get_tree().quit()

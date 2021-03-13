@@ -121,8 +121,6 @@ func cursor_activate(button):
 
 
 func show_info(optional=false):
-	var turn = level.world.turn
-	var ct = level.world.combat_turn
 	if optional and level.world.turn - level.world.combat_turn < 2:
 		return
 	var info = "Nothing to see here"

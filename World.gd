@@ -26,7 +26,7 @@ var player = null
 var active_level = null
 var combat_turn = 0
 var turn = 1
-var target = 0
+var target = 12
 
 
 func _ready():
@@ -131,7 +131,7 @@ func check_end():
 	show_info("""Level %s has been cleared""" % active_level.map_name)
 	if not level_one.is_clear():
 		return
-	target = turn + 25 * world_depth
+	target = turn + 75 * world_depth
 	level_one.lifts[0].unlock()
 	show_info("""All the levels have now been cleared.
 

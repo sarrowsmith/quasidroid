@@ -8,7 +8,7 @@ export(int) var level = 0
 
 enum Prototype {LEVEL, LIFT, ACCESS, ROGUE}
 enum {FLOOR, WALL, LIFT, ACCESS, PLAYER, ROGUE}
-enum {LOCKED, OPEN, RESET, CLEAR}
+enum {LOCKED, OPEN, RESET, this_is_really_a_bitmask, CLEAR}
 
 onready var cursor = $Cursor
 
@@ -36,7 +36,7 @@ func _ready():
 
 
 func is_clear():
-	return (state == CLEAR and children and
+	return (state & CLEAR and children and
 		children[0] and children[0].is_clear() and
 		children[1] and children[1].is_clear())
 
@@ -51,7 +51,7 @@ func create(from, rooms):
 	if parent == null:
 		level = 1
 		map_name = "1"
-		state = OPEN
+		state |= OPEN
 	else:
 		level = parent.level + 1
 		prototypes = parent.prototypes
@@ -190,7 +190,7 @@ func activate(location):
 	for ap in access.values():
 		if ap and not ap.active:
 			return false
-	state = RESET
+	state |= RESET
 	for lift in lifts:
 		lift.unlock()
 		if lift.to and lift.to.state == LOCKED:

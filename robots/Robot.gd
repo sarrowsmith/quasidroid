@@ -63,10 +63,12 @@ func _process(_delta):
 
 
 func turn():
-	if get_state() == DEAD:
-		return true
-	set_state(IDLE)
-	moves = stats.stats.speed
+	match get_state():
+		DEAD:
+			return true
+		DONE:
+			set_state(IDLE)
+			moves = stats.stats.speed
 	return false
 
 
@@ -101,7 +103,9 @@ func set_sprite():
 			weapon.set_visible(false)
 			weapon = null
 		return
-	weapon = get_sprite("Weapons/%s/%s" % [get_weapon(), firing])
+	if weapons.get_range() > 1:
+		# no sprites for melee weapons yet
+		weapon = get_sprite("Weapons/%s/%s" % [get_weapon(), firing])
 
 
 func equip(on):

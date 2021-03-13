@@ -23,6 +23,7 @@ func _process(delta):
 		emit_signal("move", position)
 
 
+
 func update():
 	if weapons.get_range() > 1:
 		pass # This only makes sense if grappling is available

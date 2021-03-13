@@ -45,8 +45,12 @@ func behaviour():
 		Level.FLOOR:
 			try_target()
 		Level.PLAYER:
+			# Automatic attack
 			equip()
-			return # Automatic attack
+			if moves > 0:
+				# Do something clever
+				set_state(DONE)
+			return
 		_:
 			new_direction()
 			set_state(DONE)

@@ -87,7 +87,7 @@ func get_sprite(path):
 	return get_node("%s/%s" % [path, facing_map[facing]])
 
 
-func set_sprite():
+func set_sprite(equipped=true):
 	if sprite:
 		sprite.set_visible(false)
 	if weapon:
@@ -103,15 +103,14 @@ func set_sprite():
 			weapon.set_visible(false)
 			weapon = null
 		return
-	# no sprites for melee weapons yet
-	weapon = get_sprite("Weapons/%s/%s" % [get_weapon(), firing]) if weapons.get_range() > 1 else null
+	weapon = get_sprite("Weapons/%s/%s" % [get_weapon(), firing])
+	if weapon:
+		weapon.position = Vector2.ZERO
+		weapon.set_visible(equipped)
 
 
 func equip(on):
-	set_sprite()
-	if weapon:
-		weapon.position = Vector2.ZERO
-		weapon.set_visible(on)
+	set_sprite(on)
 
 
 func get_weapon():
@@ -131,12 +130,12 @@ func move(target):
 	destination = target
 
 
-func action(direction, really=true):
+func action(direction, really=true, truly=true):
 	if direction == null:
 		if not is_player:
 			return Level.WALL
 		direction = level.cursor.location - location
-	if really and weapons.get_range() > 1:
+	if really and truly and weapons.get_range() > 1:
 		if direction == Vector2.ZERO:
 			direction = facing
 		shoot(direction)
@@ -168,7 +167,10 @@ func action(direction, really=true):
 				if not moves > 0:
 					set_state(DONE)
 			else:
+				while combat > MELEE and weapons.get_range() > 1:
+					combat -= 1
 				weapons.attack(level.world.player)
+				combat = len(weapons) - 1
 		Level.ROGUE:
 			if is_player:
 				var rogue = level.rogue_at(target)

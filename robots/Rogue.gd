@@ -12,11 +12,10 @@ func turn():
 		return true
 	match behaviour():
 		Level.WALL, Level.LIFT, Level.ROGUE:
-			end_move()
+			set_state(DONE)
 		Level.FLOOR, Level.ACCESS, Level.PLAYER:
 			pass # handled automatically
 	equip()
-		
 	return false
 
 
@@ -46,9 +45,9 @@ func new_direction():
 
 func behaviour():
 	# 10 % chance of doing nothing
-#	if level.rng.randf() < 0.1:
-#		set_state(DONE)
-#		return
+	if level.rng.randf() < 0.1:
+		set_state(DONE)
+		return
 	var target_type = action(facing, false)
 	match target_type:
 		Level.FLOOR:
@@ -69,7 +68,6 @@ func try_target():
 	if weapons.get_range() > 1:
 		var target = location + facing
 		for i in range(weapons.get_range() - 3):
-			print(i, ": ", level.location_type(target))
 			match level.location_type(target):
 				Level.FLOOR:
 					target += facing
@@ -86,11 +84,14 @@ func try_target():
 		var floors = nearby[Level.FLOOR] # bit heuristic
 		if 3 < floors and floors < 6:
 			check_turn()
+		# 10% of changing direction in the middle of an empty space
+		if floors == 8 and level.rng.randf() < 0.1:
+			new_direction()
+			return Level.WALL
 	return action(facing, true, location_type == Level.PLAYER)
 
 
 func check_turn():
-	return # buggy!
 	var side = Vector2(1 - facing.x * facing.x, 1 - facing.y * facing.y)
 	var floors = [ # we know facing is a floor
 		level.location_type(-facing) == Level.FLOOR,

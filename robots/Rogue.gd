@@ -104,7 +104,7 @@ func check_turn():
 		# 25% chance of taking a turn
 		if level.rng.randf() < 0.5:
 			facing = side if level.rng.randf() < 0.5 else -side
-		
+
 	else:
 		if floors[1] and level.rng.randf() < 0.25:
 			facing = side

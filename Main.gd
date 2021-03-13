@@ -95,13 +95,13 @@ func _unhandled_input(event):
 					_on_Restart_pressed()
 				KEY_Q:
 					_on_Quit_pressed()
-		match event.scancode:
-			KEY_U:
-				level = world.active_level.parent
-			KEY_O:
-				level = world.active_level.children[0]
-			KEY_P:
-				level = world.active_level.children[1]
+#		match event.scancode:
+#			KEY_U:
+#				level = world.active_level.parent
+#			KEY_O:
+#				level = world.active_level.children[0]
+#			KEY_P:
+#				level = world.active_level.children[1]
 		if level:
 			change_level(level)
 	if world.active_level == null:

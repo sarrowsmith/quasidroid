@@ -39,6 +39,7 @@ var stats = {
 }
 var type_name = ""
 var level = 1
+var baseline = null
 
 
 static func choose(choices, rng):
@@ -118,4 +119,11 @@ func scavenge(other):
 		equipment.armour = theirs.armour
 		scavenged.append("armour upgrade")
 		theirs.armour = 0
+	if baseline:
+		for stat in stats:
+			if other.stats.stats[stat] > baseline[stat]:
+				scavenged.append("%d of %s" % [other.stats.stats[stat] - baseline[stat], stat])
+				stats[stat] = other.stats.stats[stat]
+				other.stats.stats[stat] = baseline[stat]
+				baseline[stat] = stats[stat]
 	return scavenged

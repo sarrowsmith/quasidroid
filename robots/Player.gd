@@ -13,7 +13,7 @@ func _ready():
 	is_player = true
 	base = "0"
 	stats = Stats.new()
-	baseline = stats.stats.duplicate()
+	stats.baseline = stats.stats.duplicate()
 	add_to_group("player")
 
 
@@ -199,8 +199,8 @@ Downwards lift%s unlocked.
 
 func recharge():
 	for stat in stats.stats:
-		if stats.stats[stat] < baseline[stat]:
-			stats.stats[stat] = baseline[stat]
+		if stats.stats[stat] < stats.baseline[stat]:
+			stats.stats[stat] = stats.baseline[stat]
 	show_stats(true)
 
 
@@ -212,7 +212,7 @@ func scavenge(other):
 		level.world.show_info("""You have scavenged:
 \t%s""" % scavenged.join("\n\t"))
 	moves -= 1
-	set_state(WAIT if moves > 0 else DONE)
+	end_move()
 	show_stats(true)
 
 

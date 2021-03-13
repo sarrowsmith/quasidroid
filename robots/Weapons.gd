@@ -44,7 +44,7 @@ func shoot():
 			if location.distance_squared_to(owner.location) < weapon_range * weapon_range:
 				return false
 			else:
-				owner.set_state(Robot.IDLE if owner.moves else Robot.DONE) # Otherwise handled by shot->hit
+				owner.end_move() # Otherwise handled by shot->hit
 		Level.PLAYER:
 			if owner.is_player:
 				return false
@@ -54,7 +54,7 @@ func shoot():
 			if rogue and rogue != owner and rogue.get_state() != Robot.DEAD:
 				return splash(rogue)
 		_:
-			owner.set_state(Robot.IDLE if owner.moves else Robot.DONE)
+			owner.end_move()
 	return true
 
 
@@ -73,6 +73,8 @@ func splash(rogue):
 
 
 func attack(other):
+	if other.get_state() == Robot.DEAD:
+		return
 	var ours = null
 	var theirs = other.stats.stats.duplicate()
 	match get_damage_type():
@@ -151,7 +153,9 @@ func attack_b(other):
 
 
 func grapple(other):
+# warning-ignore:unused_variable
 	var attack = grapple_effect(other.stats, 1)
+# warning-ignore:unused_variable
 	var defence = grapple_effect(owner.stats, 0)
 	# TODO: work out how to turn attack - defence into damage
 

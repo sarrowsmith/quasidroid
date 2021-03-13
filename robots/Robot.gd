@@ -28,6 +28,10 @@ func set_state(value):
 func get_state():
 	return state
 
+func end_move():
+	if state != DEAD:
+		state = IDLE if moves > 0 else DONE
+
 
 func _process(_delta):
 	if level == null or get_state() == DEAD:
@@ -153,7 +157,7 @@ func action(direction, really=true):
 						set_state(WAIT)
 						if lift.open():
 							yield(lift.get_node("Open"), "animation_finished")
-							set_state(IDLE if moves > 0 else DONE)
+							end_move()
 						else:
 							set_state(IDLE)
 		Level.PLAYER:
@@ -230,9 +234,8 @@ func hit(count):
 		count -= 1
 	zapped.stop()
 	zapped.set_visible(false)
-	level.world.player.set_state(IDLE if level.world.player.moves > 0 else DONE)
-	if get_state() != DEAD:
-		set_state(IDLE if moves > 0 else DONE)
+	level.world.player.end_move()
+	end_move()
 
 
 func check_stats():
@@ -242,5 +245,5 @@ func check_stats():
 		combat = MELEE
 		set_sprite()
 		return true
-	set_state(IDLE if moves > 0 else DONE)
+	end_move()
 	return false

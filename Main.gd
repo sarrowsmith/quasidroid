@@ -18,7 +18,7 @@ func _ready():
 
 func show_dialog(dialog):
 	world.set_visible(false)
-	view_to(half_view, 0)
+	view_to(half_view, Vector2.ZERO)
 	dialog.popup_centered()
 
 
@@ -50,7 +50,7 @@ func _process(_delta):
 	for e in view_map:
 		if Input.is_action_pressed(e):
 			position += pan_speed * view_map[e]
-	view_to(position, 0)
+	view_to(position, Vector2.ZERO)
 	if world.target and world.turn > world.target:
 		timed_out()
 	if world.turn % 2:
@@ -130,10 +130,10 @@ func change_level(level):
 	view_to(player.position)
 
 
-func view_to(position, offset=180):
+func view_to(position, offset=Vector2(216, 36)):
 	$View.position = Vector2(
-		clamp(position.x + offset, 0, world_size.x),
-		clamp(position.y, 0, world_size.y))
+		clamp(position.x + offset.x, 0, world_size.x),
+		clamp(position.y + offset.y, 0, world_size.y))
 
 
 func load_game():

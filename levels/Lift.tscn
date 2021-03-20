@@ -58,10 +58,12 @@ animations = [ {
 script = ExtResource( 1 )
 
 [node name="Unlock" type="AnimatedSprite" parent="."]
+scale = Vector2( 1.5, 1.5 )
 frames = SubResource( 4 )
 centered = false
 
 [node name="Open" type="AnimatedSprite" parent="."]
 visible = false
+scale = Vector2( 1.5, 1.5 )
 frames = SubResource( 9 )
 centered = false

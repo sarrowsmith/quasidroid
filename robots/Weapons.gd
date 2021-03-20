@@ -9,11 +9,11 @@ const stats_map = {
 	Blade = ["thermal lance", BLADE, 1, 1],
 	Probe = ["logic probe", PROBE, 1, 0],
 	Plasma = ["plasma beam", BLADE, 5, 2],
-	Laser = ["laser", BLADE, 5, 2],
+	Laser = ["laser", BLADE, 7, 2],
 	Dual = ["plasma barrage", BLADE, 5, 2],
 	Ion = ["ion cannon", RAM, 5, 3],
-	Projectile = ["rail gun", PROJECTILE, 5, 1],
-	EMP = ["EMP", EMP, 5, 3],
+	Projectile = ["rail gun", PROJECTILE, 7, 1],
+	EMP = ["EMP", EMP, 7, 3],
 }
 
 var location = Vector2.ZERO

@@ -1166,6 +1166,7 @@ animations = [ {
 
 [node name="Robots" type="Node2D"]
 scale = Vector2( 2, 2 )
+z_index = 1
 script = ExtResource( 33 )
 
 [node name="0" type="Node2D" parent="."]

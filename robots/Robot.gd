@@ -157,7 +157,7 @@ func action(direction, really=true, truly=true):
 			if is_player:
 				var lift = level.lift_at(target)
 				if lift:
-					if lift._state == Lift.OPEN:
+					if lift.state == Lift.OPEN:
 						move(target)
 					else:
 						set_state(WAIT)

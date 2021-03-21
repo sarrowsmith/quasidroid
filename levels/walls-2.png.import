@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/walls.png-7498efca130b4159095288273934af97.stex"
+path="res://.import/walls-2.png-98012d0b2a371803bdc846958a1cb6eb.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://resources/Tiles/walls.png"
-dest_files=[ "res://.import/walls.png-7498efca130b4159095288273934af97.stex" ]
+source_file="res://levels/walls-2.png"
+dest_files=[ "res://.import/walls-2.png-98012d0b2a371803bdc846958a1cb6eb.stex" ]
 
 [params]
 

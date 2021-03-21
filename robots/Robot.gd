@@ -174,7 +174,7 @@ func action(direction, really=true, truly=true):
 				while combat > MELEE and weapons.get_range() > 1:
 					combat -= 1
 				weapons.attack(level.world.player)
-				combat = len(weapons) - 1
+				combat = len(stats.equipment.weapons) - 1
 		Level.ROGUE:
 			if is_player:
 				var rogue = level.rogue_at(target)

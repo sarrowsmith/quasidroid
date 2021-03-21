@@ -4,7 +4,6 @@ extends Robot
 signal move(position)
 signal change_level(level)
 
-var baseline = null
 var scavenge_location = Vector2.ZERO
 
 
@@ -13,7 +12,7 @@ func _ready():
 	is_player = true
 	base = "0"
 	stats = Stats.new()
-	stats.equipment.weapons.append("Dual")
+	stats.equipment.weapons.append("Plasma")
 	stats.baseline = stats.stats.duplicate()
 	add_to_group("player")
 
@@ -222,6 +221,6 @@ func scavenge(other):
 func level_up(to):
 	if to > stats.level:
 		stats.level += 1
-		for stat in baseline:
-			baseline[stat] += 3 if stat in stats.critical_stats else 1
+		for stat in stats.baseline:
+			stats.baseline[stat] += 3 if stat in stats.critical_stats else 1
 	recharge()

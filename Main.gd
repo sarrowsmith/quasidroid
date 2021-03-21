@@ -2,7 +2,7 @@ extends Node2D
 
 
 export(int) var game_seed = 0
-export(float) var pan_speed = 0.25
+export(float) var pan_speed = 0.5
 export(Vector2) var half_view = Vector2(960, 540)
 
 onready var player = $Player

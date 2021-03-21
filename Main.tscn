@@ -74,14 +74,14 @@ margin_right = 473.0
 margin_bottom = 1073.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
-split_offset = 16
+split_offset = -96
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="UpperPanel" type="TabContainer" parent="View/Panel/Split"]
 margin_right = 466.0
-margin_bottom = 543.0
+margin_bottom = 431.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 tab_align = 0
@@ -127,32 +127,32 @@ text = "Save"
 [node name="Restart" parent="View/Panel/Split/UpperPanel/Menu" instance=ExtResource( 6 )]
 margin_top = 27.0
 margin_right = 458.0
-margin_bottom = 184.0
+margin_bottom = 147.0
 
 [node name="Button" parent="View/Panel/Split/UpperPanel/Menu/Restart" index="0"]
 visible = false
 margin_left = 200.0
-margin_top = 68.0
+margin_top = 50.0
 margin_right = 257.0
-margin_bottom = 88.0
+margin_bottom = 70.0
 text = "Restart"
 
 [node name="Quit" parent="View/Panel/Split/UpperPanel/Menu" instance=ExtResource( 6 )]
-margin_top = 188.0
+margin_top = 151.0
 margin_right = 458.0
-margin_bottom = 345.0
+margin_bottom = 271.0
 
 [node name="Button" parent="View/Panel/Split/UpperPanel/Menu/Quit" index="0"]
 margin_left = 209.0
-margin_top = 68.0
+margin_top = 50.0
 margin_right = 249.0
-margin_bottom = 88.0
+margin_bottom = 70.0
 text = "Quit"
 
 [node name="CenterContainer2" type="CenterContainer" parent="View/Panel/Split/UpperPanel/Menu"]
-margin_top = 349.0
+margin_top = 275.0
 margin_right = 458.0
-margin_bottom = 507.0
+margin_bottom = 395.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
@@ -170,7 +170,7 @@ scroll_horizontal_enabled = false
 
 [node name="Status" type="VBoxContainer" parent="View/Panel/Split/UpperPanel/Status"]
 margin_right = 458.0
-margin_bottom = 507.0
+margin_bottom = 395.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
@@ -260,7 +260,7 @@ fit_content_height = true
 selection_enabled = true
 
 [node name="LowerPanel" type="TabContainer" parent="View/Panel/Split"]
-margin_top = 555.0
+margin_top = 443.0
 margin_right = 466.0
 margin_bottom = 1066.0
 size_flags_horizontal = 3
@@ -301,7 +301,7 @@ scroll_horizontal_enabled = false
 
 [node name="Scan" type="VBoxContainer" parent="View/Panel/Split/LowerPanel/Scan"]
 margin_right = 458.0
-margin_bottom = 475.0
+margin_bottom = 587.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 

@@ -67,7 +67,7 @@ func try_target():
 	var location_type = Level.FLOOR
 	if weapons.get_range() > 1:
 		var target = location + facing
-		for i in range(weapons.get_range() - 3):
+		for _i in range(weapons.get_range() - 3):
 			match level.location_type(target):
 				Level.FLOOR:
 					target += facing

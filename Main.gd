@@ -2,8 +2,8 @@ extends Node2D
 
 
 export(int) var game_seed = 0
-export(int) var pan_speed = 8
-export(Vector2) var half_view = Vector2(640, 360)
+export(float) var pan_speed = 0.25
+export(Vector2) var half_view = Vector2(960, 540)
 
 onready var player = $Player
 onready var world = $World
@@ -95,13 +95,15 @@ func _unhandled_input(event):
 					_on_Restart_pressed()
 				KEY_Q:
 					_on_Quit_pressed()
-#		match event.scancode:
-#			KEY_U:
-#				level = world.active_level.parent
-#			KEY_O:
-#				level = world.active_level.children[0]
-#			KEY_P:
-#				level = world.active_level.children[1]
+		match event.scancode:
+			KEY_F:
+				OS.window_fullscreen = !OS.window_fullscreen
+			KEY_U:
+				level = world.active_level.parent
+			KEY_O:
+				level = world.active_level.children[0]
+			KEY_P:
+				level = world.active_level.children[1]
 		if level:
 			change_level(level)
 	if world.active_level == null:
@@ -130,10 +132,10 @@ func change_level(level):
 	view_to(player.position)
 
 
-func view_to(position, offset=Vector2(216, 36)):
-	$View.position = Vector2(
-		clamp(position.x + offset.x, 0, world_size.x),
-		clamp(position.y + offset.y, 0, world_size.y))
+func view_to(position, offset=Vector2(280, 36)):
+	$View.position = offset + Vector2(
+		clamp(position.x, 0, world_size.x + 0.5 * half_view.x),
+		clamp(position.y, 0, world_size.y + 0.5 * half_view.y))
 
 
 func load_game():

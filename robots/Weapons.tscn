@@ -6,7 +6,7 @@
 [ext_resource path="res://robots/Weapons.gd" type="Script" id=4]
 
 [node name="Weapons" type="Node2D"]
-scale = Vector2( 1.5, 1.5 )
+scale = Vector2( 2, 2 )
 script = ExtResource( 4 )
 
 [node name="Dual" parent="." instance=ExtResource( 1 )]

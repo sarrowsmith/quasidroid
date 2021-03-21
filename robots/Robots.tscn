@@ -1165,7 +1165,7 @@ animations = [ {
 } ]
 
 [node name="Robots" type="Node2D"]
-scale = Vector2( 1.5, 1.5 )
+scale = Vector2( 2, 2 )
 script = ExtResource( 33 )
 
 [node name="0" type="Node2D" parent="."]
@@ -1218,14 +1218,12 @@ centered = false
 [node name="Left" type="AnimatedSprite" parent="0/Move"]
 visible = false
 frames = SubResource( 42 )
-frame = 2
 playing = true
 centered = false
 
 [node name="Right" type="AnimatedSprite" parent="0/Move"]
 visible = false
 frames = SubResource( 46 )
-frame = 2
 playing = true
 centered = false
 
@@ -1274,14 +1272,14 @@ centered = false
 [node name="Left" type="AnimatedSprite" parent="2/Move"]
 visible = false
 frames = SubResource( 88 )
-frame = 1
+frame = 2
 playing = true
 centered = false
 
 [node name="Right" type="AnimatedSprite" parent="2/Move"]
 visible = false
 frames = SubResource( 92 )
-frame = 1
+frame = 2
 playing = true
 centered = false
 
@@ -1333,14 +1331,14 @@ centered = false
 [node name="Left" type="AnimatedSprite" parent="0-X/Move"]
 visible = false
 frames = SubResource( 134 )
-frame = 1
+frame = 2
 playing = true
 centered = false
 
 [node name="Right" type="AnimatedSprite" parent="0-X/Move"]
 visible = false
 frames = SubResource( 138 )
-frame = 1
+frame = 2
 playing = true
 centered = false
 
@@ -1394,12 +1392,14 @@ centered = false
 [node name="Left" type="AnimatedSprite" parent="2-X/Move"]
 visible = false
 frames = SubResource( 180 )
+frame = 1
 playing = true
 centered = false
 
 [node name="Right" type="AnimatedSprite" parent="2-X/Move"]
 visible = false
 frames = SubResource( 184 )
+frame = 1
 playing = true
 centered = false
 

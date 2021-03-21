@@ -2,7 +2,7 @@ extends Node2D
 
 
 export(int) var world_seed
-export(Vector2) var world_size = Vector2(2160, 2160)
+export(Vector2) var world_size = Vector2(2880, 2880)
 export(int) var world_depth = 7
 export(NodePath) var upper_panel_path
 export(NodePath) var lower_panel_path

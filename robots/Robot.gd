@@ -5,6 +5,9 @@ extends Node2D
 enum {DEAD, IDLE, WAIT, DONE}
 enum {GRAPPLE=-1, MELEE, WEAPON}
 
+export(float) var move_speed = 1
+export(float) var weapon_speed = 2
+
 var location = Vector2.ZERO
 var level = null
 var base = "2"
@@ -22,6 +25,7 @@ var is_player = false
 # This *must* be overridden by derived classes
 var weapons = null
 
+
 func set_state(value):
 	state = value
 
@@ -33,13 +37,13 @@ func end_move():
 		state = IDLE if moves > 0 else DONE
 
 
-func _process(_delta):
+func _process(delta):
 	if level == null or get_state() == DEAD:
 		return
 	if mode == "Move":
-		position += facing
-		if position == level.location_to_position(destination):
-			location = destination
+		position += facing * move_speed * 100 * delta
+		if position.distance_squared_to(level.location_to_position(destination)) <= (move_speed * move_speed):
+			set_location(destination)
 			mode = "Idle"
 			set_sprite()
 			set_state(IDLE if moves > 0 else DONE)
@@ -50,7 +54,7 @@ func _process(_delta):
 			level.set_cursor()
 		return
 	if firing == "Fire":
-		weapon.position += facing * 4
+		weapon.position += facing * weapon_speed * 100 * delta
 		var target = level.position_to_location(weapon.global_position)
 		if level.position_to_location(weapon.position) == weapons.location:
 			return

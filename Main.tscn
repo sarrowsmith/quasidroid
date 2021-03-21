@@ -57,6 +57,7 @@ __meta__ = {
 
 [node name="View" type="Node2D" parent="."]
 position = Vector2( 960, 540 )
+z_index = 2
 
 [node name="Panel" type="PanelContainer" parent="View"]
 margin_left = 480.0

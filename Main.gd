@@ -1,9 +1,14 @@
 extends Node2D
 
 
+enum ViewMode { TRACK, FREE, RESET }
+
 export(int) var game_seed = 0
 export(float) var pan_speed = 0.5
 export(Vector2) var half_view = Vector2(960, 540)
+export(Vector2) var view_offset = Vector2(280, 36)
+
+var view_mode = ViewMode.TRACK
 
 onready var player = $Player
 onready var world = $World
@@ -18,7 +23,7 @@ func _ready():
 
 func show_dialog(dialog):
 	world.set_visible(false)
-	view_to(half_view, Vector2.ZERO)
+	view_to(half_view)
 	dialog.popup_centered()
 
 
@@ -47,10 +52,17 @@ func _process(_delta):
 	if not world.active_level:
 		return
 	var position = $View.position
-	for e in view_map:
-		if Input.is_action_pressed(e):
-			position += pan_speed * view_map[e]
-	view_to(position, Vector2.ZERO)
+	if view_mode == ViewMode.RESET:
+		position = player.position + view_offset
+		view_mode = ViewMode.TRACK
+	else:
+		for e in view_map:
+			if Input.is_action_pressed(e):
+				view_mode = ViewMode.FREE
+				position += pan_speed * view_map[e]
+		if view_mode == ViewMode.TRACK:
+			position = player.position + view_offset
+	view_to(position)
 	if world.target and world.turn > world.target:
 		timed_out()
 	if world.turn % 2:
@@ -115,10 +127,12 @@ func _unhandled_input(event):
 	if move != Vector2.ZERO:
 		world.active_level.move_cursor(move)
 	if event.is_action_pressed("map_reset"):
-		view_to(player.position)
+		view_mode = ViewMode.RESET
 		return
 	if event.is_action_pressed("cursor_reset"):
-		world.active_level.set_cursor(player.location)
+		var view_position = $View.position - view_offset
+		var view_location = world.active_level.position_to_location(view_position)
+		world.active_level.set_cursor(view_location + Vector2.ONE)
 		return
 
 
@@ -129,11 +143,12 @@ func change_level(level):
 	if level != world.active_level:
 		world.change_level(level)
 	player.change_level(level)
-	view_to(player.position)
+	view_to(player.position + view_offset)
+	view_mode = ViewMode.TRACK
 
 
-func view_to(position, offset=Vector2(280, 36)):
-	$View.position = offset + Vector2(
+func view_to(position):
+	$View.position = Vector2(
 		clamp(position.x, 0, world_size.x + 0.5 * half_view.x),
 		clamp(position.y, 0, world_size.y + 0.5 * half_view.y))
 
@@ -234,10 +249,15 @@ func _on_Quit_confirmed():
 
 
 func _on_Quit_popup_hide():
-	view_to(player.position)
+	view_to(player.position + view_offset)
 	world.set_visible(true)
 
 
 func _on_game_over():
 	# TODO: should be restart
 	get_tree().quit()
+
+
+func _on_Player_move(position):
+	if view_mode == ViewMode.FREE:
+		view_mode = ViewMode.RESET

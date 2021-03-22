@@ -9,7 +9,7 @@ const state_name = ["locked", "closed", "open"]
 var location = Vector2.ZERO
 var from = null
 var to = null
-var direction = "down"
+var direction = "Down"
 var state = LOCKED
 
 
@@ -22,7 +22,7 @@ func level_name(level):
 func get_info():
 	return """A lift %s from %s to %s.
 
-It is currently %s.""" % [direction, level_name(from), level_name(to), state_name[state]]
+It is currently %s.""" % [direction.to_lower(), level_name(from), level_name(to), state_name[state]]
 
 
 func unlock():
@@ -30,6 +30,9 @@ func unlock():
 		return false
 	$Unlock.play()
 	state = CLOSED
+	$No.set_visible(false)
+	$Exit.set_visible(false)
+	get_node(direction).set_visible(true)
 	return true
 
 

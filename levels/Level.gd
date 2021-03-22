@@ -185,8 +185,8 @@ func location_type(location):
 
 func activate(location):
 	if not access.has(location):
-		return false# Shouldn't be possible, but apparently is
-	access[location].active = true
+		return false # Shouldn't be possible, but apparently is
+	access[location].reset()
 	for ap in access.values():
 		if ap and not ap.active:
 			return false

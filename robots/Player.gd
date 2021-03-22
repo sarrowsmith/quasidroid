@@ -66,7 +66,6 @@ func _unhandled_input(event):
 				equip()
 				show_stats(true)
 			KEY_SPACE:
-				combat = (combat + 1) % len(stats.equipment.weapons)
 				action(Vector2.ZERO)
 				show_stats(true)
 

@@ -101,7 +101,7 @@ size_flags_vertical = 3
 margin_top = 0.0
 margin_right = 458.0
 margin_bottom = 23.0
-label = "Game Seed:"
+label = "Game:"
 
 [node name="CenterContainer" type="CenterContainer" parent="View/Panel/Split/UpperPanel/Menu"]
 visible = false
@@ -493,7 +493,6 @@ current = true
 z_index = 3
 
 [node name="Start" type="PopupDialog" parent="Dialogs"]
-visible = true
 margin_right = 280.0
 margin_bottom = 320.0
 popup_exclusive = true

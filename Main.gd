@@ -3,7 +3,7 @@ extends Node2D
 
 enum ViewMode { TRACK, FREE, RESET }
 
-export(int) var game_seed = 0
+export(String) var game_seed = ""
 export(float) var pan_speed = 0.5
 export(Vector2) var half_view = Vector2(960, 540)
 export(Vector2) var view_offset = Vector2(280, 36)
@@ -17,7 +17,7 @@ onready var world_size = $World.world_size
 
 func _ready():
 	if game_seed:
-		$Dialogs.get_node("Start").find_node("Seed").text = String(game_seed)
+		$Dialogs.find_node("Seed").text = game_seed
 	show_named_dialog("Start")
 
 
@@ -38,7 +38,7 @@ func new(depth=0):
 	world.set_visible(true)
 	if depth:
 		world.world_depth = depth
-	seed(game_seed)
+	seed(seed_text_to_int(game_seed))
 	$View.find_node("Seed").set_value(game_seed)
 	change_level(world.create(player))
 	world.set_value("Turn", 1, true)
@@ -171,7 +171,7 @@ func load_game():
 	var save_game = File.new()
 	if not save_game.open("user://robolike.save", File.READ):
 		depth = save_game.get_32()
-		game_seed = save_game.get_32()
+		game_seed = save_game.get_pascal_string()
 		save_game.close()
 	new(depth)
 
@@ -180,7 +180,7 @@ func save_game():
 	var save_game = File.new()
 	save_game.open("user://robolike.save", File.WRITE)
 	save_game.store_32(world.world_depth)
-	save_game.store_32(game_seed)
+	save_game.store_pascal_string(game_seed)
 	save_game.close()
 
 
@@ -228,20 +228,56 @@ All robots in the facility will be wiped.
 	game_over(false)
 
 
+# Generate a seed text of the form CVCVC CVCV which can be directly
+# converted to a 32-bit int by seed_text_to_int
+const vowels = "aeiouyäö"
+const consonants = "bdfghklmnprstvwz"
+func create_seed_text():
+	var seed_text = "          "
+	for i in 10:
+		if i == 5:
+			continue
+		var letters = vowels if i % 2 else consonants
+		seed_text[i] = letters[randi() % len(letters)]
+	seed_text[0] = seed_text[0].to_upper()
+	seed_text[6] = seed_text[6].to_upper()
+	return seed_text
+
+
+func seed_text_to_int(seed_text):
+	if seed_text.is_valid_integer():
+		return seed_text.to_int()
+	if len(seed_text) == 10 and seed_text[5] == " ":
+		var as_int = 0
+		var count = 0
+		for pair in seed_text.to_lower().bigrams():
+			var c = consonants.find(pair[0])
+			if c == -1:
+				break
+			as_int = (as_int << 4) | c
+			if c != 2:
+				var v = vowels.find(pair[1])
+				if v == -1:
+					break
+				as_int = (as_int << 3) | v
+			count += 1
+		if count == 6:
+			return as_int
+	return seed_text.hash()
+
+
 func _on_Resume_pressed():
 	load_game()
 
 
 func _on_New_pressed():
-	var seed_text = $Dialogs.get_node("Start").find_node("Seed").text
-	game_seed = seed_text.to_int() if seed_text.is_valid_integer() else seed_text.hash()
-	var depth = $Dialogs.get_node("Start").find_node("Depth").value
-	new(depth)
+	game_seed = $Dialogs.find_node("Seed").text
+	new($Dialogs.find_node("Depth").value)
 
 
 func _on_Random_pressed():
 	randomize()
-	$Dialogs.get_node("Start").find_node("Seed").text = String(randi())
+	$Dialogs.find_node("Seed").text = create_seed_text()
 
 
 func _on_Save_pressed():

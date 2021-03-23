@@ -643,7 +643,7 @@ popup_exclusive = true
 window_title = "You have failed!"
 dialog_autowrap = true
 [connection signal="change_level" from="Player" to="." method="change_level"]
-[connection signal="move" from="Player" to="." method="view_to"]
+[connection signal="move" from="Player" to="." method="_on_Player_move"]
 [connection signal="pressed" from="View/Panel/Split/UpperPanel/Menu/Save/Button" to="." method="_on_Save_pressed"]
 [connection signal="pressed" from="View/Panel/Split/UpperPanel/Menu/Restart/Button" to="." method="_on_Restart_pressed"]
 [connection signal="pressed" from="View/Panel/Split/UpperPanel/Menu/Quit/Button" to="." method="_on_Quit_pressed"]

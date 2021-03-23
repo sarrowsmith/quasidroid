@@ -22,6 +22,7 @@ func _ready():
 
 
 func show_dialog(dialog):
+	view_mode = ViewMode.FREE
 	world.set_visible(false)
 	view_to(half_view)
 	dialog.popup_centered()
@@ -51,18 +52,26 @@ const view_map = {
 func _process(_delta):
 	if not world.active_level:
 		return
-	var position = $View.position
+	var view_position = $View.position
+	var player_position = player.position + view_offset
 	if view_mode == ViewMode.RESET:
-		position = player.position + view_offset
-		view_mode = ViewMode.TRACK
+		var gap = view_position.distance_squared_to(player_position)
+		if (gap < 4):
+			view_position = player_position
+			view_mode = ViewMode.TRACK
+		else:
+			var delta = pan_speed
+			if gap > half_view.y * half_view.y:
+				delta *= 8
+			view_position = view_position.move_toward(player_position, delta)
 	else:
 		for e in view_map:
 			if Input.is_action_pressed(e):
 				view_mode = ViewMode.FREE
-				position += pan_speed * view_map[e]
+				view_position += pan_speed * view_map[e]
 		if view_mode == ViewMode.TRACK:
-			position = player.position + view_offset
-	view_to(position)
+			view_position = player_position
+	view_to(view_position)
 	if world.target and world.turn > world.target:
 		timed_out()
 	if world.turn % 2:
@@ -147,10 +156,10 @@ func change_level(level):
 	view_mode = ViewMode.TRACK
 
 
-func view_to(position):
+func view_to(view_position):
 	$View.position = Vector2(
-		clamp(position.x, 0, world_size.x + 0.5 * half_view.x),
-		clamp(position.y, 0, world_size.y + 0.5 * half_view.y))
+		clamp(view_position.x, 0, world_size.x + 0.5 * half_view.x),
+		clamp(view_position.y, 0, world_size.y + 0.5 * half_view.y))
 
 
 func load_game():
@@ -258,6 +267,6 @@ func _on_game_over():
 	get_tree().quit()
 
 
-func _on_Player_move(position):
+func _on_Player_move(_position):
 	if view_mode == ViewMode.FREE:
 		view_mode = ViewMode.RESET

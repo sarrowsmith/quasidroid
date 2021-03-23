@@ -17,8 +17,12 @@ onready var world_size = $World.world_size
 
 func _ready():
 	if game_seed:
-		$Start.find_node("Seed").text = String(game_seed)
-	show_dialog($Start)
+		$Dialogs.get_node("Start").find_node("Seed").text = String(game_seed)
+	show_named_dialog("Start")
+
+
+func show_named_dialog(dialog):
+	show_dialog($Dialogs.get_node(dialog))
 
 
 func show_dialog(dialog):
@@ -30,7 +34,7 @@ func show_dialog(dialog):
 
 # TODO: need to instantiate Player here, taking care with render order
 func new(depth=0):
-	$Start.set_visible(false)
+	$Dialogs.get_node("Start").set_visible(false)
 	world.set_visible(true)
 	if depth:
 		world.world_depth = depth
@@ -92,7 +96,7 @@ func _process(_delta):
 			if state == Robot.IDLE or state == Robot.WAIT:
 				return
 		if player.turn():
-			$Lose.window_title = "You have been deactivated!"
+			$Dialogs.get_node("Lose").window_title = "You have been deactivated!"
 			game_over(false)
 		player.update()
 		world.turn += 1
@@ -181,7 +185,7 @@ func save_game():
 
 
 func game_over(success):
-	var popup = $Win if success else $Lose
+	var popup = $Dialogs.get_node("Win" if success else "Lose")
 	var messages = PoolStringArray()
 	if success:
 		messages.append("You succeeded!\n")
@@ -220,7 +224,7 @@ Systems rebooting ...
 
 All robots in the facility will be wiped.
 """ % ((world.turn + 1) / 2))
-	$Lose.window_title = "Facility systems reboot!"
+	$Dialogs.get_node("Lose").window_title = "Facility systems reboot!"
 	game_over(false)
 
 
@@ -229,15 +233,15 @@ func _on_Resume_pressed():
 
 
 func _on_New_pressed():
-	var seed_text = $Start.find_node("Seed").text
+	var seed_text = $Dialogs.get_node("Start").find_node("Seed").text
 	game_seed = seed_text.to_int() if seed_text.is_valid_integer() else seed_text.hash()
-	var depth = $Start.find_node("Depth").value
+	var depth = $Dialogs.get_node("Start").find_node("Depth").value
 	new(depth)
 
 
 func _on_Random_pressed():
 	randomize()
-	$Start.find_node("Seed").text = String(randi())
+	$Dialogs.get_node("Start").find_node("Seed").text = String(randi())
 
 
 func _on_Save_pressed():
@@ -246,11 +250,11 @@ func _on_Save_pressed():
 
 func _on_Restart_pressed():
 	save_game()
-	show_dialog($Start)
+	show_named_dialog("Start")
 
 
 func _on_Quit_pressed():
-	show_dialog($Quit)
+	show_named_dialog("Quit")
 
 
 func _on_Quit_confirmed():
@@ -263,8 +267,7 @@ func _on_Quit_popup_hide():
 
 
 func _on_game_over():
-	# TODO: should be restart
-	get_tree().quit()
+	show_named_dialog("Start")
 
 
 func _on_Player_move(_position):

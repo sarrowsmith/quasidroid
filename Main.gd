@@ -169,7 +169,7 @@ func view_to(view_position):
 func load_game():
 	var depth = 7
 	var save_game = File.new()
-	if save_game.file_exists("user://robolike.save"):
+	if not save_game.open("user://robolike.save", File.READ):
 		depth = save_game.get_32()
 		game_seed = save_game.get_32()
 		save_game.close()

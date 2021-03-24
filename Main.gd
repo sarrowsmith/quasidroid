@@ -18,6 +18,13 @@ onready var world_size = $World.world_size
 func _ready():
 	if game_seed:
 		$Dialogs.find_node("Seed").text = game_seed
+	start()
+
+
+func start():
+	var saved_games = $Dialogs.find_node("SavedGames")
+	for game in list_games():
+		saved_games.add_item(game)
 	show_named_dialog("Start")
 
 
@@ -166,10 +173,41 @@ func view_to(view_position):
 		clamp(view_position.y, 0, world_size.y + 0.5 * half_view.y))
 
 
+func list_games():
+	var dir = Directory.new()
+	if dir.open("user://"):
+		return []
+	var file = File.new()
+	var games = []
+	var latest = 0
+	dir.list_dir_begin(true, true)
+	var file_name = dir.get_next()
+	while file_name != "":
+		print(file_name)
+		if not dir.current_is_dir() and file_name.get_extension() == "save":
+			var game_name = file_name.get_basename()
+			var current = file.get_modified_time("user://"+file_name)
+			if current > latest:
+				games.insert(0, game_name)
+				latest = current
+			else:
+				games.append(game_name)
+		file_name = dir.get_next()
+	dir.list_dir_end()
+	return games
+
+
+func save_name():
+	var save_name = game_seed
+	if not save_name.is_valid_filename():
+		save_name = save_name.hash()
+	return "user://%s.save" % save_name
+
+
 func load_game():
 	var depth = 7
 	var save_game = File.new()
-	if not save_game.open("user://robolike.save", File.READ):
+	if not save_game.open(save_name(), File.READ):
 		depth = save_game.get_32()
 		game_seed = save_game.get_pascal_string()
 		save_game.close()
@@ -178,7 +216,7 @@ func load_game():
 
 func save_game():
 	var save_game = File.new()
-	save_game.open("user://robolike.save", File.WRITE)
+	save_game.open(save_name(), File.WRITE)
 	save_game.store_32(world.world_depth)
 	save_game.store_pascal_string(game_seed)
 	save_game.close()
@@ -239,9 +277,7 @@ func create_seed_text():
 			continue
 		var letters = vowels if i % 2 else consonants
 		seed_text[i] = letters[randi() % len(letters)]
-	seed_text[0] = seed_text[0].to_upper()
-	seed_text[6] = seed_text[6].to_upper()
-	return seed_text
+	return seed_text.capitalize()
 
 
 func seed_text_to_int(seed_text):
@@ -286,7 +322,7 @@ func _on_Save_pressed():
 
 func _on_Restart_pressed():
 	save_game()
-	show_named_dialog("Start")
+	start()
 
 
 func _on_Quit_pressed():
@@ -303,7 +339,7 @@ func _on_Quit_popup_hide():
 
 
 func _on_game_over():
-	show_named_dialog("Start")
+	start()
 
 
 func _on_Player_move(_position):

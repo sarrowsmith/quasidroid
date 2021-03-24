@@ -493,6 +493,7 @@ current = true
 z_index = 3
 
 [node name="Start" type="PopupDialog" parent="Dialogs"]
+visible = true
 margin_right = 280.0
 margin_bottom = 320.0
 popup_exclusive = true
@@ -514,79 +515,119 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="CenterContainer" parent="Dialogs/Start/VBoxContainer" instance=ExtResource( 6 )]
-margin_bottom = 51.0
-
-[node name="Button" parent="Dialogs/Start/VBoxContainer/CenterContainer" index="0"]
-margin_left = 84.0
-margin_top = 15.0
-margin_right = 148.0
-margin_bottom = 35.0
-text = "Resume"
-
-[node name="CenterContainer2" parent="Dialogs/Start/VBoxContainer" instance=ExtResource( 6 )]
-margin_top = 55.0
-margin_bottom = 106.0
-
-[node name="Button" parent="Dialogs/Start/VBoxContainer/CenterContainer2" index="0"]
-margin_left = 61.0
-margin_top = 15.0
-margin_right = 170.0
-margin_bottom = 35.0
-text = "New from Seed"
-
-[node name="CenterContainer3" parent="Dialogs/Start/VBoxContainer" instance=ExtResource( 6 )]
-margin_top = 110.0
-margin_bottom = 161.0
-
-[node name="Button" parent="Dialogs/Start/VBoxContainer/CenterContainer3" index="0"]
-margin_left = 66.0
-margin_top = 15.0
-margin_right = 165.0
-margin_bottom = 35.0
-text = "Random Seed"
-
 [node name="MarginContainer" type="MarginContainer" parent="Dialogs/Start/VBoxContainer"]
-margin_top = 165.0
 margin_right = 232.0
-margin_bottom = 216.0
+margin_bottom = 88.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="HBoxContainer" type="HBoxContainer" parent="Dialogs/Start/VBoxContainer/MarginContainer"]
-margin_top = 13.0
+[node name="VBoxContainer1" type="VBoxContainer" parent="Dialogs/Start/VBoxContainer/MarginContainer"]
 margin_right = 232.0
-margin_bottom = 37.0
+margin_bottom = 88.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Dialogs/Start/VBoxContainer/MarginContainer/VBoxContainer1"]
+margin_right = 232.0
+margin_bottom = 20.0
 grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 3
 size_flags_vertical = 4
 
-[node name="Label" type="Label" parent="Dialogs/Start/VBoxContainer/MarginContainer/HBoxContainer"]
-margin_top = 5.0
-margin_right = 35.0
-margin_bottom = 19.0
-text = "Seed:"
+[node name="CenterContainer3" type="CenterContainer" parent="Dialogs/Start/VBoxContainer/MarginContainer/VBoxContainer1/HBoxContainer"]
+margin_right = 114.0
+margin_bottom = 20.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
-[node name="Seed" type="LineEdit" parent="Dialogs/Start/VBoxContainer/MarginContainer/HBoxContainer"]
-margin_left = 39.0
+[node name="Label" type="Label" parent="Dialogs/Start/VBoxContainer/MarginContainer/VBoxContainer1/HBoxContainer/CenterContainer3"]
+margin_left = 13.0
+margin_top = 3.0
+margin_right = 100.0
+margin_bottom = 17.0
+text = "Saved games:"
+
+[node name="SavedGames" type="OptionButton" parent="Dialogs/Start/VBoxContainer/MarginContainer/VBoxContainer1/HBoxContainer"]
+margin_left = 118.0
+margin_right = 232.0
+margin_bottom = 20.0
+size_flags_horizontal = 3
+
+[node name="CenterContainer" parent="Dialogs/Start/VBoxContainer/MarginContainer/VBoxContainer1" instance=ExtResource( 6 )]
+margin_top = 24.0
+margin_bottom = 88.0
+
+[node name="Button" parent="Dialogs/Start/VBoxContainer/MarginContainer/VBoxContainer1/CenterContainer" index="0"]
+margin_left = 84.0
+margin_right = 148.0
+text = "Resume"
+
+[node name="MarginContainer3" type="MarginContainer" parent="Dialogs/Start/VBoxContainer"]
+margin_top = 92.0
+margin_right = 232.0
+margin_bottom = 180.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="V2BoxContainer" type="VBoxContainer" parent="Dialogs/Start/VBoxContainer/MarginContainer3"]
+margin_right = 232.0
+margin_bottom = 88.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Dialogs/Start/VBoxContainer/MarginContainer3/V2BoxContainer"]
+margin_right = 232.0
+margin_bottom = 24.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+
+[node name="CenterContainer3" parent="Dialogs/Start/VBoxContainer/MarginContainer3/V2BoxContainer/HBoxContainer" instance=ExtResource( 6 )]
+margin_right = 114.0
+margin_bottom = 24.0
+
+[node name="Button" parent="Dialogs/Start/VBoxContainer/MarginContainer3/V2BoxContainer/HBoxContainer/CenterContainer3" index="0"]
+margin_left = 7.0
+margin_top = 2.0
+margin_right = 106.0
+margin_bottom = 22.0
+text = "Random Seed"
+
+[node name="Seed" type="LineEdit" parent="Dialogs/Start/VBoxContainer/MarginContainer3/V2BoxContainer/HBoxContainer"]
+margin_left = 118.0
 margin_right = 232.0
 margin_bottom = 24.0
 size_flags_horizontal = 3
 size_flags_vertical = 4
 placeholder_text = "seed"
 
+[node name="CenterContainer2" parent="Dialogs/Start/VBoxContainer/MarginContainer3/V2BoxContainer" instance=ExtResource( 6 )]
+margin_top = 28.0
+margin_bottom = 88.0
+
+[node name="Button" parent="Dialogs/Start/VBoxContainer/MarginContainer3/V2BoxContainer/CenterContainer2" index="0"]
+margin_left = 61.0
+margin_top = 20.0
+margin_right = 170.0
+margin_bottom = 40.0
+text = "New from Seed"
+
 [node name="MarginContainer2" type="MarginContainer" parent="Dialogs/Start/VBoxContainer"]
-margin_top = 220.0
+margin_top = 184.0
 margin_right = 232.0
 margin_bottom = 272.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="HBoxContainer" type="HBoxContainer" parent="Dialogs/Start/VBoxContainer/MarginContainer2"]
-margin_top = 18.0
+margin_top = 36.0
 margin_right = 232.0
-margin_bottom = 34.0
+margin_bottom = 52.0
 grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 3
@@ -644,9 +685,9 @@ dialog_autowrap = true
 [connection signal="pressed" from="View/Panel/Split/UpperPanel/Menu/Save/Button" to="." method="_on_Save_pressed"]
 [connection signal="pressed" from="View/Panel/Split/UpperPanel/Menu/Restart/Button" to="." method="_on_Restart_pressed"]
 [connection signal="pressed" from="View/Panel/Split/UpperPanel/Menu/Quit/Button" to="." method="_on_Quit_pressed"]
-[connection signal="pressed" from="Dialogs/Start/VBoxContainer/CenterContainer/Button" to="." method="_on_Resume_pressed"]
-[connection signal="pressed" from="Dialogs/Start/VBoxContainer/CenterContainer2/Button" to="." method="_on_New_pressed"]
-[connection signal="pressed" from="Dialogs/Start/VBoxContainer/CenterContainer3/Button" to="." method="_on_Random_pressed"]
+[connection signal="pressed" from="Dialogs/Start/VBoxContainer/MarginContainer/VBoxContainer1/CenterContainer/Button" to="." method="_on_Resume_pressed"]
+[connection signal="pressed" from="Dialogs/Start/VBoxContainer/MarginContainer3/V2BoxContainer/HBoxContainer/CenterContainer3/Button" to="." method="_on_Random_pressed"]
+[connection signal="pressed" from="Dialogs/Start/VBoxContainer/MarginContainer3/V2BoxContainer/CenterContainer2/Button" to="." method="_on_New_pressed"]
 [connection signal="confirmed" from="Dialogs/Quit" to="." method="_on_Quit_confirmed"]
 [connection signal="popup_hide" from="Dialogs/Quit" to="." method="_on_Quit_popup_hide"]
 [connection signal="confirmed" from="Dialogs/Win" to="." method="_on_game_over"]
@@ -658,8 +699,8 @@ dialog_autowrap = true
 
 [editable path="View/Panel/Split/UpperPanel/Menu/Quit"]
 
-[editable path="Dialogs/Start/VBoxContainer/CenterContainer"]
+[editable path="Dialogs/Start/VBoxContainer/MarginContainer/VBoxContainer1/CenterContainer"]
 
-[editable path="Dialogs/Start/VBoxContainer/CenterContainer2"]
+[editable path="Dialogs/Start/VBoxContainer/MarginContainer3/V2BoxContainer/HBoxContainer/CenterContainer3"]
 
-[editable path="Dialogs/Start/VBoxContainer/CenterContainer3"]
+[editable path="Dialogs/Start/VBoxContainer/MarginContainer3/V2BoxContainer/CenterContainer2"]

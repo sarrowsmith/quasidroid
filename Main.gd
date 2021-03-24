@@ -13,7 +13,7 @@ var view_mode = ViewMode.TRACK
 onready var player = $Player
 onready var world = $World
 onready var world_size = $World.world_size
-
+onready var saved_games = $Dialogs.find_node("SavedGames")
 
 func _ready():
 	if game_seed:
@@ -22,7 +22,7 @@ func _ready():
 
 
 func start():
-	var saved_games = $Dialogs.find_node("SavedGames")
+	saved_games.clear()
 	for game in list_games():
 		saved_games.add_item(game)
 	show_named_dialog("Start")
@@ -183,7 +183,6 @@ func list_games():
 	dir.list_dir_begin(true, true)
 	var file_name = dir.get_next()
 	while file_name != "":
-		print(file_name)
 		if not dir.current_is_dir() and file_name.get_extension() == "save":
 			var game_name = file_name.get_basename()
 			var current = file.get_modified_time("user://"+file_name)
@@ -303,6 +302,7 @@ func seed_text_to_int(seed_text):
 
 
 func _on_Resume_pressed():
+	game_seed = saved_games.get_item_text(saved_games.get_item_index(saved_games.get_selected_id()))
 	load_game()
 
 

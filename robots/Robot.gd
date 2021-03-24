@@ -255,3 +255,11 @@ func check_stats() -> bool:
 		return true
 	end_move()
 	return false
+
+
+func load(file: File):
+	pass
+
+
+func save(file: File):
+	pass

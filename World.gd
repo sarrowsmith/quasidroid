@@ -138,3 +138,24 @@ func check_end():
 	show_info("""All the levels have now been cleared.
 
 Make your way to the surface before the systems reboot in on turn %d.""" % target, true)
+
+
+func load(file: File) -> String:
+	world_depth = file.get_32()
+	var game_seed = file.get_pascal_string()
+	world_seed = file.get_64()
+	turn = file.get_32()
+	target = file.get_32()
+	var current_level = file.get_pascal_string()
+	# TODO: create and load level 1
+	return game_seed
+
+
+func save(file: File, game_seed: String):
+	file.store_32(world_depth)
+	file.store_pascal_string(game_seed)
+	file.store_64(world_seed)
+	file.store_32(turn)
+	file.store_32(target)
+	file.store_pascal_string(active_level.map_name)
+	level_one.save(file)

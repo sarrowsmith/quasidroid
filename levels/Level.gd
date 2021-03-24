@@ -252,6 +252,14 @@ func set_cursor(location: Vector2):
 	world.player.set_cursor()
 
 
+func load(file: File):
+	pass
+
+
+func save(file: File):
+	pass
+
+
 func _on_Background_click(_position, button):
 	world.player.cursor_activate(button)
 

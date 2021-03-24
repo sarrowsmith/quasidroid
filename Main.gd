@@ -213,8 +213,7 @@ func load_game():
 	var depth = 7
 	var save_game = File.new()
 	if not save_game.open(save_name(), File.READ):
-		depth = save_game.get_32()
-		game_seed = save_game.get_pascal_string()
+		game_seed = world.load(save_game)
 		save_game.close()
 	new(depth)
 
@@ -222,8 +221,7 @@ func load_game():
 func save_game():
 	var save_game = File.new()
 	save_game.open(save_name(), File.WRITE)
-	save_game.store_32(world.world_depth)
-	save_game.store_pascal_string(game_seed)
+	world.save(save_game, game_seed)
 	save_game.close()
 
 

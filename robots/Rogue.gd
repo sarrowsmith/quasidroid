@@ -1,3 +1,4 @@
+class_name Rogue
 extends Robot
 
 
@@ -7,7 +8,7 @@ func _ready():
 	add_to_group("rogue")
 
 
-func turn():
+func turn() -> bool:
 	if .turn():
 		return true
 	match behaviour():
@@ -19,12 +20,12 @@ func turn():
 	return false
 
 
-func generate(level, location):
+func generate(level: Level, location: Vector2):
 	self.level = level
 	set_location(location)
 
 	stats = Stats.new()
-	stats.create(level.level, level.rng)
+	stats.create(level)
 	stats.equipment.extras.append("none")
 	new_direction()
 	equip()
@@ -43,7 +44,7 @@ func new_direction():
 	set_state(DONE)
 
 
-func behaviour():
+func behaviour(): # -> enum
 	# 10 % chance of doing nothing
 	if level.rng.randf() < 0.1:
 		set_state(DONE)
@@ -63,7 +64,7 @@ func behaviour():
 	return target_type
 
 
-func try_target():
+func try_target(): # -> enum
 	var location_type = Level.FLOOR
 	if weapons.get_range() > 1:
 		var target = location + facing

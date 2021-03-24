@@ -1,3 +1,4 @@
+class_name Player
 extends Robot
 
 
@@ -12,7 +13,6 @@ func _ready():
 	is_player = true
 	base = "0"
 	stats = Stats.new()
-	stats.equipment.weapons.append("Projectile")
 	stats.baseline = stats.stats.duplicate()
 	add_to_group("player")
 
@@ -49,7 +49,7 @@ const click_map = {
 	cursor_select = BUTTON_LEFT,
 	cursor_option = BUTTON_RIGHT,
 }
-func _unhandled_input(event):
+func _unhandled_input(event: InputEvent):
 	if get_state() != IDLE:
 		return
 	for e in move_map:
@@ -118,7 +118,7 @@ func cursor_activate(button):
 				show_info()
 			"Move", "Target":
 				if get_state() == IDLE:
-					action(null)
+					null_action()
 
 
 func show_info(optional=false):
@@ -156,7 +156,7 @@ func show_combat_mode():
 	level.world.set_value("weapons", stats.equipment.weapons[combat], true)
 
 
-func change_level(level):
+func change_level(level: Level):
 	var lift = level.lifts[0]
 	if self.level and self.level.parent == level:
 		for i in len(level.children):
@@ -205,7 +205,7 @@ func recharge():
 	show_stats(true)
 
 
-func scavenge(other):
+func scavenge(other: Robot):
 	level.world.combat_turn = level.world.turn + 1
 	other.show_stats(true)
 	var scavenged = stats.scavenge(other)
@@ -217,7 +217,7 @@ func scavenge(other):
 	show_stats(true)
 
 
-func level_up(to):
+func level_up(to: int):
 	if to > stats.level:
 		stats.level += 1
 		for stat in stats.baseline:

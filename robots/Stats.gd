@@ -42,18 +42,18 @@ var level = 1
 var baseline = null
 
 
-static func choose(choices, rng):
+static func choose(choices: Array, rng: RandomNumberGenerator):
 	return choices[rng.randi_range(0, len(choices) - 1)]
 
 
 # warning-ignore:shadowed_variable
-func create(level, rng):
+func create(level: Level):
 	var template = types[0]
-	if level < len(level_limits):
-		template = types[rng.randi_range(0, level_limits[level-1])]
+	if level.level < len(level_limits):
+		template = types[level.rng.randi_range(0, level_limits[level.level-1])]
 	else:
-		template = choose(types, rng)
-		self.level = 1 + level - len(level_limits)
+		template = choose(types, level.rng)
+		self.level = 1 + level.level - len(level_limits)
 	for item in template:
 		match item:
 			"weapon":
@@ -67,25 +67,25 @@ func create(level, rng):
 					stats[item] = template[item] * self.level
 
 
-func disabled():
+func disabled() -> bool:
 	var lowest = stats[critical_stats[0]]
 	for stat in critical_stats:
 		lowest = min(lowest, stats[stat])
 	return lowest == 0
 
 
-func weight():
+func weight() -> float:
 	return equipment.drive + equipment.armour + log(stats.chassis)
 
 
-func health():
+func health() -> float:
 	var health = 0
 	for critical in critical_stats:
 		health += stats[critical]
 	return health
 
 
-func normalise(reference):
+func normalise(reference: Dictionary):
 	for stat in stats:
 		var normalised = int(round(stats[stat]))
 		if normalised < 0:
@@ -95,7 +95,7 @@ func normalise(reference):
 		stats[stat] = normalised
 
 
-func scavenge(other):
+func scavenge(other: Robot) -> PoolStringArray:
 	var theirs = other.stats.equipment.duplicate()
 	var scavenged = PoolStringArray()
 	for i in len(theirs.weapons):

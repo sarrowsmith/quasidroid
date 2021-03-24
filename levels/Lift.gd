@@ -7,25 +7,25 @@ enum {LOCKED, CLOSED, OPEN}
 const state_name = ["locked", "closed", "open"]
 
 var location = Vector2.ZERO
-var from = null
-var to = null
+var from: Level = null
+var to: Level = null
 var direction = "Down"
 var state = LOCKED
 
 
-func level_name(level):
+func level_name(level: Level) -> String:
 	if level:
 		return "level "+level.map_name
 	return "the surface"
 
 
-func get_info():
+func get_info() -> String:
 	return """A lift %s from %s to %s.
 
 It is currently %s.""" % [direction.to_lower(), level_name(from), level_name(to), state_name[state]]
 
 
-func unlock():
+func unlock() -> bool:
 	if state != LOCKED:
 		return false
 	$Unlock.play()
@@ -36,7 +36,7 @@ func unlock():
 	return true
 
 
-func open():
+func open() -> bool:
 	if state != CLOSED:
 		return false
 	$Open.set_visible(true)
@@ -46,7 +46,7 @@ func open():
 	return true
 
 
-func close():
+func close() -> bool:
 	if state != OPEN:
 		return false
 	$Open.play("default", true)

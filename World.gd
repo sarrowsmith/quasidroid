@@ -22,8 +22,8 @@ onready var level_one = $Level
 var rng = RandomNumberGenerator.new()
 # This the "official" refrence to the player object, the Node is a sibling
 # to make render order easier
-var player = null
-var active_level = null
+var player: Player = null
+var active_level: Level = null
 var combat_turn = 0
 var turn = 1
 var target = 0
@@ -36,7 +36,7 @@ func _ready():
 
 # TODO: need to instantiate Level 1 on demand so that starting anew works
 # warning-ignore:shadowed_variable
-func create(player):
+func create(player: Player):
 	self.player = player
 	world_seed = randi()
 	rng.seed = world_seed
@@ -45,20 +45,20 @@ func create(player):
 	return active_level
 
 
-func change_level(level):
+func change_level(level: Level):
 	if active_level:
 		active_level.set_visible(false)
 	level.generate()
 	active_level = level
 
 
-func set_value(name, value, is_player):
+func set_value(name: String, value, is_player: bool):
 	var lv = (player_status_box if is_player else rogue_status_box).get_node(name)
 	if lv:
 		lv.set_value(value)
 
 
-func show_info(text, append=false):
+func show_info(text: String, append=false):
 	var info_box = lower_panel.get_tab_control(INFO)
 	if append:
 		var new_text = "%s\n%s" % [info_box.text, text]
@@ -68,21 +68,21 @@ func show_info(text, append=false):
 	lower_panel.current_tab = INFO
 
 
-func show_stats(is_player):
+func show_stats(is_player: bool):
 	var p = (upper_panel if is_player else lower_panel)
 	p.current_tab = STATUS
 
 
-static func first_capital(string):
-	return string.substr(0, 1).capitalize() + string.substr(1)
+static func first_capital(string: String) -> String:
+	return string.substr(0, 1).to_upper() + string.substr(1)
 
 
-func report_death(display_name, is_player):
+func report_death(display_name: String, is_player: bool):
 	var past = "have" if is_player else "has"
 	show_info("%s %s been deactivated!" % [first_capital(display_name), past], true)
 
 
-func report_attack(attacker, defender, attackers, defenders):
+func report_attack(attacker: Robot, defender: Robot, attackers: Dictionary, defenders: Dictionary):
 	var continuation = (turn - combat_turn) < 3
 	combat_turn = turn
 	var a_name = first_capital("you" if attacker.is_player else ("the " + attacker.stats.type_name))

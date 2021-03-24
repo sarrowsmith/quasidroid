@@ -1,7 +1,9 @@
+class_name Weapons
 extends Node2D
 
 
 enum {GRAPPLE, RAM, BLADE, PROBE, PROJECTILE, EMP}
+enum Field {NAME, DAMAGE, RANGE, AC}
 
 const stats_map = {
 	Grapple = ["grapple", GRAPPLE, 1, 0],
@@ -19,25 +21,25 @@ const stats_map = {
 var location = Vector2.ZERO
 
 
-func get_weapon_name(weapon=null):
+func get_weapon_name(weapon: String="") -> String:
 	if not weapon:
 		weapon = owner.get_weapon()
-	return stats_map[weapon][0]
+	return stats_map[weapon][Field.NAME]
 
 
 func get_damage_type():
-	return stats_map[owner.get_weapon()][1]
+	return stats_map[owner.get_weapon()][Field.DAMAGE]
 
 
-func get_range():
-	return stats_map[owner.get_weapon()][2]
+func get_range() -> int:
+	return stats_map[owner.get_weapon()][Field.RANGE]
 
 
-func get_armour_required():
-	return stats_map[owner.get_weapon()][3]
+func get_armour_required() -> int:
+	return stats_map[owner.get_weapon()][Field.AC]
 
 
-func shoot():
+func shoot() -> bool:
 	match owner.level.location_type(location):
 		Level.FLOOR:
 			var weapon_range = get_range()
@@ -58,7 +60,7 @@ func shoot():
 	return true
 
 
-func splash(rogue):
+func splash(rogue: Rogue) -> bool:
 	match owner.get_weapon():
 		"Dual", "Ion":
 			for r in owner.level.rogues:
@@ -72,12 +74,12 @@ func splash(rogue):
 	return true
 
 
-func attack(other):
+func attack(other: Robot):
 	if other.get_state() == Robot.DEAD:
 		return
 	owner.set_state(Robot.WAIT)
 	var hit = 1
-	var ours = null
+	var ours = {}
 	var theirs = other.stats.stats.duplicate()
 	match get_damage_type():
 		GRAPPLE:
@@ -110,12 +112,12 @@ func attack(other):
 # round right now. Just throwing some wild guesses in.
 # (The idea behind using health is the "desperate fight".)
 
-func grapple_effect(stats, initiative=0):
+func grapple_effect(stats: Stats, initiative: int=0) -> float:
 	# weight penalty is effectively a trade off against armour and speed
 	return owner.level.rng.randfn(stats.stats.logic * (initiative +  stats.stats.power) / stats.weight(), 0.1 + log(stats.health()))
 
 
-func modify_attack(theirs):
+func modify_attack(theirs: Stats) -> float:
 	var ours = owner.stats
 	var ac = get_armour_required()
 	var attack = 1 + ours.stats.strength - theirs.equipment.armour
@@ -126,7 +128,7 @@ func modify_attack(theirs):
 	return attack
 
 
-func attack_a(other):
+func attack_a(other: Robot):
 	var attack = modify_attack(other.stats)
 	for k in other.stats.stats:
 		if other.stats.stats[k] <= 0:
@@ -136,7 +138,7 @@ func attack_a(other):
 			other.stats.stats[k] -= 1
 
 
-func attack_b(other):
+func attack_b(other: Robot):
 	var attack = modify_attack(other.stats)
 	var vulnerabilities = []
 	for stat in other.stats.stats:
@@ -153,7 +155,7 @@ func attack_b(other):
 			attack -= 1
 
 
-func grapple(other):
+func grapple(other: Robot):
 # warning-ignore:unused_variable
 	var attack = grapple_effect(other.stats, 1)
 # warning-ignore:unused_variable
@@ -161,11 +163,11 @@ func grapple(other):
 	# TODO: work out how to turn attack - defence into damage
 
 
-func probe(other):
+func probe(other: Robot):
 	other.stats.stats.logic -= owner.level.rng.randfn(owner.stats.stats.strength, 0.1 + log(other.stats.health()))
 
 
-func projectile(other):
+func projectile(other: Robot):
 	var attack = modify_attack(other.stats)
 	if attack > 0:
 		other.stats.stats.protection -= owner.level.rng.randfn(attack, 0.1 + other.stats.equipment.armour)
@@ -174,7 +176,7 @@ func projectile(other):
 			other.stats.equipment.armour -= 1
 
 
-func emp(other):
+func emp(other: Robot):
 	var attack = modify_attack(other.stats)
 	if attack > 0:
 		other.stats.stats.logic -= owner.level.rng.randfn(attack, log(other.stats.stats.logic))

@@ -1,7 +1,7 @@
 extends Node2D
 
 
-enum ViewMode { TRACK, FREE, RESET }
+enum ViewMode {TRACK, FREE, RESET, DIALOG}
 
 export(String) var game_seed = ""
 export(float) var pan_speed = 0.5
@@ -28,21 +28,27 @@ func start():
 	show_named_dialog("Start")
 
 
-func show_named_dialog(dialog):
+func show_named_dialog(dialog: String):
 	show_dialog($Dialogs.get_node(dialog))
 
 
-func show_dialog(dialog):
-	view_mode = ViewMode.FREE
+func show_dialog(dialog: Popup):
+	view_mode = ViewMode.DIALOG
 	world.set_visible(false)
 	view_to(half_view)
 	dialog.popup_centered()
 
 
+func hide_dialog(dialog: Popup):
+	view_mode = ViewMode.TRACK
+	world.set_visible(true)
+	if dialog:
+		dialog.set_visible(false)
+
+
 # TODO: need to instantiate Player here, taking care with render order
 func new(depth=0):
-	$Dialogs.get_node("Start").set_visible(false)
-	world.set_visible(true)
+	hide_dialog($Dialogs.get_node("Start"))
 	if depth:
 		world.world_depth = depth
 	seed(seed_text_to_int(game_seed))
@@ -116,7 +122,7 @@ const cursor_map = {
 	cursor_left = Vector2(-1, 0),
 	cursor_right = Vector2(1, 0)
 }
-func _unhandled_input(event):
+func _unhandled_input(event: InputEvent):
 	if event is InputEventKey and event.pressed:
 		var level = null
 		if event.control:
@@ -156,7 +162,7 @@ func _unhandled_input(event):
 		return
 
 
-func change_level(level):
+func change_level(level: Level):
 	if not level:
 		if world.level_one.is_clear():
 			game_over(true)
@@ -167,13 +173,13 @@ func change_level(level):
 	view_mode = ViewMode.TRACK
 
 
-func view_to(view_position):
+func view_to(view_position: Vector2):
 	$View.position = Vector2(
 		clamp(view_position.x, 0, world_size.x + 0.5 * half_view.x),
 		clamp(view_position.y, 0, world_size.y + 0.5 * half_view.y))
 
 
-func list_games():
+func list_games() -> Array:
 	var dir = Directory.new()
 	if dir.open("user://"):
 		return []
@@ -196,7 +202,7 @@ func list_games():
 	return games
 
 
-func save_name():
+func save_name() -> String:
 	var save_name = game_seed
 	if not save_name.is_valid_filename():
 		save_name = save_name.hash()
@@ -221,7 +227,7 @@ func save_game():
 	save_game.close()
 
 
-func game_over(success):
+func game_over(success: bool):
 	var popup = $Dialogs.get_node("Win" if success else "Lose")
 	var messages = PoolStringArray()
 	if success:
@@ -240,7 +246,7 @@ func game_over(success):
 	show_dialog(popup)
 
 
-func gather_stats(level, acc):
+func gather_stats(level: Level, acc: Dictionary):
 	if level.state & Level.RESET:
 		acc["levels reset"] += 1
 	if level.state & Level.CLEAR:
@@ -269,7 +275,7 @@ All robots in the facility will be wiped.
 # converted to a 32-bit int by seed_text_to_int
 const vowels = "aeiouyäö"
 const consonants = "bdfghklmnprstvwz"
-func create_seed_text():
+func create_seed_text() -> String:
 	var seed_text = "          "
 	for i in 10:
 		if i == 5:
@@ -279,7 +285,7 @@ func create_seed_text():
 	return seed_text.capitalize()
 
 
-func seed_text_to_int(seed_text):
+func seed_text_to_int(seed_text: String) -> int:
 	if seed_text.is_valid_integer():
 		return seed_text.to_int()
 	if len(seed_text) == 10 and seed_text[5] == " ":
@@ -335,7 +341,7 @@ func _on_Quit_confirmed():
 
 func _on_Quit_popup_hide():
 	view_to(player.position + view_offset)
-	world.set_visible(true)
+	hide_dialog(null)
 
 
 func _on_game_over():

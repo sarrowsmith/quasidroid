@@ -13,11 +13,11 @@ enum {LOCKED, OPEN, RESET, this_is_really_a_bitmask, CLEAR}
 onready var cursor = $Cursor
 
 var rng = RandomNumberGenerator.new()
-var map = null
+var map: TileMap = null
 var world = null
-var parent = null
-var children = null
-var prototypes = null
+var parent: Level = null
+var children = []
+var prototypes = [null, null, null, null]
 var lifts = []
 var access = {}
 var map_name = ""
@@ -35,14 +35,14 @@ func _ready():
 	world = find_parent("World")
 
 
-func is_clear():
+func is_clear() -> bool:
 	return (state & CLEAR and children and
 		children[0] and children[0].is_clear() and
 		children[1] and children[1].is_clear())
 
 
 # warning-ignore:shadowed_variable
-func create(from, rooms):
+func create(from: Level, rooms: bool):
 	set_visible(false)
 	map = get_node("Rooms" if rooms else "Caves")
 	map.set_visible(true)
@@ -155,7 +155,7 @@ func generate_rogues():
 				break
 
 
-func rogue_at(location=null):
+func rogue_at(location: Vector2): # -> Rogue (cyclic refereence)
 	if not location:
 		location = cursor.location
 	for r in rogues:
@@ -164,7 +164,7 @@ func rogue_at(location=null):
 	return null
 
 
-func check_nearby(x, y, r):
+func check_nearby(x: float, y: float, r: float) -> Array:
 	var counts = [0, 0, 0, 0, 0, 0]
 	for i in 2*r+1:
 		for j in 2*r+1:
@@ -173,7 +173,7 @@ func check_nearby(x, y, r):
 	return counts
 
 
-func location_type(location):
+func location_type(location: Vector2): # -> enum
 	if access.has(location):
 		return ACCESS if access[location] else LIFT
 	if location == world.player.location:
@@ -183,7 +183,7 @@ func location_type(location):
 	return WALL if map.get_cellv(location) != TileMap.INVALID_CELL else FLOOR
 
 
-func activate(location):
+func activate(location: Vector2) -> bool:
 	if not access.has(location):
 		return false # Shouldn't be possible, but apparently is
 	access[location].reset()
@@ -197,7 +197,7 @@ func activate(location):
 			lift.to.state = OPEN
 	return true
 
-func lift_at(location):
+func lift_at(location: Vector2): # -> Lift (cyclic reference)
 	if not access.has(location) or access[location]:
 		return null
 	for l in lifts:
@@ -206,7 +206,7 @@ func lift_at(location):
 	return null
 
 
-func new_lift(location):
+func new_lift(location: Vector2): # -> Lift (cyclic reference)
 	var lift = new_feature(location, Prototype.LIFT)
 	lift.location = location
 	lift.from = self
@@ -226,26 +226,26 @@ func new_lift(location):
 	return lift
 
 
-func new_feature(location, type):
+func new_feature(location: Vector2, type) -> Node:
 	var feature = prototypes[type].instance()
 	add_child(feature)
 	feature.position = location_to_position(location)
 	return feature
 
 
-func location_to_position(location):
+func location_to_position(location: Vector2) -> Vector2:
 	return map.map_to_world(location)
 
 
-func position_to_location(position):
+func position_to_location(position: Vector2) -> Vector2:
 	return map.world_to_map(position)
 
 
-func move_cursor(movement):
+func move_cursor(movement: Vector2):
 	set_cursor(position_to_location(cursor.position) + movement)
 
 
-func set_cursor(location=null):
+func set_cursor(location: Vector2):
 	if location:
 		cursor.location = location
 		cursor.position = location_to_position(location)

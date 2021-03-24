@@ -15,8 +15,8 @@ var mode = "Idle"
 var firing = "Idle"
 var facing = Vector2.DOWN
 var destination = Vector2.ZERO
-var sprite = null
-var weapon = null
+var sprite: Node2D = null
+var weapon: Node2D = null
 var combat = MELEE
 var stats = null
 var moves = 0
@@ -51,7 +51,7 @@ func _process(delta):
 				show_stats(true)
 				# Yes, this is us, but the indirection sorts the type out
 				level.world.player.check_location()
-			level.set_cursor()
+			level.set_cursor(Vector2.ZERO)
 		return
 	if firing == "Fire":
 		weapon.position += facing * weapon_speed * 100 * delta
@@ -66,7 +66,7 @@ func _process(delta):
 		equip(true)
 
 
-func turn():
+func turn() -> bool:
 	match get_state():
 		DEAD:
 			return true
@@ -87,7 +87,7 @@ const facing_map = {
 	Vector2(1, -1): "Right",
 	Vector2(-1, -1): "Left",
 }
-func get_sprite(path):
+func get_sprite(path: String) -> Node:
 	return get_node("%s/%s" % [path, facing_map[facing]])
 
 
@@ -113,32 +113,34 @@ func set_sprite(equipped=true):
 		weapon.set_visible(equipped)
 
 
-func equip(on):
+func equip(on: bool):
 	set_sprite(on)
 
 
-func get_weapon():
+func get_weapon() -> String:
 	return stats.equipment.weapons[combat]
 
 
 # warning-ignore:shadowed_variable
-func set_location(destination):
+func set_location(destination: Vector2):
 	self.destination = destination
 	location = destination
 	position = level.location_to_position(location)
 
 
-func move(target):
+func move(target: Vector2):
 	mode = "Move"
 	set_state(WAIT)
 	destination = target
 
 
-func action(direction, really=true, truly=true):
-	if direction == null:
-		if not is_player:
-			return Level.WALL
-		direction = level.cursor.location - location
+func null_action(): # -> enum
+	if not is_player:
+		return Level.WALL
+	return action(level.cursor.location - location)
+
+
+func action(direction: Vector2, really=true, truly=true): # -> enum
 	if really and truly and weapons.get_range() > 1:
 		if direction == Vector2.ZERO:
 			direction = facing
@@ -190,7 +192,7 @@ func action(direction, really=true, truly=true):
 	return target_type
 
 
-func shoot(direction):
+func shoot(direction: Vector2):
 	facing = direction
 	firing = "Fire"
 	weapons.location = location + direction
@@ -203,7 +205,7 @@ const item_name_map = {
 	drive = ["none", "basic", "improved", "advanced"],
 	armour = ["none", "standard", "ablative", "active"],
 }
-func item_to_string(item):
+func item_to_string(item: String) -> String:
 	match item:
 		"extras":
 			if stats.equipment.extras:
@@ -229,7 +231,7 @@ func show_stats(visible=false):
 		level.world.show_stats(is_player)
 
 
-func hit(count):
+func hit(count: int):
 	if get_state() == DEAD:
 		return
 	var zapped = get_sprite("Robot/Hit")
@@ -244,7 +246,7 @@ func hit(count):
 	zapped.set_visible(false)
 
 
-func check_stats():
+func check_stats() -> bool:
 	if stats.disabled():
 		# nice death animation here please
 		set_state(DEAD)

@@ -19,21 +19,39 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://levels/Lift.gd"
 }, {
+"base": "Robot",
+"class": "Player",
+"language": "GDScript",
+"path": "res://robots/Player.gd"
+}, {
 "base": "Node2D",
 "class": "Robot",
 "language": "GDScript",
 "path": "res://robots/Robot.gd"
 }, {
+"base": "Robot",
+"class": "Rogue",
+"language": "GDScript",
+"path": "res://robots/Rogue.gd"
+}, {
 "base": "Reference",
 "class": "Stats",
 "language": "GDScript",
 "path": "res://robots/Stats.gd"
+}, {
+"base": "Node2D",
+"class": "Weapons",
+"language": "GDScript",
+"path": "res://robots/Weapons.gd"
 } ]
 _global_script_class_icons={
 "Level": "",
 "Lift": "",
+"Player": "",
 "Robot": "",
-"Stats": ""
+"Rogue": "",
+"Stats": "",
+"Weapons": ""
 }
 
 [application]

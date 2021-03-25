@@ -58,6 +58,11 @@ func set_value(name: String, value, is_player: bool):
 		lv.set_value(value)
 
 
+func set_turn(inc: int):
+	turn += inc
+	set_value("Turn", (turn + 1) / 2, true)
+
+
 func show_info(text: String, append=false):
 	var info_box = lower_panel.get_tab_control(INFO)
 	if append:
@@ -147,7 +152,7 @@ func load(file: File) -> String:
 	turn = file.get_32()
 	target = file.get_32()
 	var current_level = file.get_pascal_string()
-	# TODO: create and load level 1
+	# TODO: create and load player and level 1
 	return game_seed
 
 
@@ -158,4 +163,5 @@ func save(file: File, game_seed: String):
 	file.store_32(turn)
 	file.store_32(target)
 	file.store_pascal_string(active_level.map_name)
+	player.save(file)
 	level_one.save(file)

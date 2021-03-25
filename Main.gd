@@ -18,13 +18,15 @@ onready var saved_games = $Dialogs.find_node("SavedGames")
 func _ready():
 	if game_seed:
 		$Dialogs.find_node("Seed").text = game_seed
-	start()
+	start_dialog()
 
 
-func start():
+func start_dialog():
 	saved_games.clear()
 	for game in list_games():
 		saved_games.add_item(game)
+	if not saved_games.get_item_count():
+		$Dialogs.find_node("ResumeButton").disabled = true
 	show_named_dialog("Start")
 
 
@@ -54,7 +56,7 @@ func new(depth=0):
 	seed(seed_text_to_int(game_seed))
 	$View.find_node("Seed").set_value(game_seed)
 	change_level(world.create(player))
-	world.set_value("Turn", 1, true)
+	world.set_turn(0)
 	player.turn()
 	player.update()
 
@@ -112,8 +114,7 @@ func _process(_delta):
 			$Dialogs.get_node("Lose").window_title = "You have been deactivated!"
 			game_over(false)
 		player.update()
-		world.turn += 1
-		world.set_value("Turn", (world.turn + 1) / 2, true)
+		world.set_turn(1)
 
 
 const cursor_map = {
@@ -210,12 +211,11 @@ func save_name() -> String:
 
 
 func load_game():
-	var depth = 7
 	var save_game = File.new()
 	if not save_game.open(save_name(), File.READ):
 		game_seed = world.load(save_game)
 		save_game.close()
-	new(depth)
+	new()
 
 
 func save_game():
@@ -326,7 +326,7 @@ func _on_Save_pressed():
 
 func _on_Restart_pressed():
 	save_game()
-	start()
+	start_dialog()
 
 
 func _on_Quit_pressed():
@@ -343,7 +343,7 @@ func _on_Quit_popup_hide():
 
 
 func _on_game_over():
-	start()
+	start_dialog()
 
 
 func _on_Player_move(_position):

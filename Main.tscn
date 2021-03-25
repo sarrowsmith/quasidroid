@@ -557,13 +557,23 @@ margin_right = 232.0
 margin_bottom = 20.0
 size_flags_horizontal = 3
 
-[node name="CenterContainer" parent="Dialogs/Start/VBoxContainer/MarginContainer/VBoxContainer1" instance=ExtResource( 6 )]
+[node name="CenterContainer" type="CenterContainer" parent="Dialogs/Start/VBoxContainer/MarginContainer/VBoxContainer1"]
 margin_top = 24.0
+margin_right = 232.0
 margin_bottom = 88.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
-[node name="Button" parent="Dialogs/Start/VBoxContainer/MarginContainer/VBoxContainer1/CenterContainer" index="0"]
+[node name="ResumeButton" type="Button" parent="Dialogs/Start/VBoxContainer/MarginContainer/VBoxContainer1/CenterContainer"]
 margin_left = 84.0
+margin_top = 22.0
 margin_right = 148.0
+margin_bottom = 42.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
 text = "Resume"
 
 [node name="MarginContainer3" type="MarginContainer" parent="Dialogs/Start/VBoxContainer"]
@@ -685,7 +695,7 @@ dialog_autowrap = true
 [connection signal="pressed" from="View/Panel/Split/UpperPanel/Menu/Save/Button" to="." method="_on_Save_pressed"]
 [connection signal="pressed" from="View/Panel/Split/UpperPanel/Menu/Restart/Button" to="." method="_on_Restart_pressed"]
 [connection signal="pressed" from="View/Panel/Split/UpperPanel/Menu/Quit/Button" to="." method="_on_Quit_pressed"]
-[connection signal="pressed" from="Dialogs/Start/VBoxContainer/MarginContainer/VBoxContainer1/CenterContainer/Button" to="." method="_on_Resume_pressed"]
+[connection signal="pressed" from="Dialogs/Start/VBoxContainer/MarginContainer/VBoxContainer1/CenterContainer/ResumeButton" to="." method="_on_Resume_pressed"]
 [connection signal="pressed" from="Dialogs/Start/VBoxContainer/MarginContainer3/V2BoxContainer/HBoxContainer/CenterContainer3/Button" to="." method="_on_Random_pressed"]
 [connection signal="pressed" from="Dialogs/Start/VBoxContainer/MarginContainer3/V2BoxContainer/CenterContainer2/Button" to="." method="_on_New_pressed"]
 [connection signal="confirmed" from="Dialogs/Quit" to="." method="_on_Quit_confirmed"]
@@ -698,8 +708,6 @@ dialog_autowrap = true
 [editable path="View/Panel/Split/UpperPanel/Menu/Restart"]
 
 [editable path="View/Panel/Split/UpperPanel/Menu/Quit"]
-
-[editable path="Dialogs/Start/VBoxContainer/MarginContainer/VBoxContainer1/CenterContainer"]
 
 [editable path="Dialogs/Start/VBoxContainer/MarginContainer3/V2BoxContainer/HBoxContainer/CenterContainer3"]
 

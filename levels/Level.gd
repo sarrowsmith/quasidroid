@@ -17,6 +17,7 @@ var map: TileMap = null
 var world = null
 var parent: Level = null
 var children = []
+var n_children = 0
 var prototypes = [null, null, null, null]
 var lifts = []
 var access = {}
@@ -36,15 +37,15 @@ func _ready():
 
 
 func is_clear() -> bool:
-	return (state & CLEAR and children and
-		children[0] and children[0].is_clear() and
-		children[1] and children[1].is_clear())
+	return (state & CLEAR and
+		n_children > 0 and children[0].is_clear() and
+		n_children > 1 and children[1].is_clear())
 
 
 # warning-ignore:shadowed_variable
 func create(from: Level, rooms: bool):
 	set_visible(false)
-	map = get_node("Rooms" if rooms else "Caves")
+	map = $Rooms if rooms else $Caves
 	map.set_visible(true)
 	parent = from
 	self.rooms = rooms
@@ -83,6 +84,7 @@ func generate():
 			var child = prototypes[Prototype.LEVEL].instance()
 			world.add_child(child)
 			child.create(self, i == 1 and level < world.world_depth - 1)
+			n_children += 1
 			children.append(child)
 			if not rooms:
 				children.append(null)
@@ -252,12 +254,101 @@ func set_cursor(location: Vector2):
 	world.player.set_cursor()
 
 
+func find_level(level_name: String) -> Level:
+	if map_name == level_name:
+		return self
+	for i in n_children:
+		var found = children[i].find_level(level_name)
+		if found:
+			return found
+	return null
+
+
+func load_lifts(file: File):
+	var n_lifts = file.get_8()
+	for _i in n_lifts:
+		var lift = new_feature(Vector2.ZERO, Prototype.LIFT)
+		lift.from = self
+		lift.to = find_level(lift.load(file))
+		for o in [Vector2.ZERO, Vector2.UP]:
+			map.set_cellv(lift.location + o, map.Tiles.ROOF)
+			map.update_bitmask_area(lift.location + o)
+		access[lift.location] = null
+
+
+func save_lifts(file: File):
+	file.store_8(len(lifts))
+	for lift in lifts:
+		lift.save(file)
+
+
+func load_access(file: File):
+	var save_form = file.get_var()
+	for location in save_form:
+		var ap = new_feature(location, Prototype.ACCESS)
+		if save_form[location]:
+			ap.reset()
+		access[location] = ap
+
+
+func save_access(file: File):
+	var save_form = {}
+	for ap in access:
+		if access[ap]:
+			save_form[ap] = access[ap].active
+	file.store_var(save_form)
+
+
+func load_rogues(file: File):
+	var n_rogues = file.get_32()
+	for i in n_rogues:
+		pass
+
+
+func save_rogues(file: File):
+	file.store_32(len(rogues))
+	for r in rogues:
+		r.save(file)
+
+
 func load(file: File):
-	pass
+	set_visible(false)
+	level_seed = file.get_32()
+	rooms = bool(file.get_8())
+	map = $Rooms if rooms else $Caves
+	map.set_visible(true)
+	level = file.get_32()
+	state = file.get_8()
+	map_name = file.get_pascal_string()
+	rng.seed = level_seed
+	if file.get_8():
+		map.generate(rng)
+	n_children = file.get_8()
+	for _i in n_children:
+		var child = prototypes[Prototype.LEVEL].instance()
+		world.add_child(child)
+		children.append(child)
+		child.parent = self
+		child.load(file)
+	load_lifts(file)
+	load_access(file)
+	load_rogues(file)
 
 
 func save(file: File):
-	pass
+	file.store_32(level_seed)
+	file.store_8(int(rooms))
+	file.store_32(level)
+	file.store_8(state)
+	file.store_pascal_string(map_name)
+	# n_children is number of non-null chidlren.
+	file.store_8(len(children))
+	file.store_8(n_children)
+	for i in n_children:
+		children[i].save(file)
+	save_lifts(file)
+	save_access(file)
+	save_rogues(file)
 
 
 func _on_Background_click(_position, button):

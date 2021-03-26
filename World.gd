@@ -12,17 +12,20 @@ export(NodePath) var rogue_status_path
 
 enum {INFO, STATUS, ABOUT, MAP}
 
+var Level_prototype = preload("res://levels/Level.tscn")
+var Player_prototype = preload("res://robots/Player.tscn")
+
 onready var upper_panel = get_node(upper_panel_path)
 onready var lower_panel = get_node(lower_panel_path)
 onready var player_status_box = get_node(player_status_path)
 onready var rogue_status_box = get_node(rogue_status_path)
-onready var level_one = $Level
 
 
 var rng = RandomNumberGenerator.new()
 # This the "official" refrence to the player object, the Node is a sibling
 # to make render order easier
 var player: Player = null
+var level_one: Level = null
 var active_level: Level = null
 var combat_turn = 0
 var turn = 1
@@ -34,15 +37,20 @@ func _ready():
 	lower_panel.current_tab = ABOUT
 
 
-# TODO: need to instantiate Level 1 on demand so that starting anew works
 # warning-ignore:shadowed_variable
-func create(player: Player):
-	self.player = player
+func create():
+	if player:
+		remove_child(player)
+		player.queue_free()
+	for existing_level in get_children():
+		remove_child(existing_level)
+		existing_level.queue_free()
+	player = Player_prototype.instance()
+	add_child(player)
 	world_seed = randi()
 	rng.seed = world_seed
-	level_one.create(null, true)
-	change_level(level_one)
-	return active_level
+	level_one = Level_prototype.instance()
+	add_child(level_one)
 
 
 func change_level(level: Level):
@@ -151,8 +159,13 @@ func load(file: File) -> String:
 	world_seed = file.get_64()
 	turn = file.get_32()
 	target = file.get_32()
-	var current_level = file.get_pascal_string()
-	# TODO: create and load player and level 1
+	var level_name = file.get_pascal_string()
+	create()
+	level_one.load(file)
+	active_level = level_one.find_level(level_name)
+	player.level = active_level
+	player.load(file)
+	active_level.set_visible(true)
 	return game_seed
 
 
@@ -163,5 +176,5 @@ func save(file: File, game_seed: String):
 	file.store_32(turn)
 	file.store_32(target)
 	file.store_pascal_string(active_level.map_name)
-	player.save(file)
 	level_one.save(file)
+	player.save(file)

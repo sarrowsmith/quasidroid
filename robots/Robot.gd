@@ -258,8 +258,15 @@ func check_stats() -> bool:
 
 
 func load(file: File):
-	pass
+	set_location(file.get_var())
+	facing = file.get_var()
+	stats.load(file)
+	if not check_stats():
+		combat = len(stats.equipment.weapons) - 1
+		equip(true)
 
 
 func save(file: File):
-	pass
+	file.store_var(location)
+	file.store_var(facing)
+	stats.save(file)

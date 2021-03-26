@@ -145,7 +145,7 @@ You can also recharge here.
 			show_stats(true)
 			return
 		Level.ROGUE:
-			var rogue = level.rogue_at()
+			var rogue = level.rogue_at(Vector2.ZERO)
 			if rogue:
 				rogue.show_stats(true)
 				return

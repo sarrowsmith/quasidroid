@@ -127,3 +127,19 @@ func scavenge(other: Robot) -> PoolStringArray:
 				other.stats.stats[stat] = baseline[stat]
 				baseline[stat] = stats[stat]
 	return scavenged
+
+
+func load(file: File):
+	equipment = file.get_var()
+	stats = file.get_var()
+	type_name = file.get_pascal_string()
+	level = file.get_32()
+	baseline = file.get_var()
+
+
+func save(file: File):
+	file.store_var(equipment)
+	file.store_var(stats)
+	file.store_pascal_string(type_name)
+	file.store_32(level)
+	file.store_var(baseline)

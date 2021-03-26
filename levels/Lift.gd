@@ -25,14 +25,15 @@ func get_info() -> String:
 It is currently %s.""" % [direction.to_lower(), level_name(from), level_name(to), state_name[state]]
 
 
-func unlock() -> bool:
-	if state != LOCKED:
+func unlock(force=false) -> bool:
+	if state != LOCKED and not force:
 		return false
-	$Unlock.play()
-	state = CLOSED
 	$No.set_visible(false)
 	$Exit.set_visible(false)
 	get_node(direction).set_visible(true)
+	if force:
+		return state != LOCKED
+	state = CLOSED
 	return true
 
 
@@ -52,3 +53,24 @@ func close() -> bool:
 	$Open.play("default", true)
 	state = CLOSED
 	return true
+
+
+func load(file: File) -> String:
+	location = file.get_var()
+	position = from.location_to_position(location)
+	direction = file.get_pascal_string()
+	state = file.get_8()
+	if state == LOCKED:
+		if from.level == 1 and direction == "Up":
+			$No.set_visible(false)
+			$Exit.set_visible(true)
+	else:
+		unlock(true)
+	return file.get_pascal_string()
+
+
+func save(file: File):
+	file.store_var(location)
+	file.store_pascal_string(direction)
+	file.store_8(state)
+	file.store_pascal_string(to.map_name if to else "")

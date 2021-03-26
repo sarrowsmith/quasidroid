@@ -10,7 +10,6 @@ export(Vector2) var view_offset = Vector2(280, 36)
 
 var view_mode = ViewMode.TRACK
 
-onready var player = $Player
 onready var world = $World
 onready var world_size = $World.world_size
 onready var saved_games = $Dialogs.find_node("SavedGames")
@@ -37,28 +36,36 @@ func show_named_dialog(dialog: String):
 func show_dialog(dialog: Popup):
 	view_mode = ViewMode.DIALOG
 	world.set_visible(false)
-	view_to(half_view)
+	view_to(half_view, ViewMode.FREE)
 	dialog.popup_centered()
 
 
 func hide_dialog(dialog: Popup):
-	view_mode = ViewMode.TRACK
 	world.set_visible(true)
 	if dialog:
 		dialog.set_visible(false)
 
 
-# TODO: need to instantiate Player here, taking care with render order
-func new(depth=0):
-	hide_dialog($Dialogs.get_node("Start"))
-	if depth:
-		world.world_depth = depth
+func new():
+	game_seed = $Dialogs.find_node("Seed").text
 	seed(seed_text_to_int(game_seed))
+	world.world_depth = $Dialogs.find_node("Depth").value
+	hide_dialog($Dialogs.get_node("Start"))
 	$View.find_node("Seed").set_value(game_seed)
-	change_level(world.create(player))
+	world.create()
+	world.level_one.create(null, true)
+	change_level(world.level_one)
 	world.set_turn(0)
-	player.turn()
-	player.update()
+	world.player.turn()
+	world.player.update()
+
+
+func resume():
+	game_seed = saved_games.get_item_text(saved_games.get_item_index(saved_games.get_selected_id()))
+	seed(seed_text_to_int(game_seed))
+	hide_dialog($Dialogs.get_node("Start"))
+	load_game()
+	view_to(world.player.position + view_offset, ViewMode.TRACK)
 
 
 const view_map = {
@@ -72,7 +79,7 @@ func _process(_delta):
 	if not world.active_level:
 		return
 	var view_position = $View.position
-	var player_position = player.position + view_offset
+	var player_position = world.player.position + view_offset
 	if view_mode == ViewMode.RESET:
 		var gap = view_position.distance_squared_to(player_position)
 		if (gap < 4):
@@ -90,11 +97,11 @@ func _process(_delta):
 				view_position += pan_speed * view_map[e]
 		if view_mode == ViewMode.TRACK:
 			view_position = player_position
-	view_to(view_position)
+	view_to(view_position, view_mode)
 	if world.target and world.turn > world.target:
 		timed_out()
 	if world.turn % 2:
-		if player.get_state() == Robot.DONE:
+		if world.player.get_state() == Robot.DONE:
 			world.turn += 1
 			world.set_value("Moves", 0, true)
 			var dead = 0
@@ -110,10 +117,10 @@ func _process(_delta):
 			var state = r.get_state()
 			if state == Robot.IDLE or state == Robot.WAIT:
 				return
-		if player.turn():
+		if world.player.turn():
 			$Dialogs.get_node("Lose").window_title = "You have been deactivated!"
 			game_over(false)
-		player.update()
+		world.player.update()
 		world.set_turn(1)
 
 
@@ -169,15 +176,15 @@ func change_level(level: Level):
 			game_over(true)
 	if level != world.active_level:
 		world.change_level(level)
-	player.change_level(level)
-	view_to(player.position + view_offset)
-	view_mode = ViewMode.TRACK
+	world.player.change_level(level)
+	view_to(world.player.position + view_offset, ViewMode.TRACK)
 
 
-func view_to(view_position: Vector2):
+func view_to(view_position: Vector2, mode):
 	$View.position = Vector2(
 		clamp(view_position.x, 0, world_size.x + 0.5 * half_view.x),
 		clamp(view_position.y, 0, world_size.y + 0.5 * half_view.y))
+	view_mode = mode
 
 
 func list_games() -> Array:
@@ -215,7 +222,6 @@ func load_game():
 	if not save_game.open(save_name(), File.READ):
 		game_seed = world.load(save_game)
 		save_game.close()
-	new()
 
 
 func save_game():
@@ -306,13 +312,11 @@ func seed_text_to_int(seed_text: String) -> int:
 
 
 func _on_Resume_pressed():
-	game_seed = saved_games.get_item_text(saved_games.get_item_index(saved_games.get_selected_id()))
-	load_game()
+	resume()
 
 
 func _on_New_pressed():
-	game_seed = $Dialogs.find_node("Seed").text
-	new($Dialogs.find_node("Depth").value)
+	new()
 
 
 func _on_Random_pressed():
@@ -338,7 +342,7 @@ func _on_Quit_confirmed():
 
 
 func _on_Quit_popup_hide():
-	view_to(player.position + view_offset)
+	view_to(world.player.position + view_offset, ViewMode.TRACK)
 	hide_dialog(null)
 
 

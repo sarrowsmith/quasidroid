@@ -54,6 +54,7 @@ func new():
 	$View.find_node("Seed").set_value(game_seed)
 	world.create()
 	world.level_one.create(null, true)
+	connect_player()
 	change_level(world.level_one)
 	world.set_turn(0)
 	world.player.turn()
@@ -65,7 +66,13 @@ func resume():
 	seed(seed_text_to_int(game_seed))
 	hide_dialog($Dialogs.get_node("Start"))
 	load_game()
+	connect_player()
 	view_to(world.player.position + view_offset, ViewMode.TRACK)
+
+
+func connect_player():
+	world.player.connect("move", self, "_on_Player_move")
+	world.player.connect("change_level", self, "change_level")
 
 
 const view_map = {

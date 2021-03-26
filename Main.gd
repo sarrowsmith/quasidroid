@@ -56,6 +56,7 @@ func new():
 	world.level_one.create(null, true)
 	connect_player()
 	change_level(world.level_one)
+	world.turn = 1
 	world.set_turn(0)
 	world.player.turn()
 	world.player.update()

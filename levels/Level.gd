@@ -274,6 +274,7 @@ func load_lifts(file: File):
 			map.set_cellv(lift.location + o, map.Tiles.ROOF)
 			map.update_bitmask_area(lift.location + o)
 		access[lift.location] = null
+		lifts.append(lift)
 
 
 func save_lifts(file: File):
@@ -302,7 +303,10 @@ func save_access(file: File):
 func load_rogues(file: File):
 	var n_rogues = file.get_32()
 	for i in n_rogues:
-		pass
+		var rogue = new_feature(Vector2.ZERO, Prototype.ROGUE)
+		rogue.level = self
+		rogue.load(file)
+		rogues.append(rogue)
 
 
 func save_rogues(file: File):

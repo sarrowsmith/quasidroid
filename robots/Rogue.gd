@@ -5,6 +5,7 @@ extends Robot
 func _ready():
 	weapons = $Weapons
 	set_state(DONE)
+	stats = Stats.new()
 	add_to_group("rogue")
 
 
@@ -24,7 +25,6 @@ func generate(level: Level, location: Vector2):
 	self.level = level
 	set_location(location)
 
-	stats = Stats.new()
 	stats.create(level)
 	stats.equipment.extras.append("none")
 	new_direction()

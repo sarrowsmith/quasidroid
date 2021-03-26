@@ -26,8 +26,7 @@ func _process(delta):
 
 func update():
 	if weapons.get_range() > 1:
-		pass # This only makes sense if grappling is available
-		#combat = 0
+		combat = 0
 	equip()
 	check_location()
 	show_stats(false)
@@ -153,7 +152,7 @@ You can also recharge here.
 
 
 func show_combat_mode():
-	level.world.set_value("weapons", stats.equipment.weapons[combat], true)
+	level.world.set_value("weapons", weapons.get_weapon_name(), true)
 
 
 func change_level(level: Level):
@@ -212,8 +211,10 @@ func scavenge(other: Robot):
 	if len(scavenged):
 		level.world.show_info("""You have scavenged:
 \t%s""" % scavenged.join("\n\t"))
-	moves -= 1
-	end_move()
+		moves -= 1
+		end_move()
+	else:
+		level.world.show_info("Nothing worth scavenging here")
 	show_stats(true)
 
 

@@ -25,7 +25,7 @@ const level_limits = [4, 9, 11, 13]
 
 var equipment = {
 	drive = 1,
-	weapons = ["Ram"],
+	weapons = ["Grapple", "Ram"],
 	armour = 0,
 	extras = [],
 }
@@ -85,6 +85,7 @@ func health() -> float:
 	return health
 
 
+const damage = [["protection", "armour"], ["chassis", "drive"], ["strength", ""], ["power", ""], ["logic", ""]]
 func normalise(reference: Dictionary):
 	for stat in stats:
 		var normalised = int(round(stats[stat]))
@@ -93,6 +94,30 @@ func normalise(reference: Dictionary):
 		elif normalised > reference[stat]:
 			normalised = reference[stat]
 		stats[stat] = normalised
+	var damages = []
+	for i in len(damage):
+		var s = damage[i][0]
+		if stats[s] == 0 or reference[s] - stats[s] > 1:
+			match i:
+				0, 1:
+					var e = damage[i][1]
+					if equipment[e] > i:
+						equipment[e] -= 1
+						damages.append(e + (" damaged!" if equipment[e] > 0 else " destroyed!"))
+				2:
+					var n_weapons = len(equipment.weapons)
+					if n_weapons > 2:
+						damages.append(equipment.weapons.pop_back())
+				_:
+					var item = equipment.extras.pop_back()
+					if item and item != "none":
+						damages.append(equipment.extras.pop_back() + " destroyed!")
+					break
+	return damages
+
+
+func compare(other: Stats, stat: String) -> int:
+	return stats[stat] - other.stats[stat]
 
 
 func scavenge(other: Robot) -> PoolStringArray:
@@ -100,7 +125,7 @@ func scavenge(other: Robot) -> PoolStringArray:
 	var scavenged = PoolStringArray()
 	for i in len(theirs.weapons):
 		if not theirs.weapons[i] in equipment.weapons:
-			scavenged.append(other.weapons.get_weapon_name(theirs.weapons[i]))
+			scavenged.append(other.stats.get.weapon_name(theirs.weapons[i]))
 			equipment.weapons.append(theirs.weapons[i])
 			other.stats.equipment.weapons.remove(i)
 	for i in len(theirs.extras):

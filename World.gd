@@ -95,7 +95,7 @@ func report_death(display_name: String, is_player: bool):
 	show_info("%s %s been deactivated!" % [first_capital(display_name), past], true)
 
 
-func report_attack(attacker: Robot, defender: Robot, attackers: Dictionary, defenders: Dictionary):
+func report_attack(attacker: Robot, defender: Robot, attackers: Dictionary, defenders: Dictionary, damages: Array):
 	var continuation = (turn - combat_turn) < 3
 	combat_turn = turn
 	var a_name = first_capital("you" if attacker.is_player else ("the " + attacker.stats.type_name))
@@ -103,24 +103,26 @@ func report_attack(attacker: Robot, defender: Robot, attackers: Dictionary, defe
 	var weapon = attacker.weapons.get_weapon_name()
 	var with = " with a " + weapon
 	var attack = "shoot"
-	var damages = PoolStringArray()
+	var report = PoolStringArray()
 	var preamble = "Turn %d" % ((turn + 1) / 2)
 	for stat in defenders:
 		var delta = defenders[stat] - defender.stats.stats[stat]
 		if delta:
-			damages.append("\t%s: %d" % [stat, round(delta)])
-	if not len(damages):
-		damages.append("\tnone")
+			report.append("\t%s: %d" % [stat, round(delta)])
+	for damage in damages:
+		report.append("\t"+damage)
+	if not len(report):
+		report.append("\tnone")
 	if attackers:
-		damages.append("\nDamage received:")
+		report.append("\nDamage received:")
 		var count = 0
 		for stat in attackers:
 			var delta = attackers[stat] - attacker.stats.stats[stat]
 			if delta:
-				damages.append("\t%s: %d", round(delta))
+				report.append("\t%s: %d", round(delta))
 				count += 1
 		if not count:
-			damages.append("\tnone")
+			report.append("\tnone")
 	if attacker.weapons.get_range() == 1:
 		if attacker.combat >= Robot.WEAPON:
 			attack = "attack"
@@ -134,7 +136,7 @@ func report_attack(attacker: Robot, defender: Robot, attackers: Dictionary, defe
 
 Damage inflicted:
 %s
-""" % [preamble, first_capital(a_name), attack, d_name, with, damages.join("\n")]
+""" % [preamble, first_capital(a_name), attack, d_name, with, report.join("\n")]
 	show_info(text, continuation)
 	if defender.check_stats():
 		report_death(first_capital(d_name), defender.is_player)

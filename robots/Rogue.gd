@@ -66,7 +66,8 @@ func behaviour(): # -> enum
 
 func try_target(): # -> enum
 	var location_type = Level.FLOOR
-	if weapons.get_range() > 1:
+	var weapon_range = weapons.get_range()
+	if weapon_range > 1 && location.distance_squared_to(level.world.player.location) < weapon_range * weapon_range:
 		var target = location + facing
 		for _i in range(weapons.get_range() - 3):
 			match level.location_type(target):

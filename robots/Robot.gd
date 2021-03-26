@@ -3,7 +3,7 @@ extends Node2D
 
 
 enum {DEAD, IDLE, WAIT, DONE}
-enum {GRAPPLE=-1, MELEE, WEAPON}
+enum {GRAPPLE, MELEE, WEAPON}
 
 export(float) var move_speed = 1
 export(float) var weapon_speed = 2
@@ -173,8 +173,11 @@ func action(direction: Vector2, really=true, truly=true): # -> enum
 				if not moves > 0:
 					set_state(DONE)
 			else:
-				while combat > MELEE and weapons.get_range() > 1:
-					combat -= 1
+				if stats.compare(level.world.player.stats, "logic") > 0:
+					combat = GRAPPLE
+				else:
+					while combat > MELEE and weapons.get_range() > 1:
+						combat -= 1
 				weapons.attack(level.world.player)
 				combat = len(stats.equipment.weapons) - 1
 		Level.ROGUE:
@@ -253,6 +256,9 @@ func check_stats() -> bool:
 		combat = MELEE
 		set_sprite()
 		return true
+	if combat >= len(stats.equipment.weapons):
+		combat = len(stats.equipment.weapons) - 1
+		equip(true)
 	end_move()
 	return false
 

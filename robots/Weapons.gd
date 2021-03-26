@@ -53,8 +53,11 @@ func shoot() -> bool:
 			attack(owner.level.world.player)
 		Level.ROGUE:
 			var rogue = owner.level.rogue_at(location)
-			if rogue and rogue != owner and rogue.get_state() != Robot.DEAD:
-				return splash(rogue)
+			if rogue and rogue != owner:
+				if rogue.get_state() != Robot.DEAD:
+					return splash(rogue)
+			else:
+				return false
 		_:
 			owner.end_move()
 	return true
@@ -99,10 +102,13 @@ func attack(other: Robot):
 		EMP:
 			hit = 3
 			emp(other)
-	other.stats.normalise(theirs)
+	var damages = other.stats.normalise(theirs)
+	for i in len(damages):
+		if not damages[i].ends_with("!"):
+			damages[i] = get_weapon_name(damages[i]) + " destroyed!"
 	if ours:
 		owner.stats.normalise(ours)
-	owner.level.world.report_attack(owner, other, ours, theirs)
+	owner.level.world.report_attack(owner, other, ours, theirs, damages)
 	other.hit(hit)
 	owner.end_move()
 
@@ -114,7 +120,7 @@ func attack(other: Robot):
 
 func grapple_effect(stats: Stats, initiative: int=0) -> float:
 	# weight penalty is effectively a trade off against armour and speed
-	return owner.level.rng.randfn(stats.stats.logic * (initiative +  stats.stats.power) / stats.weight(), 0.1 + log(stats.health()))
+	return owner.level.rng.randfn(stats.stats.logic * (initiative +  stats.stats.power) / stats.weight(), 1.0 / stats.health())
 
 
 func modify_attack(theirs: Stats) -> float:
@@ -149,7 +155,7 @@ func attack_b(other: Robot):
 			var k = v[1]
 			if other.stats.stats[k] <= 0:
 				continue
-			other.stats.stats[k] -= (owner.level.rng.randfn(attack, 0.1 + log(other.stats.health())) if v[1] in Stats.critical_stats else 1)
+			other.stats.stats[k] -= (owner.level.rng.randfn(attack,  1.0 / other.stats.health()) if v[1] in Stats.critical_stats else 1)
 			if attack == 0 or other.stats.disabled():
 				break
 			attack -= 1
@@ -164,7 +170,7 @@ func grapple(other: Robot):
 
 
 func probe(other: Robot):
-	other.stats.stats.logic -= owner.level.rng.randfn(owner.stats.stats.strength, 0.1 + log(other.stats.health()))
+	other.stats.stats.logic -= owner.level.rng.randfn(owner.stats.stats.strength,  1.0 / other.stats.health())
 
 
 func projectile(other: Robot):

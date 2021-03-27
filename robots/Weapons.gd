@@ -45,8 +45,7 @@ func shoot() -> bool:
 			var weapon_range = get_range()
 			if location.distance_squared_to(owner.location) < weapon_range * weapon_range:
 				return false
-			else:
-				owner.end_move() # Otherwise handled by shot->hit
+			continue
 		Level.PLAYER:
 			if owner.is_player:
 				return false

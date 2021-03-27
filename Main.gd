@@ -9,6 +9,7 @@ export(Vector2) var half_view = Vector2(960, 540)
 export(Vector2) var view_offset = Vector2(280, 36)
 
 var view_mode = ViewMode.TRACK
+var save = false
 
 onready var world = $World
 onready var world_size = $World.world_size
@@ -127,6 +128,9 @@ func _process(_delta):
 			var state = r.get_state()
 			if state == Robot.IDLE or state == Robot.WAIT:
 				return
+		if save:
+			save_game()
+			save = false
 		if world.player.turn():
 			game_over(false, "You have been deactivated!")
 		world.player.update()
@@ -336,7 +340,7 @@ func _on_Random_pressed():
 
 
 func _on_Save_pressed():
-	save_game()
+	save = true
 
 
 func _on_Restart_pressed():

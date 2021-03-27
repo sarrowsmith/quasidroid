@@ -119,7 +119,7 @@ func report_attack(attacker: Robot, defender: Robot, attackers: Dictionary, defe
 		for stat in attackers:
 			var delta = attackers[stat] - attacker.stats.stats[stat]
 			if delta:
-				report.append("\t%s: %d", round(delta))
+				report.append("\t%s: %d" % [stat, round(delta)])
 				count += 1
 		if not count:
 			report.append("\tnone")

@@ -15,6 +15,7 @@ onready var world_size = $World.world_size
 onready var saved_games = $Dialogs.find_node("SavedGames")
 
 func _ready():
+	OS.window_fullscreen = !OS.window_fullscreen
 	if game_seed:
 		$Dialogs.find_node("Seed").text = game_seed
 	start_dialog()
@@ -26,6 +27,7 @@ func start_dialog():
 		saved_games.add_item(game)
 	if not saved_games.get_item_count():
 		$Dialogs.find_node("ResumeButton").disabled = true
+	$Dialogs.find_node("NewButton").disabled = not $Dialogs.find_node("Seed").text
 	show_named_dialog("Start")
 
 
@@ -126,8 +128,7 @@ func _process(_delta):
 			if state == Robot.IDLE or state == Robot.WAIT:
 				return
 		if world.player.turn():
-			$Dialogs.get_node("Lose").window_title = "You have been deactivated!"
-			game_over(false)
+			game_over(false, "You have been deactivated!")
 		world.player.update()
 		world.set_turn(1)
 
@@ -239,8 +240,10 @@ func save_game():
 	save_game.close()
 
 
-func game_over(success: bool):
+func game_over(success: bool, title=""):
 	var popup = $Dialogs.get_node("Win" if success else "Lose")
+	if title:
+		popup.window_title = title
 	var messages = PoolStringArray()
 	if success:
 		messages.append("You succeeded!\n")
@@ -279,8 +282,7 @@ Systems rebooting ...
 
 All robots in the facility will be wiped.
 """ % ((world.turn + 1) / 2))
-	$Dialogs.get_node("Lose").window_title = "Facility systems reboot!"
-	game_over(false)
+	game_over(false, "Facility systems reboot!")
 
 
 # Generate a seed text of the form CVCVC CVCV which can be directly
@@ -330,6 +332,7 @@ func _on_New_pressed():
 func _on_Random_pressed():
 	randomize()
 	$Dialogs.find_node("Seed").text = create_seed_text()
+	$Dialogs.find_node("NewButton").disabled = false
 
 
 func _on_Save_pressed():
@@ -354,10 +357,14 @@ func _on_Quit_popup_hide():
 	hide_dialog(null)
 
 
-func _on_game_over():
+func _on_game_over(success):
+	$Dialogs.get_node("Win" if success else "Lose").set_visible(false)
 	start_dialog()
 
 
-func _on_Player_move(_position):
-	if view_mode == ViewMode.FREE:
-		view_mode = ViewMode.RESET
+func _on_Player_move(alive):
+	if alive:
+		if view_mode == ViewMode.FREE:
+			view_mode = ViewMode.RESET
+	else:
+		game_over(false, "You have been deactivated!")

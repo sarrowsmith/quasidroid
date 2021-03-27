@@ -68,7 +68,7 @@ func try_target(): # -> enum
 	var location_type = Level.FLOOR
 	var weapon_range = weapons.get_range()
 	if weapon_range > 1 && location.distance_squared_to(level.world.player.location) < weapon_range * weapon_range:
-		var target = location + facing
+		var target = target()
 		for _i in range(weapons.get_range() - 3):
 			match level.location_type(target):
 				Level.FLOOR:
@@ -78,7 +78,7 @@ func try_target(): # -> enum
 				_:
 					break
 	if location_type == Level.FLOOR:
-		var ahead = location + facing
+		var ahead = target()
 		var nearby = level.check_nearby(ahead.x, ahead.y, 1)
 		if nearby[Level.ROGUE] > 1:
 			new_direction()

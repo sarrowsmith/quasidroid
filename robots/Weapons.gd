@@ -82,15 +82,13 @@ func attack(other: Robot):
 		return
 	owner.set_state(Robot.WAIT)
 	var hit = 1
-	var ours = {}
 	var theirs = other.stats.stats.duplicate()
 	match get_damage_type():
 		GRAPPLE:
-			ours = owner.stats.stats.duplicate()
-			owner.hit(1)
-			grapple(other)
-		RAM:
-			attack_a(other)
+			if owner.is_player:
+				grapple(other, theirs)
+				return
+			continue
 		BLADE:
 			hit = 2
 			attack_b(other)
@@ -102,14 +100,48 @@ func attack(other: Robot):
 		EMP:
 			hit = 3
 			emp(other)
+		RAM, _:
+			attack_a(other)
+	other.hit(hit)
 	var damages = other.stats.normalise(theirs)
 	for i in len(damages):
 		if not damages[i].ends_with("!"):
 			damages[i] = get_weapon_name(damages[i]) + " destroyed!"
-	if ours:
-		owner.stats.normalise(ours)
-	owner.level.world.report_attack(owner, other, ours, theirs, damages)
-	other.hit(hit)
+	owner.level.world.report_attack(owner, other, {}, theirs, damages)
+	owner.end_move()
+
+
+func grapple(other: Robot, theirs: Dictionary):
+	var ours = owner.stats.stats.duplicate()
+	owner.hit(1)
+	other.hit(1)
+	var attack = grapple_effect(owner.stats, 1 if (other.target() == owner.location) else 2)
+	var defence = grapple_effect(other.stats, 0)
+	print(attack, " > ", defence)
+	var delta = attack - defence
+	var damage = 1.0 / delta
+	match sign(delta):
+		-1.0:
+			for k in owner.stats.stats:
+				# delta and damage are negative
+				owner.stats.stats[k] += delta * (1.5 if k in Stats.critical_stats else 0.5)
+				# defender also take damage for an unconvincing win
+				other.stats.stats[k] += damage
+		0.0:
+			for k in Stats.critical_stats:
+				other.stats.stats[k] -= 1
+				owner.stats.stats[k] -= 1
+		+1.0:
+			# victory is an automatic kill
+			other.set_state(Robot.DEAD)
+			for k in other.stats.stats:
+				# a convincing win inflicts less damage for better scavenging
+				other.stats.stats[k] -= damage * (3.0 if k in Stats.critical_stats else 1.0)
+				# we also take damage for an unconvincing win
+				owner.stats.stats[k] -= damage
+	other.stats.normalise(theirs, true)
+	owner.stats.normalise(ours, true)
+	owner.level.world.report_attack(owner, other, ours, theirs, [])
 	owner.end_move()
 
 
@@ -118,7 +150,7 @@ func attack(other: Robot):
 # round right now. Just throwing some wild guesses in.
 # (The idea behind using health is the "desperate fight".)
 
-func grapple_effect(stats: Stats, initiative: int=0) -> float:
+func grapple_effect(stats: Stats, initiative: int) -> float:
 	# weight penalty is effectively a trade off against armour and speed
 	return owner.level.rng.randfn(stats.stats.logic * (initiative +  stats.stats.power) / stats.weight(), 1.0 / stats.health())
 
@@ -159,14 +191,6 @@ func attack_b(other: Robot):
 			if attack == 0 or other.stats.disabled():
 				break
 			attack -= 1
-
-
-func grapple(other: Robot):
-# warning-ignore:unused_variable
-	var attack = grapple_effect(other.stats, 1)
-# warning-ignore:unused_variable
-	var defence = grapple_effect(owner.stats, 0)
-	# TODO: work out how to turn attack - defence into damage
 
 
 func probe(other: Robot):

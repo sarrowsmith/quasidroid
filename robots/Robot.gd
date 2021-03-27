@@ -128,6 +128,10 @@ func set_location(destination: Vector2):
 	position = level.location_to_position(location)
 
 
+func target():
+	return location + facing
+
+
 func move(target: Vector2):
 	mode = "Move"
 	set_state(WAIT)
@@ -137,7 +141,7 @@ func move(target: Vector2):
 func null_action(): # -> enum
 	if not is_player:
 		return Level.WALL
-	return action(level.cursor.location - location)
+	return action((level.cursor.location - location).clamped(1.0))
 
 
 func action(direction: Vector2, really=true, truly=true): # -> enum
@@ -147,11 +151,11 @@ func action(direction: Vector2, really=true, truly=true): # -> enum
 		shoot(direction)
 		return Level.WALL
 	facing = direction
-	var target = location + direction
+	var target = target()
 	if really:
 		moves -= 1
 	var target_type = level.location_type(target)
-	match level.location_type(target):
+	match target_type:
 		Level.FLOOR, Level.ACCESS:
 			if really:
 				move(target)
@@ -173,11 +177,8 @@ func action(direction: Vector2, really=true, truly=true): # -> enum
 				if not moves > 0:
 					set_state(DONE)
 			else:
-				if stats.compare(level.world.player.stats, "logic") > 0:
-					combat = GRAPPLE
-				else:
-					while combat > MELEE and weapons.get_range() > 1:
-						combat -= 1
+				while combat > MELEE and weapons.get_range() > 1:
+					combat -= 1
 				weapons.attack(level.world.player)
 				combat = len(stats.equipment.weapons) - 1
 		Level.ROGUE:
@@ -198,7 +199,7 @@ func action(direction: Vector2, really=true, truly=true): # -> enum
 func shoot(direction: Vector2):
 	facing = direction
 	firing = "Fire"
-	weapons.location = location + direction
+	weapons.location = target()
 	set_state(WAIT)
 	moves -= 1
 	equip(true)
@@ -242,16 +243,33 @@ func hit(count: int):
 		return
 	zapped.set_visible(true)
 	zapped.play()
-	while count > 0:
+	for _i in count:
 		yield(zapped, "animation_finished")
-		count -= 1
 	zapped.stop()
 	zapped.set_visible(false)
+	if get_state() == DEAD:
+		die()
+
+
+func die():
+	# nice death animation here please
+	var zapped = get_sprite("Robot/Hit")
+	if zapped:
+		zapped.set_visible(true)
+		zapped.play()
+		for _i in 4:
+			yield(zapped, "animation_finished")
+		zapped.stop()
+		zapped.set_visible(false)
+	on_die()
+
+
+func on_die():
+	set_sprite()
 
 
 func check_stats() -> bool:
-	if stats.disabled():
-		# nice death animation here please
+	if get_state() == DEAD or stats.disabled():
 		set_state(DEAD)
 		combat = MELEE
 		set_sprite()
@@ -266,6 +284,7 @@ func check_stats() -> bool:
 func load(file: File):
 	set_location(file.get_var())
 	facing = file.get_var()
+	set_state(file.get_8())
 	stats.load(file)
 	if not check_stats():
 		combat = len(stats.equipment.weapons) - 1
@@ -275,4 +294,5 @@ func load(file: File):
 func save(file: File):
 	file.store_var(location)
 	file.store_var(facing)
+	file.store_8(get_state())
 	stats.save(file)

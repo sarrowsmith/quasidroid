@@ -594,15 +594,22 @@ grow_vertical = 2
 size_flags_horizontal = 3
 size_flags_vertical = 4
 
-[node name="CenterContainer3" parent="Dialogs/Start/VBoxContainer/MarginContainer3/V2BoxContainer/HBoxContainer" instance=ExtResource( 6 )]
+[node name="CenterContainer3" type="CenterContainer" parent="Dialogs/Start/VBoxContainer/MarginContainer3/V2BoxContainer/HBoxContainer"]
 margin_right = 114.0
 margin_bottom = 24.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
-[node name="Button" parent="Dialogs/Start/VBoxContainer/MarginContainer3/V2BoxContainer/HBoxContainer/CenterContainer3" index="0"]
+[node name="RandomButton" type="Button" parent="Dialogs/Start/VBoxContainer/MarginContainer3/V2BoxContainer/HBoxContainer/CenterContainer3"]
 margin_left = 7.0
 margin_top = 2.0
 margin_right = 106.0
 margin_bottom = 22.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
 text = "Random Seed"
 
 [node name="Seed" type="LineEdit" parent="Dialogs/Start/VBoxContainer/MarginContainer3/V2BoxContainer/HBoxContainer"]
@@ -613,15 +620,23 @@ size_flags_horizontal = 3
 size_flags_vertical = 4
 placeholder_text = "seed"
 
-[node name="CenterContainer2" parent="Dialogs/Start/VBoxContainer/MarginContainer3/V2BoxContainer" instance=ExtResource( 6 )]
+[node name="CenterContainer2" type="CenterContainer" parent="Dialogs/Start/VBoxContainer/MarginContainer3/V2BoxContainer"]
 margin_top = 28.0
+margin_right = 232.0
 margin_bottom = 88.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
-[node name="Button" parent="Dialogs/Start/VBoxContainer/MarginContainer3/V2BoxContainer/CenterContainer2" index="0"]
+[node name="NewButton" type="Button" parent="Dialogs/Start/VBoxContainer/MarginContainer3/V2BoxContainer/CenterContainer2"]
 margin_left = 61.0
 margin_top = 20.0
 margin_right = 170.0
 margin_bottom = 40.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
 text = "New from Seed"
 
 [node name="MarginContainer2" type="MarginContainer" parent="Dialogs/Start/VBoxContainer"]
@@ -691,19 +706,15 @@ dialog_autowrap = true
 [connection signal="pressed" from="View/Panel/Split/UpperPanel/Menu/Restart/Button" to="." method="_on_Restart_pressed"]
 [connection signal="pressed" from="View/Panel/Split/UpperPanel/Menu/Quit/Button" to="." method="_on_Quit_pressed"]
 [connection signal="pressed" from="Dialogs/Start/VBoxContainer/MarginContainer/VBoxContainer1/CenterContainer/ResumeButton" to="." method="_on_Resume_pressed"]
-[connection signal="pressed" from="Dialogs/Start/VBoxContainer/MarginContainer3/V2BoxContainer/HBoxContainer/CenterContainer3/Button" to="." method="_on_Random_pressed"]
-[connection signal="pressed" from="Dialogs/Start/VBoxContainer/MarginContainer3/V2BoxContainer/CenterContainer2/Button" to="." method="_on_New_pressed"]
+[connection signal="pressed" from="Dialogs/Start/VBoxContainer/MarginContainer3/V2BoxContainer/HBoxContainer/CenterContainer3/RandomButton" to="." method="_on_Random_pressed"]
+[connection signal="pressed" from="Dialogs/Start/VBoxContainer/MarginContainer3/V2BoxContainer/CenterContainer2/NewButton" to="." method="_on_New_pressed"]
 [connection signal="confirmed" from="Dialogs/Quit" to="." method="_on_Quit_confirmed"]
 [connection signal="popup_hide" from="Dialogs/Quit" to="." method="_on_Quit_popup_hide"]
-[connection signal="confirmed" from="Dialogs/Win" to="." method="_on_game_over"]
-[connection signal="confirmed" from="Dialogs/Lose" to="." method="_on_game_over"]
+[connection signal="confirmed" from="Dialogs/Win" to="." method="_on_game_over" binds= [ true ]]
+[connection signal="confirmed" from="Dialogs/Lose" to="." method="_on_game_over" binds= [ false ]]
 
 [editable path="View/Panel/Split/UpperPanel/Menu/Save"]
 
 [editable path="View/Panel/Split/UpperPanel/Menu/Restart"]
 
 [editable path="View/Panel/Split/UpperPanel/Menu/Quit"]
-
-[editable path="Dialogs/Start/VBoxContainer/MarginContainer3/V2BoxContainer/HBoxContainer/CenterContainer3"]
-
-[editable path="Dialogs/Start/VBoxContainer/MarginContainer3/V2BoxContainer/CenterContainer2"]

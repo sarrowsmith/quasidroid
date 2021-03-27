@@ -2,7 +2,7 @@ class_name Player
 extends Robot
 
 
-signal move(position)
+signal move(alive)
 signal change_level(level)
 
 var scavenge_location = Vector2.ZERO
@@ -13,6 +13,7 @@ func _ready():
 	is_player = true
 	base = "0"
 	stats = Stats.new()
+	stats.type_name = "Player"
 	stats.baseline = stats.stats.duplicate()
 	add_to_group("player")
 
@@ -20,8 +21,7 @@ func _ready():
 func _process(delta):
 	._process(delta)
 	if get_state() == WAIT:
-		emit_signal("move", position)
-
+		emit_signal("move", true)
 
 
 func update():
@@ -211,7 +211,7 @@ func scavenge(other: Robot):
 	if len(scavenged):
 		level.world.show_info("""You have scavenged:
 \t%s""" % scavenged.join("\n\t"))
-		moves -= 1
+		moves = 0
 		end_move()
 	else:
 		level.world.show_info("Nothing worth scavenging here")
@@ -224,3 +224,8 @@ func level_up(to: int):
 		for stat in stats.baseline:
 			stats.baseline[stat] += 3 if stat in stats.critical_stats else 1
 	recharge()
+
+
+func on_die():
+	set_sprite()
+	emit_signal("move", false)

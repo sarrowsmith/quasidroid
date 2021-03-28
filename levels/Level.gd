@@ -2,6 +2,8 @@ class_name Level
 extends Node2D
 
 
+signal rogues_move_end()
+
 export(int) var level_seed = 0
 export(bool) var rooms = false
 export(int) var level = 0
@@ -24,6 +26,7 @@ var access = {}
 var map_name = ""
 var rogues = []
 var state = LOCKED
+var awaiting = {}
 
 
 func _ready():
@@ -158,8 +161,19 @@ func generate_rogues():
 				break
 
 
-func rogue_end_move(_rogue):
-	pass
+func await_rogues():
+	awaiting = {}
+	for r in rogues:
+		if r.get_state(): # 0 == Robot.DEAD:
+			awaiting[r] = true
+
+
+func rogue_end_move(rogue):
+	awaiting.erase(rogue)
+	print(awaiting.size())
+	if awaiting.empty():
+		emit_signal("rogues_move_end")
+
 
 func rogue_at(location: Vector2): # -> Rogue (cyclic refereence)
 	if not location:

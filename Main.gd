@@ -63,10 +63,13 @@ func new():
 
 
 func resume():
+	if world.active_level and world.active_level.is_connected("rogues_move_end", self, "rogues_move_end"):
+		world.active_level.disconnect("rogues_move_end", self, "rogues_move_end")
 	game_seed = saved_games.get_item_text(saved_games.get_item_index(saved_games.get_selected_id()))
 	seed(seed_text_to_int(game_seed))
 	hide_dialog($Dialogs.get_node("Start"))
 	load_game()
+	world.active_level.connect("rogues_move_end", self, "rogues_move_end")
 	view_to(world.player.position, ViewMode.TRACK)
 	start()
 
@@ -116,16 +119,6 @@ func _process(_delta):
 	view_to(view_position, view_mode)
 	if world.target and world.turn > world.target:
 		timed_out()
-	elif world.turn % 2 == 0:
-		for r in world.active_level.rogues:
-			match r.get_state():
-				Robot.IDLE, Robot.WAIT:
-					return
-		if not world.player.turn():
-			world.player.update()
-			world.set_turn(1)
-			if save:
-				save_game()
 
 
 const cursor_map = {
@@ -181,6 +174,7 @@ func player_end_move(player):
 		return
 	world.set_turn(1)
 	world.set_value("Moves", 0, true)
+	world.active_level.await_rogues()
 	var dead = 0
 	for r in world.active_level.rogues:
 		if r.turn():
@@ -191,12 +185,23 @@ func player_end_move(player):
 			world.check_end()
 
 
+func rogues_move_end():
+	if not world.player.turn():
+		world.player.update()
+		world.set_turn(1)
+		if save:
+			save_game()
+
+
 func change_level(level: Level):
 	if not level:
 		if world.level_one.is_clear():
 			game_over(true)
 	if level != world.active_level:
+		if world.active_level.is_connected("rogues_move_end", self, "rogues_move_end"):
+			world.active_level.disconnect("rogues_move_end", self, "rogues_move_end")
 		world.change_level(level)
+		world.active_level.connect("rogues_move_end", self, "rogues_move_end")
 	world.player.change_level(level)
 	view_to(world.player.position, ViewMode.TRACK)
 

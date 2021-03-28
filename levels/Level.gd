@@ -153,9 +153,13 @@ func generate_rogues():
 			if probe.distance_squared_to(lifts[0].location) > 25:
 				var r = new_feature(probe, Prototype.ROGUE)
 				r.generate(self, probe)
+				r.connect("end_move", self, "rogue_end_move")
 				rogues.append(r)
 				break
 
+
+func rogue_end_move(_rogue):
+	pass
 
 func rogue_at(location: Vector2): # -> Rogue (cyclic refereence)
 	if not location:
@@ -306,6 +310,7 @@ func load_rogues(file: File):
 		var rogue = new_feature(Vector2.ZERO, Prototype.ROGUE)
 		rogue.level = self
 		rogue.load(file)
+		rogue.connect("end_move", self, "rogue_end_move")
 		rogues.append(rogue)
 
 

@@ -59,7 +59,6 @@ func new():
 	world.level_one.create(null, true)
 	change_level(world.level_one)
 	world.turn = 1
-	world.set_turn(0)
 	start()
 
 
@@ -74,6 +73,7 @@ func resume():
 
 func start():
 	connect_player()
+	world.set_turn(0)
 	world.player.turn()
 	world.player.update()
 
@@ -174,10 +174,10 @@ func _unhandled_input(event: InputEvent):
 		return
 
 
-func player_end_move(done):
+func player_end_move(player):
 	if save:
 		save_game()
-	if not done:
+	if player.get_state() != Robot.DONE:
 		return
 	world.set_turn(1)
 	world.set_value("Moves", 0, true)
@@ -356,7 +356,6 @@ func _on_Save_pressed():
 
 
 func _on_Restart_pressed():
-	save_game()
 	start_dialog()
 
 

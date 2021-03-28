@@ -12,16 +12,22 @@ func _ready():
 func turn() -> bool:
 	if .turn():
 		return true
+	var signalled = false
 	while moves > 0:
 		match behaviour():
 			Level.FLOOR, Level.PLAYER:
-				if get_state() == DONE or yield(self, "end_move"):
+				while get_state() == WAIT:
+					yield(self, "end_move")
+					signalled = true
+				if get_state() == DONE:
 					break
 				else:
 					pass
 			_:
 				moves -= 1
 		equip()
+	if signalled:
+		set_state(DONE)
 	end_move()
 	return false
 

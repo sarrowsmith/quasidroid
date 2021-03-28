@@ -2,7 +2,7 @@ class_name Robot
 extends Node2D
 
 
-signal end_move(done)
+signal end_move(robot)
 
 enum {DEAD, IDLE, WAIT, DONE}
 enum {GRAPPLE, MELEE, WEAPON}
@@ -41,17 +41,18 @@ func end_move(end_turn=false):
 		if state == WAIT:
 			state = IDLE
 	else:
+		moves = 0
 		if state == DONE:
 			return
 		state = DONE
-	emit_signal("end_move", state == DONE)
+	emit_signal("end_move", self)
 
 
 func _process(delta):
 	if level == null or get_state() == DEAD:
 		return
 	if mode == "Move":
-		position += facing * move_speed * 100 * delta
+		position += facing * move_speed * 100 * delta * stats.stats.speed
 		if position.distance_squared_to(level.location_to_position(destination)) <= (move_speed * move_speed):
 			set_location(destination)
 			mode = "Idle"
@@ -82,7 +83,7 @@ func turn() -> bool:
 			return true
 		DONE:
 			set_state(IDLE)
-			moves = stats.stats.speed
+			moves = (stats.equipment.drive * stats.stats.speed) if stats.stats.speed > 0 else 1
 	return false
 
 
@@ -143,6 +144,9 @@ func target():
 
 
 func move(target: Vector2):
+	if stats.stats.speed < 1:
+		end_move(true)
+		return
 	mode = "Move"
 	set_state(WAIT)
 	destination = target
@@ -184,9 +188,7 @@ func action(direction: Vector2, really=true, truly=true) -> int: # -> enum
 							set_state(IDLE)
 		Level.PLAYER:
 			if is_player:
-				if moves > 0:
-					moves -= 1
-					end_move()
+				end_move()
 			else:
 				while combat > MELEE and weapons.get_range() > 1:
 					combat -= 1

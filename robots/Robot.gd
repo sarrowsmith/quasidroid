@@ -26,6 +26,7 @@ var state = DONE
 var is_player = false
 # This *must* be overridden by derived classes
 var weapons = null
+var signalled = false
 
 
 func set_state(value):
@@ -35,6 +36,8 @@ func get_state():
 	return state
 
 func end_move(end_turn=false):
+	if is_player:
+		pass
 	if end_turn:
 		moves = 0
 	if moves > 0:
@@ -42,10 +45,10 @@ func end_move(end_turn=false):
 			state = IDLE
 	else:
 		moves = 0
-		if state == DONE:
-			return
 		state = DONE
-	emit_signal("end_move", self)
+	if not signalled:
+		emit_signal("end_move", self)
+		signalled = true
 
 
 func _process(delta):
@@ -78,6 +81,7 @@ func _process(delta):
 
 
 func turn() -> bool:
+	signalled = false
 	match get_state():
 		DEAD:
 			return true

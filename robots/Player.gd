@@ -213,7 +213,7 @@ func scavenge(other: Robot):
 	if len(scavenged):
 		level.world.log_info("""You have scavenged:
 \t%s""" % scavenged.join("\n\t"))
-		end_move(true)
+		moves -= 1
 	else:
 		level.world.show_info("Nothing worth scavenging here")
 	show_stats(true)

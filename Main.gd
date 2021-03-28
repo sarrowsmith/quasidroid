@@ -82,9 +82,9 @@ func start():
 
 
 func connect_player():
-	world.player.connect("move", self, "_on_Player_move")
-	world.player.connect("change_level", self, "change_level")
-	world.player.connect("end_move", self, "player_end_move")
+	world.player.connect("move", self, "_on_Player_move", [], CONNECT_DEFERRED)
+	world.player.connect("change_level", self, "change_level", [], CONNECT_DEFERRED)
+	world.player.connect("end_move", self, "player_end_move", [], CONNECT_DEFERRED)
 
 
 const view_map = {

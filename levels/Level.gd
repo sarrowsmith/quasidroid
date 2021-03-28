@@ -170,7 +170,6 @@ func await_rogues():
 
 func rogue_end_move(rogue):
 	awaiting.erase(rogue)
-	print(awaiting.size())
 	if awaiting.empty():
 		emit_signal("rogues_move_end")
 
@@ -324,7 +323,7 @@ func load_rogues(file: File):
 		var rogue = new_feature(Vector2.ZERO, Prototype.ROGUE)
 		rogue.level = self
 		rogue.load(file)
-		rogue.connect("end_move", self, "rogue_end_move")
+		rogue.connect("end_move", self, "rogue_end_move", [], CONNECT_DEFERRED)
 		rogues.append(rogue)
 
 

@@ -12,7 +12,6 @@ func _ready():
 func turn() -> bool:
 	if .turn():
 		return true
-	var signalled = false
 	while moves > 0:
 		match behaviour():
 			Level.FLOOR, Level.PLAYER:
@@ -26,8 +25,6 @@ func turn() -> bool:
 			_:
 				moves -= 1
 		equip()
-	if signalled:
-		set_state(DONE)
 	end_move()
 	return false
 

@@ -2,6 +2,8 @@ class_name Robot
 extends Node2D
 
 
+signal end_move(done)
+
 enum {DEAD, IDLE, WAIT, DONE}
 enum {GRAPPLE, MELEE, WEAPON}
 
@@ -32,12 +34,15 @@ func set_state(value):
 func get_state():
 	return state
 
-func end_move():
+func end_move(end_turn=false):
+	if end_turn:
+		moves = 0
 	if moves:
 		if state == WAIT:
 			state = IDLE
 	else:
 		state = DONE
+	emit_signal("end_move", state == DONE)
 
 
 func _process(delta):
@@ -49,7 +54,7 @@ func _process(delta):
 			set_location(destination)
 			mode = "Idle"
 			set_sprite()
-			set_state(IDLE if moves > 0 else DONE)
+			end_move()
 			if is_player and moves > 0:
 				show_stats(true)
 				# Yes, this is us, but the indirection sorts the type out
@@ -141,13 +146,13 @@ func move(target: Vector2):
 	destination = target
 
 
-func null_action(): # -> enum
+func null_action() -> int: # -> enum
 	if not is_player:
 		return Level.WALL
 	return action((level.cursor.location - location).clamped(1.0))
 
 
-func action(direction: Vector2, really=true, truly=true): # -> enum
+func action(direction: Vector2, really=true, truly=true) -> int: # -> enum
 	if really and truly and weapons.get_range() > 1:
 		if direction == Vector2.ZERO:
 			direction = facing
@@ -177,8 +182,9 @@ func action(direction: Vector2, really=true, truly=true): # -> enum
 							set_state(IDLE)
 		Level.PLAYER:
 			if is_player:
-				if not moves > 0:
-					set_state(DONE)
+				if moves > 0:
+					moves -= 1
+					end_move()
 			else:
 				while combat > MELEE and weapons.get_range() > 1:
 					combat -= 1
@@ -280,6 +286,8 @@ func check_stats() -> bool:
 	if combat >= len(stats.equipment.weapons):
 		combat = len(stats.equipment.weapons) - 1
 		equip(true)
+	if stats.stats.speed == 0:
+		end_move(true)
 	return false
 
 

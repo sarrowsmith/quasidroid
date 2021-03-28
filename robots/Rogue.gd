@@ -12,19 +12,23 @@ func _ready():
 func turn() -> bool:
 	if .turn():
 		return true
-	match behaviour():
-		Level.WALL, Level.LIFT, Level.ROGUE:
-			set_state(DONE)
-		Level.FLOOR, Level.ACCESS, Level.PLAYER:
-			pass # handled automatically
-	equip()
+	while moves > 0:
+		match behaviour():
+			Level.FLOOR, Level.PLAYER:
+				if get_state() == DONE or yield(self, "end_move"):
+					break
+				else:
+					pass
+			_:
+				moves -= 1
+		equip()
+	end_move()
 	return false
 
 
 func generate(level: Level, location: Vector2):
 	self.level = level
 	set_location(location)
-
 	stats.create(level)
 	stats.equipment.extras.append("none")
 	new_direction()
@@ -41,14 +45,12 @@ func new_direction():
 	# a pause. target_type in behaviour will be ROGUE (us) and
 	# so trigger a new direction for next turn.
 	facing = facing_map.keys()[level.rng.randi_range(0, 4)]
-	set_state(DONE)
 
 
-func behaviour(): # -> enum
+func behaviour() -> int: # -> enum
 	# 10 % chance of doing nothing
 	if level.rng.randf() < 0.1:
-		set_state(DONE)
-		return
+		return Level.WALL
 	var target_type = action(facing, false)
 	match target_type:
 		Level.FLOOR:
@@ -56,15 +58,14 @@ func behaviour(): # -> enum
 		Level.PLAYER:
 			# Automatic attack
 			if moves > 0:
-				# Do something clever
-				set_state(DONE)
+				set_state(IDLE)
 		_:
 			new_direction()
 	equip()
 	return target_type
 
 
-func try_target(): # -> enum
+func try_target() -> int: # -> enum
 	var location_type = Level.FLOOR
 	var weapon_range = weapons.get_range()
 	if weapon_range > 1 && location.distance_squared_to(level.world.player.location) < weapon_range * weapon_range:

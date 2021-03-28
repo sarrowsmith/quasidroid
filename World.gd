@@ -8,6 +8,7 @@ export(NodePath) var upper_panel_path
 export(NodePath) var lower_panel_path
 export(NodePath) var player_status_path
 export(NodePath) var rogue_status_path
+export(NodePath) var log_path
 
 
 enum {INFO, STATUS, ABOUT, MAP}
@@ -19,6 +20,7 @@ onready var upper_panel = get_node(upper_panel_path)
 onready var lower_panel = get_node(lower_panel_path)
 onready var player_status_box = get_node(player_status_path)
 onready var rogue_status_box = get_node(rogue_status_path)
+onready var log_box = get_node(log_path)
 
 
 var rng = RandomNumberGenerator.new()
@@ -27,7 +29,6 @@ var rng = RandomNumberGenerator.new()
 var player: Player = null
 var level_one: Level = null
 var active_level: Level = null
-var combat_turn = 0
 var turn = 1
 var target = 0
 
@@ -71,13 +72,13 @@ func set_turn(inc: int):
 	set_value("Turn", (turn + 1) / 2, true)
 
 
-func show_info(text: String, append=false):
+func log_info(text: String):
+	log_box.text += text + "\n"
+
+
+func show_info(text: String):
 	var info_box = lower_panel.get_tab_control(INFO)
-	if append:
-		var new_text = "%s\n%s" % [info_box.text, text]
-		info_box.text = new_text
-	else:
-		info_box.text = text
+	info_box.text = text
 	lower_panel.current_tab = INFO
 
 
@@ -92,12 +93,10 @@ static func first_capital(string: String) -> String:
 
 func report_state(display_name: String, is_player: bool, state: String):
 	var past = "have" if is_player else "has"
-	show_info("%s %s been %sd!" % [first_capital(display_name), past, state], true)
+	log_info("%s %s been %sd!" % [first_capital(display_name), past, state])
 
 
 func report_attack(attacker: Robot, defender: Robot, attackers: Dictionary, defenders: Dictionary, damages: Array):
-	var continuation = (turn - combat_turn) < 3
-	combat_turn = turn
 	var a_name = first_capital("you" if attacker.is_player else ("the " + attacker.stats.type_name))
 	var d_name = "you" if defender.is_player else ("the " + defender.stats.type_name)
 	var weapon = attacker.weapons.get_weapon_name()
@@ -137,7 +136,7 @@ func report_attack(attacker: Robot, defender: Robot, attackers: Dictionary, defe
 Damage inflicted:
 %s
 """ % [preamble, first_capital(a_name), attack, d_name, with, report.join("\n")]
-	show_info(text, continuation)
+	log_info(text)
 	if defender.check_stats():
 		report_state(first_capital(d_name), defender.is_player, "deactivate")
 	elif defender.stats.stats.speed == 0:
@@ -149,14 +148,14 @@ Damage inflicted:
 
 
 func check_end():
-	show_info("""Level %s has been cleared""" % active_level.map_name)
+	log_info("""Level %s has been cleared""" % active_level.map_name)
 	if not level_one.is_clear():
 		return
 	target = turn + 75 * world_depth
 	level_one.lifts[0].unlock()
-	show_info("""All the levels have now been cleared.
+	log_info("""All the levels have now been cleared.
 
-Make your way to the surface before the systems reboot in on turn %d.""" % target, true)
+Make your way to the surface before the systems reboot in on turn %d.""" % target)
 
 
 func load(file: File) -> String:
@@ -171,6 +170,7 @@ func load(file: File) -> String:
 	active_level = level_one.find_level(level_name)
 	player.level = active_level
 	player.load(file)
+	log_box.text = file.get_as_text()
 	active_level.set_visible(true)
 	return game_seed
 
@@ -184,3 +184,4 @@ func save(file: File, game_seed: String):
 	file.store_pascal_string(active_level.map_name)
 	level_one.save(file)
 	player.save(file)
+	file.store_string(log_box.text)

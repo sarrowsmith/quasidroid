@@ -121,8 +121,6 @@ func cursor_activate(button):
 
 
 func show_info(optional=false):
-	if optional and level.world.turn - level.world.combat_turn < 2:
-		return
 	var info = "Nothing to see here"
 	var location_type = level.location_type(level.cursor.location)
 	match location_type:
@@ -148,7 +146,8 @@ You can also recharge here.
 			if rogue:
 				rogue.show_stats(true)
 				return
-	level.world.show_info(info)
+	if not optional:
+		level.world.show_info(info)
 
 
 func show_combat_mode():
@@ -184,17 +183,18 @@ func check_location():
 		return
 	var lift =  level.lift_at(location)
 	if lift:
-		set_state(DONE)
+		end_move(true)
+		level.world.log_info("Transferring to "+lift.level_name(lift.to))
 		emit_signal("change_level", lift.to)
 	else:
 		recharge()
 		level.set_cursor(location)
 		show_info(true)
 		if level.activate(location):
-			level.world.show_info("""All access points on level %s reset
+			level.world.log_info("""All access points on level %s reset
 
 Downwards lift%s unlocked.
-""" % [level.map_name, "s" if level.rooms else ""], true)
+""" % [level.map_name, "s" if level.rooms else ""])
 
 
 func recharge():
@@ -205,14 +205,12 @@ func recharge():
 
 
 func scavenge(other: Robot):
-	level.world.combat_turn = level.world.turn + 1
 	other.show_stats(true)
 	var scavenged = stats.scavenge(other)
 	if len(scavenged):
-		level.world.show_info("""You have scavenged:
+		level.world.log_info("""You have scavenged:
 \t%s""" % scavenged.join("\n\t"))
-		moves = 0
-		end_move()
+		end_move(true)
 	else:
 		level.world.show_info("Nothing worth scavenging here")
 	show_stats(true)

@@ -81,6 +81,7 @@ func start():
 func connect_player():
 	world.player.connect("move", self, "_on_Player_move")
 	world.player.connect("change_level", self, "change_level")
+	world.player.connect("end_move", self, "player_end_move")
 
 
 const view_map = {
@@ -115,29 +116,16 @@ func _process(_delta):
 	view_to(view_position, view_mode)
 	if world.target and world.turn > world.target:
 		timed_out()
-	if world.turn % 2:
-		if world.player.get_state() == Robot.DONE:
-			world.turn += 1
-			world.set_value("Moves", 0, true)
-			var dead = 0
-			for r in world.active_level.rogues:
-				if r.turn():
-					dead += 1
-			if dead == len(world.active_level.rogues):
-				if not world.active_level.state & Level.CLEAR:
-					world.active_level.state |= Level.CLEAR
-					world.check_end()
-		if save:
-			save_game()
-			save = false
-	else:
+	elif world.turn % 2 == 0:
 		for r in world.active_level.rogues:
-			var state = r.get_state()
-			if state == Robot.IDLE or state == Robot.WAIT:
-				return
+			match r.get_state():
+				Robot.IDLE, Robot.WAIT:
+					return
 		if not world.player.turn():
 			world.player.update()
 			world.set_turn(1)
+			if save:
+				save_game()
 
 
 const cursor_map = {
@@ -184,6 +172,23 @@ func _unhandled_input(event: InputEvent):
 		var view_location = world.active_level.position_to_location(view_position)
 		world.active_level.set_cursor(view_location + Vector2.ONE)
 		return
+
+
+func player_end_move(done):
+	if save:
+		save_game()
+	if not done:
+		return
+	world.set_turn(1)
+	world.set_value("Moves", 0, true)
+	var dead = 0
+	for r in world.active_level.rogues:
+		if r.turn():
+			dead += 1
+	if dead == len(world.active_level.rogues):
+		if not world.active_level.state & Level.CLEAR:
+			world.active_level.state |= Level.CLEAR
+			world.check_end()
 
 
 func change_level(level: Level):
@@ -235,16 +240,17 @@ func save_name() -> String:
 
 func load_game():
 	var save_game = File.new()
-	if not save_game.open(save_name(), File.READ):
+	if save_game.open(save_name(), File.READ) == OK:
 		game_seed = world.load(save_game)
 		save_game.close()
 
 
 func save_game():
 	var save_game = File.new()
-	save_game.open(save_name(), File.WRITE)
-	world.save(save_game, game_seed)
-	save_game.close()
+	if save_game.open(save_name(), File.WRITE) == OK:
+		save = false
+		world.save(save_game, game_seed)
+		save_game.close()
 
 
 func game_over(success: bool, title=""):
@@ -343,7 +349,10 @@ func _on_Random_pressed():
 
 
 func _on_Save_pressed():
-	save = true
+	if world.player.get_state() == Robot.IDLE:
+		save_game()
+	else:
+		save = true
 
 
 func _on_Restart_pressed():

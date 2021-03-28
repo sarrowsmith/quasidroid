@@ -111,9 +111,8 @@ func normalise(reference: Dictionary, no_damage: bool=false) -> Array:
 					if n_weapons > 2:
 						damages.append(equipment.weapons.pop_back())
 				_:
-					var item = equipment.extras.pop_back()
-					if item and item != "none":
-						damages.append(item + " destroyed!")
+					if equipment.extras and equipment.extras[-1] != "none":
+						damages.append(equipment.extras.pop_back() + " destroyed!")
 					break
 	return damages
 

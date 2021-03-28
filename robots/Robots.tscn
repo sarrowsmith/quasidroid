@@ -1,4 +1,4 @@
-[gd_scene load_steps=238 format=2]
+[gd_scene load_steps=250 format=2]
 
 [ext_resource path="res://resources/Robots/0/down-idle.png" type="Texture" id=1]
 [ext_resource path="res://resources/Robots/dead+.png" type="Texture" id=2]
@@ -34,6 +34,8 @@
 [ext_resource path="res://resources/Robots/2/right+.png" type="Texture" id=32]
 [ext_resource path="res://robots/Robot.gd" type="Script" id=33]
 [ext_resource path="res://resources/Robots/zapped.png" type="Texture" id=34]
+[ext_resource path="res://resources/Robots/0/die.png" type="Texture" id=35]
+[ext_resource path="res://resources/Robots/2/die+.png" type="Texture" id=36]
 
 [sub_resource type="AtlasTexture" id=1]
 flags = 4
@@ -285,6 +287,34 @@ region = Rect2( 0, 48, 48, 48 )
 animations = [ {
 "frames": [ SubResource( 43 ), SubResource( 44 ), SubResource( 45 ) ],
 "loop": true,
+"name": "default",
+"speed": 5.0
+} ]
+
+[sub_resource type="AtlasTexture" id=204]
+flags = 4
+atlas = ExtResource( 35 )
+region = Rect2( 0, 0, 48, 48 )
+
+[sub_resource type="AtlasTexture" id=205]
+flags = 4
+atlas = ExtResource( 35 )
+region = Rect2( 48, 0, 48, 48 )
+
+[sub_resource type="AtlasTexture" id=206]
+flags = 4
+atlas = ExtResource( 35 )
+region = Rect2( 0, 48, 48, 48 )
+
+[sub_resource type="AtlasTexture" id=207]
+flags = 4
+atlas = ExtResource( 35 )
+region = Rect2( 48, 48, 48, 48 )
+
+[sub_resource type="SpriteFrames" id=208]
+animations = [ {
+"frames": [ SubResource( 204 ), SubResource( 205 ), SubResource( 206 ), SubResource( 207 ) ],
+"loop": false,
 "name": "default",
 "speed": 5.0
 } ]
@@ -1051,6 +1081,34 @@ animations = [ {
 "speed": 5.0
 } ]
 
+[sub_resource type="AtlasTexture" id=209]
+flags = 4
+atlas = ExtResource( 36 )
+region = Rect2( 0, 0, 48, 48 )
+
+[sub_resource type="AtlasTexture" id=210]
+flags = 4
+atlas = ExtResource( 36 )
+region = Rect2( 48, 0, 48, 48 )
+
+[sub_resource type="AtlasTexture" id=211]
+flags = 4
+atlas = ExtResource( 36 )
+region = Rect2( 0, 48, 48, 48 )
+
+[sub_resource type="AtlasTexture" id=212]
+flags = 4
+atlas = ExtResource( 36 )
+region = Rect2( 48, 48, 48, 48 )
+
+[sub_resource type="SpriteFrames" id=213]
+animations = [ {
+"frames": [ SubResource( 209 ), SubResource( 210 ), SubResource( 211 ), SubResource( 212 ) ],
+"loop": false,
+"name": "default",
+"speed": 5.0
+} ]
+
 [sub_resource type="AtlasTexture" id=185]
 flags = 4
 atlas = ExtResource( 2 )
@@ -1218,15 +1276,20 @@ centered = false
 [node name="Left" type="AnimatedSprite" parent="0/Move"]
 visible = false
 frames = SubResource( 42 )
-frame = 2
+frame = 1
 playing = true
 centered = false
 
 [node name="Right" type="AnimatedSprite" parent="0/Move"]
 visible = false
 frames = SubResource( 46 )
-frame = 2
+frame = 1
 playing = true
+centered = false
+
+[node name="Die" type="AnimatedSprite" parent="0"]
+visible = false
+frames = SubResource( 208 )
 centered = false
 
 [node name="2" type="Node2D" parent="."]
@@ -1279,14 +1342,12 @@ centered = false
 [node name="Left" type="AnimatedSprite" parent="2/Move"]
 visible = false
 frames = SubResource( 88 )
-frame = 1
 playing = true
 centered = false
 
 [node name="Right" type="AnimatedSprite" parent="2/Move"]
 visible = false
 frames = SubResource( 92 )
-frame = 1
 playing = true
 centered = false
 
@@ -1340,14 +1401,12 @@ centered = false
 [node name="Left" type="AnimatedSprite" parent="0-X/Move"]
 visible = false
 frames = SubResource( 134 )
-frame = 1
 playing = true
 centered = false
 
 [node name="Right" type="AnimatedSprite" parent="0-X/Move"]
 visible = false
 frames = SubResource( 138 )
-frame = 1
 playing = true
 centered = false
 
@@ -1401,26 +1460,31 @@ centered = false
 [node name="Left" type="AnimatedSprite" parent="2-X/Move"]
 visible = false
 frames = SubResource( 180 )
+frame = 2
 playing = true
 centered = false
 
 [node name="Right" type="AnimatedSprite" parent="2-X/Move"]
 visible = false
 frames = SubResource( 184 )
+frame = 2
 playing = true
+centered = false
+
+[node name="Die" type="AnimatedSprite" parent="2-X"]
+visible = false
+frames = SubResource( 213 )
 centered = false
 
 [node name="Dead-X" type="AnimatedSprite" parent="."]
 visible = false
 frames = SubResource( 186 )
 centered = false
-offset = Vector2( 0, 6 )
 
 [node name="Dead" type="AnimatedSprite" parent="."]
 visible = false
 frames = SubResource( 187 )
 centered = false
-offset = Vector2( 0, 6 )
 
 [node name="Hit" type="Node2D" parent="."]
 

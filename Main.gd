@@ -135,10 +135,9 @@ func _process(_delta):
 			var state = r.get_state()
 			if state == Robot.IDLE or state == Robot.WAIT:
 				return
-		if world.player.turn():
-			game_over(false, "You have been deactivated!")
-		world.player.update()
-		world.set_turn(1)
+		if not world.player.turn():
+			world.player.update()
+			world.set_turn(1)
 
 
 const cursor_map = {

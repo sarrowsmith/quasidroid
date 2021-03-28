@@ -255,15 +255,16 @@ func hit(count: int):
 
 
 func die():
-	# nice death animation here please
-	var zapped = get_sprite("Robot/Hit")
-	if zapped:
-		zapped.set_visible(true)
-		zapped.play()
-		for _i in 4:
-			yield(zapped, "animation_finished")
-		zapped.stop()
-		zapped.set_visible(false)
+	var die = get_node("Robot/%s%s/Die" % [base, "-X" if stats.equipment.extras else ""])
+	if sprite:
+		sprite.set_visible(false)
+	if weapon:
+		weapon.set_visible(false)
+	if die:
+		die.set_visible(true)
+		die.play()
+		yield(die, "animation_finished")
+		die.set_visible(false)
 	on_die()
 
 
@@ -275,7 +276,6 @@ func check_stats() -> bool:
 	if get_state() == DEAD or stats.disabled():
 		set_state(DEAD)
 		combat = MELEE
-		set_sprite()
 		return true
 	if combat >= len(stats.equipment.weapons):
 		combat = len(stats.equipment.weapons) - 1
@@ -289,7 +289,9 @@ func load(file: File):
 	set_state(file.get_8())
 	moves = file.get_8()
 	stats.load(file)
-	if not check_stats():
+	if check_stats():
+		set_sprite()
+	else:
 		combat = len(stats.equipment.weapons) - 1
 		equip(true)
 

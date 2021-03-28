@@ -228,4 +228,5 @@ func level_up(to: int):
 
 func on_die():
 	set_sprite()
+	yield(get_tree().create_timer(1.75), "timeout")
 	emit_signal("move", false)

@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/ion-idle-up.png-a7ba58f7c800cb1064def5c0c6e53d2d.stex"
+path="res://.import/die+.png-22d7340f43bf8cc64d4a840ba786f46e.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://resources/Resources/ion-idle-up.png"
-dest_files=[ "res://.import/ion-idle-up.png-a7ba58f7c800cb1064def5c0c6e53d2d.stex" ]
+source_file="res://resources/Robots/2/die+.png"
+dest_files=[ "res://.import/die+.png-22d7340f43bf8cc64d4a840ba786f46e.stex" ]
 
 [params]
 

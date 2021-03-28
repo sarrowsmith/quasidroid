@@ -90,9 +90,9 @@ static func first_capital(string: String) -> String:
 	return string.substr(0, 1).to_upper() + string.substr(1)
 
 
-func report_death(display_name: String, is_player: bool):
+func report_state(display_name: String, is_player: bool, state: String):
 	var past = "have" if is_player else "has"
-	show_info("%s %s been deactivated!" % [first_capital(display_name), past], true)
+	show_info("%s %s been %sd!" % [first_capital(display_name), past, state], true)
 
 
 func report_attack(attacker: Robot, defender: Robot, attackers: Dictionary, defenders: Dictionary, damages: Array):
@@ -139,9 +139,13 @@ Damage inflicted:
 """ % [preamble, first_capital(a_name), attack, d_name, with, report.join("\n")]
 	show_info(text, continuation)
 	if defender.check_stats():
-		report_death(first_capital(d_name), defender.is_player)
+		report_state(first_capital(d_name), defender.is_player, "deactivate")
+	elif defender.stats.stats.speed == 0:
+		report_state(first_capital(d_name), defender.is_player, "disable")
 	if attacker.check_stats():
-		report_death(a_name, attacker.is_player)
+		report_state(a_name, attacker.is_player, "deactivate")
+	elif attacker.stats.stats.speed == 0:
+		report_state(a_name, attacker.is_player, "disable")
 
 
 func check_end():

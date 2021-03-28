@@ -33,8 +33,11 @@ func get_state():
 	return state
 
 func end_move():
-	if state == WAIT:
-		state = IDLE if moves > 0 else DONE
+	if moves:
+		if state == WAIT:
+			state = IDLE
+	else:
+		state = DONE
 
 
 func _process(delta):
@@ -277,7 +280,6 @@ func check_stats() -> bool:
 	if combat >= len(stats.equipment.weapons):
 		combat = len(stats.equipment.weapons) - 1
 		equip(true)
-	end_move()
 	return false
 
 
@@ -285,6 +287,7 @@ func load(file: File):
 	set_location(file.get_var())
 	facing = file.get_var()
 	set_state(file.get_8())
+	moves = file.get_8()
 	stats.load(file)
 	if not check_stats():
 		combat = len(stats.equipment.weapons) - 1
@@ -295,4 +298,5 @@ func save(file: File):
 	file.store_var(location)
 	file.store_var(facing)
 	file.store_8(get_state())
+	file.store_8(moves)
 	stats.save(file)

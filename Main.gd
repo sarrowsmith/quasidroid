@@ -57,12 +57,10 @@ func new():
 	$View.find_node("Seed").set_value(game_seed)
 	world.create()
 	world.level_one.create(null, true)
-	connect_player()
 	change_level(world.level_one)
 	world.turn = 1
 	world.set_turn(0)
-	world.player.turn()
-	world.player.update()
+	start()
 
 
 func resume():
@@ -70,8 +68,14 @@ func resume():
 	seed(seed_text_to_int(game_seed))
 	hide_dialog($Dialogs.get_node("Start"))
 	load_game()
-	connect_player()
 	view_to(world.player.position + view_offset, ViewMode.TRACK)
+	start()
+
+
+func start():
+	connect_player()
+	world.player.turn()
+	world.player.update()
 
 
 func connect_player():
@@ -123,14 +127,14 @@ func _process(_delta):
 				if not world.active_level.state & Level.CLEAR:
 					world.active_level.state |= Level.CLEAR
 					world.check_end()
+		if save:
+			save_game()
+			save = false
 	else:
 		for r in world.active_level.rogues:
 			var state = r.get_state()
 			if state == Robot.IDLE or state == Robot.WAIT:
 				return
-		if save:
-			save_game()
-			save = false
 		if world.player.turn():
 			game_over(false, "You have been deactivated!")
 		world.player.update()

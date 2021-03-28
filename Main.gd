@@ -6,7 +6,6 @@ enum ViewMode {TRACK, FREE, RESET, DIALOG}
 export(String) var game_seed = ""
 export(float) var pan_speed = 0.5
 export(Vector2) var half_view = Vector2(960, 540)
-export(Vector2) var view_offset = Vector2(280, 36)
 
 var view_mode = ViewMode.TRACK
 var save = false
@@ -55,6 +54,7 @@ func new():
 	world.world_depth = $Dialogs.find_node("Depth").value
 	hide_dialog($Dialogs.get_node("Start"))
 	$View.find_node("Seed").set_value(game_seed)
+	world.log_info(game_seed + "\n")
 	world.create()
 	world.level_one.create(null, true)
 	change_level(world.level_one)
@@ -68,7 +68,7 @@ func resume():
 	seed(seed_text_to_int(game_seed))
 	hide_dialog($Dialogs.get_node("Start"))
 	load_game()
-	view_to(world.player.position + view_offset, ViewMode.TRACK)
+	view_to(world.player.position, ViewMode.TRACK)
 	start()
 
 
@@ -95,17 +95,17 @@ func _process(_delta):
 	if not world.active_level:
 		return
 	var view_position = $View.position
-	var player_position = world.player.position + view_offset
+	var player_position = world.player.position
 	if view_mode == ViewMode.RESET:
-		var gap = view_position.distance_squared_to(player_position)
-		if (gap < 4):
-			view_position = player_position
+		var gap = view_position.distance_squared_to(world.player.position)
+		if (gap < 16):
+			view_position = world.player.position
 			view_mode = ViewMode.TRACK
 		else:
 			var delta = pan_speed
 			if gap > half_view.y * half_view.y:
 				delta *= 8
-			view_position = view_position.move_toward(player_position, delta)
+			view_position = view_position.move_toward(world.player.position, delta)
 	else:
 		for e in view_map:
 			if Input.is_action_pressed(e):
@@ -168,7 +168,7 @@ func _unhandled_input(event: InputEvent):
 		view_mode = ViewMode.RESET
 		return
 	if event.is_action_pressed("cursor_reset"):
-		var view_position = $View.position - view_offset
+		var view_position = $View.position
 		var view_location = world.active_level.position_to_location(view_position)
 		world.active_level.set_cursor(view_location + Vector2.ONE)
 		return
@@ -198,7 +198,7 @@ func change_level(level: Level):
 	if level != world.active_level:
 		world.change_level(level)
 	world.player.change_level(level)
-	view_to(world.player.position + view_offset, ViewMode.TRACK)
+	view_to(world.player.position, ViewMode.TRACK)
 
 
 func view_to(view_position: Vector2, mode):
@@ -369,7 +369,7 @@ func _on_Quit_confirmed():
 
 
 func _on_Quit_popup_hide():
-	view_to(world.player.position + view_offset, ViewMode.TRACK)
+	view_to(world.player.position, ViewMode.TRACK)
 	hide_dialog(null)
 
 

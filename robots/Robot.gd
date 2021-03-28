@@ -37,10 +37,12 @@ func get_state():
 func end_move(end_turn=false):
 	if end_turn:
 		moves = 0
-	if moves:
+	if moves > 0:
 		if state == WAIT:
 			state = IDLE
 	else:
+		if state == DONE:
+			return
 		state = DONE
 	emit_signal("end_move", state == DONE)
 

@@ -91,9 +91,14 @@ static func first_capital(string: String) -> String:
 	return string.substr(0, 1).to_upper() + string.substr(1)
 
 
-func report_state(display_name: String, is_player: bool, state: String):
+func report_deactivated(display_name: String, is_player: bool):
 	var past = "have" if is_player else "has"
-	log_info("%s %s been %sd!" % [first_capital(display_name), past, state])
+	log_info("%s %s been deactivatd!" % [display_name, past])
+
+
+func report_disabled(display_name: String, is_player: bool):
+	var verb = "are" if is_player else "is"
+	log_info("%s %s disabled." % [display_name, verb])
 
 
 func report_attack(attacker: Robot, defender: Robot, attackers: Dictionary, defenders: Dictionary, damages: Array):
@@ -138,13 +143,13 @@ Damage inflicted:
 """ % [preamble, first_capital(a_name), attack, d_name, with, report.join("\n")]
 	log_info(text)
 	if defender.check_stats():
-		report_state(first_capital(d_name), defender.is_player, "deactivate")
+		report_deactivated(first_capital(d_name), defender.is_player)
 	elif defender.stats.stats.speed == 0:
-		report_state(first_capital(d_name), defender.is_player, "disable")
+		report_disabled(first_capital(d_name), defender.is_player)
 	if attacker.check_stats():
-		report_state(a_name, attacker.is_player, "deactivate")
+		report_deactivated(a_name, attacker.is_player)
 	elif attacker.stats.stats.speed == 0:
-		report_state(a_name, attacker.is_player, "disable")
+		report_disabled(a_name, attacker.is_player)
 
 
 func check_end():
@@ -170,7 +175,7 @@ func load(file: File) -> String:
 	active_level = level_one.find_level(level_name)
 	player.level = active_level
 	player.load(file)
-	log_box.text = file.get_as_text()
+	log_box.text = file.get_pascal_string()
 	active_level.set_visible(true)
 	return game_seed
 
@@ -184,4 +189,4 @@ func save(file: File, game_seed: String):
 	file.store_pascal_string(active_level.map_name)
 	level_one.save(file)
 	player.save(file)
-	file.store_string(log_box.text)
+	file.store_pascal_string(log_box.text)

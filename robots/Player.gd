@@ -30,6 +30,8 @@ func update():
 	equip()
 	check_location()
 	show_stats(false)
+	if moves <= 0:
+		end_move(true)
 
 
 func equip(_auto=true):
@@ -117,6 +119,7 @@ func cursor_activate(button):
 				show_info()
 			"Move", "Target":
 				if get_state() == IDLE:
+# warning-ignore:return_value_discarded
 					null_action()
 
 

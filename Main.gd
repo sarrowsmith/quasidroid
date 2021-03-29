@@ -198,7 +198,7 @@ func change_level(level: Level):
 		if world.level_one.is_clear():
 			game_over(true)
 	if level != world.active_level:
-		if world.active_level.is_connected("rogues_move_end", self, "rogues_move_end"):
+		if world.active_level and world.active_level.is_connected("rogues_move_end", self, "rogues_move_end"):
 			world.active_level.disconnect("rogues_move_end", self, "rogues_move_end")
 		world.change_level(level)
 		world.active_level.connect("rogues_move_end", self, "rogues_move_end")

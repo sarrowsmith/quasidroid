@@ -80,7 +80,7 @@ func _process(delta):
 			return
 		firing = "Idle"
 		weapons.location = location
-		equip(true)
+		equip()
 
 
 func turn() -> bool:
@@ -109,7 +109,7 @@ func get_sprite(path: String) -> Node:
 	return get_node("%s/%s" % [path, facing_map[facing]])
 
 
-func set_sprite(equipped=true):
+func set_sprite():
 	if sprite:
 		sprite.set_visible(false)
 	if weapon:
@@ -128,11 +128,11 @@ func set_sprite(equipped=true):
 	weapon = get_sprite("Weapons/%s/%s" % [get_weapon(), firing])
 	if weapon:
 		weapon.position = Vector2.ZERO
-		weapon.set_visible(equipped)
+		weapon.set_visible(true)
 
 
-func equip(on: bool):
-	set_sprite(on)
+func equip():
+	set_sprite()
 
 
 func get_weapon() -> String:
@@ -159,18 +159,28 @@ func move(target: Vector2):
 	destination = target
 
 
-func null_action() -> int: # -> enum
+func shoot(direction: Vector2):
+	facing = direction
+	firing = "Fire"
+	weapons.location = target()
+	set_state(WAIT)
+	moves -= 1
+	set_sprite()
+
+
+func default_action():
 	if not is_player:
-		return Level.WALL
-	return action((level.cursor.location - location).clamped(1.0))
-
-
-func action(direction: Vector2, really=true, truly=true) -> int: # -> enum
-	if really and truly and weapons.get_range() > 1:
+		return
+	var direction = (level.cursor.location - location).clamped(1.0)
+	if weapons.get_range() > 1:
 		if direction == Vector2.ZERO:
 			direction = facing
 		shoot(direction)
-		return Level.WALL
+	else:
+		action(direction)
+
+
+func action(direction: Vector2, really=true) -> int: # -> enum
 	facing = direction
 	var target = target()
 	if really:
@@ -214,15 +224,6 @@ func action(direction: Vector2, really=true, truly=true) -> int: # -> enum
 				moves += 1 # because we've already paid for the move, pay back the no-op
 	set_sprite()
 	return target_type
-
-
-func shoot(direction: Vector2):
-	facing = direction
-	firing = "Fire"
-	weapons.location = target()
-	set_state(WAIT)
-	moves -= 1
-	equip(true)
 
 
 const item_name_map = {
@@ -295,8 +296,9 @@ func check_stats() -> bool:
 		combat = MELEE
 		return true
 	if combat >= len(stats.equipment.weapons):
-		combat = len(stats.equipment.weapons) - 1
-		equip(true)
+		if is_player:
+			combat = GRAPPLE
+		equip()
 	if stats.stats.speed == 0:
 		end_move(true)
 	return false
@@ -311,8 +313,7 @@ func load(file: File):
 	if check_stats():
 		set_sprite()
 	else:
-		combat = len(stats.equipment.weapons) - 1
-		equip(true)
+		equip()
 
 
 func save(file: File):

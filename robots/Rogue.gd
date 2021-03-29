@@ -38,9 +38,9 @@ func generate(level: Level, location: Vector2):
 	equip()
 
 
-func equip(_auto=true):
+func equip():
 	combat = len(stats.equipment.weapons) - 1
-	.equip(combat >= WEAPON)
+	.equip()
 
 
 func new_direction():
@@ -69,32 +69,31 @@ func behaviour() -> int: # -> enum
 
 
 func try_target() -> int: # -> enum
-	var location_type = Level.FLOOR
 	var weapon_range = weapons.get_range()
 	if weapon_range > 1 && location.distance_squared_to(level.world.player.location) < weapon_range * weapon_range:
 		var target = target()
-		for _i in range(weapons.get_range() - 3):
+		for _i in range(weapons.get_range() - 1):
 			match level.location_type(target):
 				Level.FLOOR:
 					target += facing
 				Level.PLAYER:
-					location_type = Level.PLAYER
+					shoot(facing)
+					return level.PLAYER
 				_:
 					break
-	if location_type == Level.FLOOR:
-		var ahead = target()
-		var nearby = level.check_nearby(ahead.x, ahead.y, 1)
-		if nearby[Level.ROGUE] > 1:
-			new_direction()
-			return Level.ROGUE
-		var floors = nearby[Level.FLOOR] # bit heuristic
-		if 3 < floors and floors < 6:
-			check_turn()
-		# 10% of changing direction in the middle of an empty space
-		if floors == 8 and level.rng.randf() < 0.1:
-			new_direction()
-			return Level.WALL
-	return action(facing, true, location_type == Level.PLAYER)
+	var ahead = target()
+	var nearby = level.check_nearby(ahead.x, ahead.y, 1)
+	if nearby[Level.ROGUE] > 1:
+		new_direction()
+		return Level.ROGUE
+	var floors = nearby[Level.FLOOR] # bit heuristic
+	if 3 < floors and floors < 6:
+		check_turn()
+	# 10% of changing direction in the middle of an empty space
+	if floors == 8 and level.rng.randf() < 0.1:
+		new_direction()
+		return Level.WALL
+	return action(facing)
 
 
 func check_turn():

@@ -15,6 +15,7 @@ func _ready():
 	stats = Stats.new()
 	stats.type_name = "Player"
 	stats.baseline = stats.stats.duplicate()
+	stats.equipment.weapons.append("Ion")
 	add_to_group("player")
 
 
@@ -25,8 +26,6 @@ func _process(delta):
 
 
 func update():
-	if weapons.get_range() > 1:
-		combat = 0
 	equip()
 	check_location()
 	show_stats(false)
@@ -34,8 +33,8 @@ func update():
 		end_move(true)
 
 
-func equip(_auto=true):
-	.equip(combat >= WEAPON)
+func equip():
+	.equip()
 	show_combat_mode()
 	set_cursor()
 
@@ -53,9 +52,13 @@ const click_map = {
 func _unhandled_input(event: InputEvent):
 	if get_state() != IDLE:
 		return
+	var shift = InputEventKey and event.shift
 	for e in move_map:
 		if event.is_action_pressed(e):
-			action(move_map[e])
+			if shift and weapons.get_range() > 1:
+				shoot(move_map[e])
+			else:
+				action(move_map[e])
 			break
 	for e in click_map:
 		if event.is_action_pressed(e):
@@ -63,7 +66,7 @@ func _unhandled_input(event: InputEvent):
 	if event is InputEventKey and event.pressed:
 		match event.scancode:
 			KEY_Z:
-				combat = (combat + 1) % len(stats.equipment.weapons)
+				combat = (combat + (-1 if shift else 1)) % len(stats.equipment.weapons)
 				equip()
 				show_stats(true)
 			KEY_SPACE:
@@ -120,7 +123,7 @@ func cursor_activate(button):
 			"Move", "Target":
 				if get_state() == IDLE:
 # warning-ignore:return_value_discarded
-					null_action()
+					default_action()
 
 
 func show_info(optional=false):

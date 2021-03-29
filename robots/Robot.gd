@@ -55,8 +55,11 @@ func _process(delta):
 	if level == null or get_state() == DEAD:
 		return
 	if mode == "Move":
+		var target = level.location_to_position(destination)
+		var to_go = position.distance_squared_to(target)
 		position += facing * move_speed * 100 * delta * stats.stats.speed
-		if position.distance_squared_to(level.location_to_position(destination)) <= (move_speed * move_speed):
+		var current = position.distance_squared_to(target)
+		if to_go <= current or current <= (move_speed * move_speed):
 			set_location(destination)
 			mode = "Idle"
 			set_sprite()

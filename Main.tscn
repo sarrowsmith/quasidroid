@@ -354,8 +354,15 @@ size_flags_vertical = 3
 margin_top = 0.0
 margin_right = 338.0
 margin_bottom = 23.0
-label = "Move/Fire"
+label = "Move"
 default = "H, J, K, L"
+
+[node name="LabelledValue13" parent="View/Panel/Split/LowerPanel/Controls" instance=ExtResource( 5 )]
+margin_top = 0.0
+margin_right = 338.0
+margin_bottom = 23.0
+label = "Fire"
+default = "shift + H, J, K, L"
 
 [node name="LabelledValue8" parent="View/Panel/Split/LowerPanel/Controls" instance=ExtResource( 5 )]
 margin_top = 0.0

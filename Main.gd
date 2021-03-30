@@ -78,7 +78,8 @@ func start():
 	connect_player()
 	world.set_turn(0)
 	world.player.turn()
-	world.player.update()
+	world.player.start()
+	world.player.show_stats(true)
 
 
 func connect_player():
@@ -187,7 +188,7 @@ func player_end_move(player):
 
 func rogues_move_end():
 	if not world.player.turn():
-		world.player.update()
+		world.player.start()
 		world.set_turn(1)
 		if save:
 			save_game()

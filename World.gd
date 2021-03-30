@@ -69,7 +69,10 @@ func set_value(name: String, value, is_player: bool):
 
 func set_turn(inc: int):
 	turn += inc
-	set_value("Turn", (turn + 1) / 2, true)
+	var display_turn = String((turn + 1) / 2)
+	set_value("Turn", display_turn , true)
+	if turn % 2:
+		log_info("\nTurn " + display_turn)
 
 
 func log_info(text: String):
@@ -108,7 +111,6 @@ func report_attack(attacker: Robot, defender: Robot, attackers: Dictionary, defe
 	var with = " with a " + weapon
 	var attack = "shoot"
 	var report = PoolStringArray()
-	var preamble = "Turn %d" % ((turn + 1) / 2)
 	for stat in defenders:
 		var delta = defenders[stat] - defender.stats.stats[stat]
 		if delta:
@@ -135,12 +137,11 @@ func report_attack(attacker: Robot, defender: Robot, attackers: Dictionary, defe
 			with = ""
 	if defender.is_player:
 		attack += "s"
-	var text = """%s
-%s %s %s%s!
+	var text = """%s %s %s%s!
 
 Damage inflicted:
 %s
-""" % [preamble, first_capital(a_name), attack, d_name, with, report.join("\n")]
+""" % [first_capital(a_name), attack, d_name, with, report.join("\n")]
 	log_info(text)
 	if defender.check_stats():
 		report_deactivated(first_capital(d_name), defender.is_player)

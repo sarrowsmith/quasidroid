@@ -175,8 +175,6 @@ func rogue_end_move(rogue):
 
 
 func rogue_at(location: Vector2): # -> Rogue (cyclic refereence)
-	if not location:
-		location = cursor.location
 	for r in rogues:
 		if r.location == location:
 			return r

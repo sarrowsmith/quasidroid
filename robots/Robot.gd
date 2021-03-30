@@ -168,18 +168,6 @@ func shoot(direction: Vector2):
 	set_sprite()
 
 
-func default_action():
-	if not is_player:
-		return
-	var direction = (level.cursor.location - location).clamped(1.0)
-	if weapons.get_range() > 1:
-		if direction == Vector2.ZERO:
-			direction = facing
-		shoot(direction)
-	else:
-		action(direction)
-
-
 func action(direction: Vector2, really=true) -> int: # -> enum
 	facing = direction
 	var target = target()

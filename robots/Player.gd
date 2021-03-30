@@ -25,12 +25,16 @@ func _process(delta):
 		emit_signal("move", true)
 
 
+func start():
+	update()
+	if moves <= 0:
+		end_move(true)
+
+
 func update():
 	equip()
 	check_location()
 	show_stats(false)
-	if moves <= 0:
-		end_move(true)
 
 
 func equip():
@@ -55,6 +59,7 @@ func _unhandled_input(event: InputEvent):
 	var shift = InputEventKey and event.shift
 	for e in move_map:
 		if event.is_action_pressed(e):
+			signalled = false
 			if shift and weapons.get_range() > 1:
 				shoot(move_map[e])
 			else:
@@ -70,6 +75,7 @@ func _unhandled_input(event: InputEvent):
 				equip()
 				show_stats(true)
 			KEY_SPACE:
+				signalled = false
 				action(Vector2.ZERO)
 				show_stats(true)
 
@@ -84,18 +90,22 @@ const cursor_types = {
 }
 func set_cursor():
 	var location_type = level.location_type(level.cursor.location)
+	var in_range = location.distance_squared_to(level.cursor.location) <= stats.stats.speed
 	match location_type:
 		Level.LIFT:
 			var lift = level.lift_at(level.cursor.location)
 			if lift and lift.state == Lift.OPEN:
 				location_type = Level.PLAYER
 		Level.FLOOR, Level.ACCESS:
-			if location.distance_squared_to(level.cursor.location) <= stats.stats.speed:
+			if in_range:
 				location_type = Level.PLAYER
 		Level.ROGUE:
-			if location.x == level.cursor.location.x or location.y == level.cursor.location.y:
+			var rogue = level.rogue_at(level.cursor.location)
+			if rogue and rogue.get_state() == DEAD:
+				location_type = Level.PLAYER if in_range else Level.ACCESS
+			elif location.x == level.cursor.location.x or location.y == level.cursor.location.y:
 				if location.distance_squared_to(level.cursor.location) > 1:
-					if combat == WEAPON:
+					if weapons.get_range() > 1:
 						if location.x == level.cursor.location.x:
 							for y in range(min(location.y, level.cursor.location.y), max(location.y, level.cursor.location.y)):
 								if y != location.y and y != level.cursor.location.y and level.location_type(Vector2(location.x, y)) != Level.FLOOR:
@@ -122,8 +132,15 @@ func cursor_activate(button):
 				show_info()
 			"Move", "Target":
 				if get_state() == IDLE:
-# warning-ignore:return_value_discarded
-					default_action()
+					show_info()
+					signalled = false
+					var direction = (level.cursor.location - location).clamped(1.0)
+					if level.cursor.mode == "Target" and weapons.get_range() > 1:
+						if direction == Vector2.ZERO:
+							direction = facing
+						shoot(direction)
+					else:
+						action(direction)
 
 
 func show_info(optional=false):
@@ -148,7 +165,7 @@ You can also recharge here.
 			show_stats(true)
 			return
 		Level.ROGUE:
-			var rogue = level.rogue_at(Vector2.ZERO)
+			var rogue = level.rogue_at(level.cursor.location)
 			if rogue:
 				rogue.show_stats(true)
 				return
@@ -183,9 +200,12 @@ func check_location():
 			show_info(true)
 		if location != scavenge_location:
 			var rogue = level.rogue_at(location)
-			if rogue and rogue.get_state() == DEAD:
-				scavenge(rogue)
-				scavenge_location = location
+			if rogue:
+				if rogue.get_state() == DEAD:
+					scavenge(rogue)
+					scavenge_location = location
+				else:
+					show_info()
 		return
 	var lift =  level.lift_at(location)
 	if lift:
@@ -234,3 +254,7 @@ func on_die():
 	set_sprite()
 	yield(get_tree().create_timer(1.75), "timeout")
 	emit_signal("move", false)
+
+
+func _on_Player_end_move(_robot):
+	update()

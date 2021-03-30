@@ -53,7 +53,6 @@ func new():
 	seed(seed_text_to_int(game_seed))
 	world.world_depth = $Dialogs.find_node("Depth").value
 	hide_dialog($Dialogs.get_node("Start"))
-	$View.find_node("Seed").set_value(game_seed)
 	world.log_info(game_seed + "\n")
 	world.create()
 	world.level_one.create(null, true)
@@ -75,6 +74,7 @@ func resume():
 
 
 func start():
+	$View.find_node("Seed").set_value(game_seed)
 	connect_player()
 	world.set_turn(0)
 	world.player.turn()

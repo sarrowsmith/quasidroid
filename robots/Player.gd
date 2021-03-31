@@ -53,12 +53,16 @@ const click_map = {
 	cursor_select = BUTTON_LEFT,
 	cursor_option = BUTTON_RIGHT,
 }
+const weapon_select_map = {
+	weapon_select_down = -1,
+	weapon_select_up = +1,
+}
 func _unhandled_input(event: InputEvent):
 	if get_state() != IDLE:
 		return
-	var shift = InputEventKey and event.shift
 	for e in move_map:
 		if event.is_action_pressed(e):
+			var shift = InputEventKey and event.shift
 			signalled = false
 			if shift and weapons.get_range() > 1:
 				shoot(move_map[e])
@@ -68,16 +72,15 @@ func _unhandled_input(event: InputEvent):
 	for e in click_map:
 		if event.is_action_pressed(e):
 			cursor_activate(click_map[e])
-	if event is InputEventKey and event.pressed:
-		match event.scancode:
-			KEY_Z:
-				combat = (combat + (-1 if shift else 1)) % len(stats.equipment.weapons)
-				equip()
-				show_stats(true)
-			KEY_SPACE:
-				signalled = false
-				action(Vector2.ZERO)
-				show_stats(true)
+	for e in weapon_select_map:
+		if event.is_action_pressed(e):
+			combat = (combat + weapon_select_map[e]) % len(stats.equipment.weapons)
+			equip()
+			show_stats(true)
+	if event is InputEventKey and event.pressed and event.scancode == KEY_SPACE:
+		signalled = false
+		action(Vector2.ZERO)
+		show_stats(true)
 
 
 const cursor_types = {

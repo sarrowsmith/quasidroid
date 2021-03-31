@@ -366,7 +366,7 @@ margin_top = 0.0
 margin_right = 338.0
 margin_bottom = 23.0
 label = "Select weapon"
-default = "Z"
+default = "Z, X"
 
 [node name="LabelledValue12" parent="View/Panel/Split/LowerPanel/Controls" instance=ExtResource( 5 )]
 margin_top = 0.0
@@ -394,7 +394,7 @@ margin_top = 27.0
 margin_right = 338.0
 margin_bottom = 50.0
 label = "Info at cursor"
-default = "tab"
+default = "esc"
 
 [node name="LabelledValue11" parent="View/Panel/Split/LowerPanel/Controls" instance=ExtResource( 5 )]
 margin_top = 27.0
@@ -409,6 +409,13 @@ margin_right = 338.0
 margin_bottom = 23.0
 label = "Move view"
 default = "arrow keys"
+
+[node name="LabelledValue14" parent="View/Panel/Split/LowerPanel/Controls" instance=ExtResource( 5 )]
+margin_top = 0.0
+margin_right = 338.0
+margin_bottom = 23.0
+label = "Toggle overview"
+default = "tab"
 
 [node name="LabelledValue9" parent="View/Panel/Split/LowerPanel/Controls" instance=ExtResource( 5 )]
 margin_top = 27.0

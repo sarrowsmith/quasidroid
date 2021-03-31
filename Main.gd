@@ -143,8 +143,6 @@ func _unhandled_input(event: InputEvent):
 		match event.scancode:
 			KEY_F:
 				OS.window_fullscreen = !OS.window_fullscreen
-			KEY_M:
-				set_zoom(!world.zoomed)
 			KEY_U:
 				level = world.active_level.parent
 			KEY_O:
@@ -161,8 +159,13 @@ func _unhandled_input(event: InputEvent):
 			move += cursor_map[e]
 	if move != Vector2.ZERO:
 		world.active_level.move_cursor(move)
+	if event.is_action_pressed("map_zoom"):
+		set_zoom(!world.zoomed)
 	if event.is_action_pressed("map_reset"):
-		view_mode = ViewMode.RESET
+		if world.zoomed:
+			set_zoom(true)
+		else:
+			view_mode = ViewMode.RESET
 		return
 	if event.is_action_pressed("cursor_reset"):
 		var view_position = $View.position

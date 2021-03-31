@@ -70,19 +70,19 @@ func set_value(name: String, value, is_player: bool):
 
 func set_turn(inc: int):
 	turn += inc
-	var display_turn = String((turn + 1) / 2)
+	var display_turn = (turn + 1) / 2
 	set_value("Turn", display_turn , true)
 	if turn % 2:
-		log_info("\nTurn " + display_turn)
+		log_info("\n[i]Turn %d[/i]" % display_turn)
 
 
 func log_info(text: String):
-	log_box.text += text + "\n"
+	log_box.bbcode_text += text + "\n"
 
 
 func show_info(text: String):
 	var info_box = lower_panel.get_tab_control(INFO)
-	info_box.text = text
+	info_box.bbcode_text = text
 	lower_panel.current_tab = INFO
 
 
@@ -97,12 +97,12 @@ static func first_capital(string: String) -> String:
 
 func report_deactivated(display_name: String, is_player: bool):
 	var past = "have" if is_player else "has"
-	log_info("%s %s been deactivatd!" % [display_name, past])
+	log_info("[b]%s %s been deactivated![/b]" % [display_name, past])
 
 
 func report_disabled(display_name: String, is_player: bool):
 	var verb = "are" if is_player else "is"
-	log_info("%s %s disabled." % [display_name, verb])
+	log_info("[b]%s %s disabled.[/b]" % [display_name, verb])
 
 
 func report_attack(attacker: Robot, defender: Robot, attackers: Dictionary, defenders: Dictionary, damages: Array):
@@ -115,7 +115,7 @@ func report_attack(attacker: Robot, defender: Robot, attackers: Dictionary, defe
 	for stat in defenders:
 		var delta = defenders[stat] - defender.stats.stats[stat]
 		if delta:
-			report.append("\t%s: %d" % [stat, round(delta)])
+			report.append("\t%s: [b][i]%d[/i][/b]" % [stat, round(delta)])
 	for damage in damages:
 		report.append("\t"+damage)
 	if not len(report):
@@ -126,7 +126,7 @@ func report_attack(attacker: Robot, defender: Robot, attackers: Dictionary, defe
 		for stat in attackers:
 			var delta = attackers[stat] - attacker.stats.stats[stat]
 			if delta:
-				report.append("\t%s: %d" % [stat, round(delta)])
+				report.append("\t%s: [b][i]%d[/i][/b]" % [stat, round(delta)])
 				count += 1
 		if not count:
 			report.append("\tnone")
@@ -155,14 +155,14 @@ Damage inflicted:
 
 
 func check_end():
-	log_info("""Level %s has been cleared""" % active_level.map_name)
+	log_info("""[b]Level %s has been cleared[/b]""" % active_level.map_name)
 	if not level_one.is_clear():
 		return
 	target = turn + 75 * world_depth
 	level_one.lifts[0].unlock()
 	log_info("""All the levels have now been cleared.
 
-Make your way to the surface before the systems reboot in on turn %d.""" % target)
+[b]Make your way to the surface before the systems reboot on turn %d.[/b]""" % target)
 
 
 func load(file: File) -> String:
@@ -177,7 +177,7 @@ func load(file: File) -> String:
 	active_level = level_one.find_level(level_name)
 	player.level = active_level
 	player.load(file)
-	log_box.text = file.get_pascal_string()
+	log_box.bbcode_text = file.get_pascal_string()
 	active_level.set_visible(true)
 	return game_seed
 
@@ -191,4 +191,4 @@ func save(file: File, game_seed: String):
 	file.store_pascal_string(active_level.map_name)
 	level_one.save(file)
 	player.save(file)
-	file.store_pascal_string(log_box.text)
+	file.store_pascal_string(log_box.bbcode_text)

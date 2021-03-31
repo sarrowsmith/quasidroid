@@ -20,9 +20,9 @@ func level_name(level: Level) -> String:
 
 
 func get_info() -> String:
-	return """A lift %s from %s to %s.
+	return """[b][i]A lift [/i]%s[i] from %s to [/i]%s[i].[/i][/b]
 
-It is currently %s.""" % [direction.to_lower(), level_name(from), level_name(to), state_name[state]]
+It is currently [b]%s[/b].""" % [direction.to_lower(), level_name(from), level_name(to), state_name[state]]
 
 
 func unlock(force=false):

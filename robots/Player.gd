@@ -154,10 +154,10 @@ func show_info(optional=false):
 		Level.ACCESS:
 			var ap = level.access[level.cursor.location]
 			if ap:
-				info = """An access point
+				info = """[b][i]An access point[/i][/b]
 
 Resetting all the access points on a level will unlock downwards lifts.
-This access point %s.
+[b]This access point %s.[/b]
 
 You can also recharge here.
 """ % ("has been reset" if ap.active else "is being reset" if level.cursor.location == location else "needs resetting")
@@ -210,7 +210,7 @@ func check_location():
 	var lift =  level.lift_at(location)
 	if lift:
 		end_move(true)
-		level.world.log_info("Transferring to "+lift.level_name(lift.to))
+		level.world.log_info("Transferring to [b]%s[/b]" % lift.level_name(lift.to))
 		emit_signal("change_level", lift.to)
 	else:
 		recharge()
@@ -219,7 +219,7 @@ func check_location():
 		if level.activate(location):
 			level.world.log_info("""All access points on level %s reset
 
-Downwards lift%s unlocked.
+[b]Downwards lift%s unlocked.[/b]
 """ % [level.map_name, "s" if level.rooms else ""])
 
 
@@ -235,7 +235,7 @@ func scavenge(other: Robot):
 	var scavenged = stats.scavenge(other)
 	if len(scavenged):
 		level.world.log_info("""You have scavenged:
-\t%s""" % scavenged.join("\n\t"))
+\t[b][i]%s[/i][/b]""" % scavenged.join("\n\t"))
 		moves -= 1
 	else:
 		level.world.show_info("Nothing worth scavenging here")

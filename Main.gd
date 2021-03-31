@@ -53,7 +53,7 @@ func new():
 	seed(seed_text_to_int(game_seed))
 	world.world_depth = $Dialogs.find_node("Depth").value
 	hide_dialog($Dialogs.get_node("Start"))
-	world.log_info(game_seed + "\n")
+	world.log_info("[b]%s[\b]\n" % game_seed)
 	world.create()
 	world.level_one.create(null, true)
 	change_level(world.level_one)
@@ -388,7 +388,8 @@ func _on_Quit_confirmed():
 
 
 func _on_Quit_popup_hide():
-	view_to(world.player.position, ViewMode.TRACK)
+	if world.player:
+		view_to(world.player.position, ViewMode.TRACK)
 	hide_dialog(null)
 
 

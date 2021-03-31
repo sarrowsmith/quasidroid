@@ -74,6 +74,7 @@ func resume():
 
 
 func start():
+	set_zoom(false)
 	$View.find_node("Seed").set_value(game_seed)
 	connect_player()
 	world.set_turn(0)
@@ -142,6 +143,8 @@ func _unhandled_input(event: InputEvent):
 		match event.scancode:
 			KEY_F:
 				OS.window_fullscreen = !OS.window_fullscreen
+			KEY_M:
+				set_zoom(!world.zoomed)
 			KEY_U:
 				level = world.active_level.parent
 			KEY_O:
@@ -204,7 +207,7 @@ func change_level(level: Level):
 		world.change_level(level)
 		world.active_level.connect("rogues_move_end", self, "rogues_move_end")
 	world.player.change_level(level)
-	view_to(world.player.position, ViewMode.TRACK)
+	set_zoom(world.zoomed)
 
 
 func view_to(view_position: Vector2, mode):
@@ -212,6 +215,17 @@ func view_to(view_position: Vector2, mode):
 		clamp(view_position.x, 0, world_size.x + 0.5 * half_view.x),
 		clamp(view_position.y, 0, world_size.y + 0.5 * half_view.y))
 	view_mode = mode
+
+
+func set_zoom(out: bool):
+	world.zoomed = out
+	var scale = Vector2.ONE / (3.0 if out else 1.0)
+	$World.scale = scale
+	$Frame.scale = scale
+	if out:
+		view_to(world.world_size / 6.0, ViewMode.FREE)
+	else:
+		view_to(world.player.position, ViewMode.TRACK)
 
 
 func list_games() -> Array:
@@ -384,6 +398,7 @@ func _on_game_over(success):
 
 
 func _on_Player_move(alive):
+	set_zoom(false)
 	if alive:
 		if view_mode == ViewMode.FREE:
 			view_mode = ViewMode.RESET

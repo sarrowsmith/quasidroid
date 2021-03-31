@@ -124,7 +124,7 @@ func set_cursor():
 
 
 func cursor_activate(button):
-	if button == BUTTON_RIGHT:
+	if button == BUTTON_RIGHT or level.world.zoomed:
 		show_info()
 	else:
 		match level.cursor.mode:

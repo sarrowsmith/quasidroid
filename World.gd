@@ -31,6 +31,7 @@ var level_one: Level = null
 var active_level: Level = null
 var turn = 1
 var target = 0
+var zoomed = false
 
 
 func _ready():

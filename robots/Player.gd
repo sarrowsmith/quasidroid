@@ -94,7 +94,7 @@ func set_cursor():
 	match location_type:
 		Level.LIFT:
 			var lift = level.lift_at(level.cursor.location)
-			if lift and lift.state == Lift.OPEN:
+			if lift and lift.state != Lift.LOCKED:
 				location_type = Level.PLAYER
 		Level.FLOOR, Level.ACCESS:
 			if in_range:
@@ -209,7 +209,7 @@ func check_location():
 		return
 	var lift =  level.lift_at(location)
 	if lift:
-		end_move(true)
+		moves = 0
 		level.world.log_info("Transferring to [b]%s[/b]" % lift.level_name(lift.to))
 		emit_signal("change_level", lift.to)
 	else:

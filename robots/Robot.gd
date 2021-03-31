@@ -36,8 +36,6 @@ func get_state():
 	return state
 
 func end_move(end_turn=false):
-	if is_player:
-		pass
 	if end_turn:
 		moves = 0
 	if moves > 0:

@@ -25,10 +25,14 @@ func start_dialog():
 	saved_games.clear()
 	for game in list_games():
 		saved_games.add_item(game)
-	if not saved_games.get_item_count():
-		$Dialogs.find_node("ResumeButton").disabled = true
+	var resume = $Dialogs.find_node("ResumeButton")
 	$Dialogs.find_node("NewButton").disabled = not $Dialogs.find_node("Seed").text
 	show_named_dialog("Start")
+	if saved_games.get_item_count():
+		resume.disabled = false
+		resume.grab_focus()
+	else:
+		resume.disabled = true
 
 
 func show_named_dialog(dialog: String):
@@ -36,9 +40,8 @@ func show_named_dialog(dialog: String):
 
 
 func show_dialog(dialog: Popup):
-	view_mode = ViewMode.DIALOG
 	world.set_visible(false)
-	view_to(half_view, ViewMode.FREE)
+	view_to(half_view, ViewMode.DIALOG)
 	dialog.popup_centered()
 
 
@@ -46,6 +49,8 @@ func hide_dialog(dialog: Popup):
 	world.set_visible(true)
 	if dialog:
 		dialog.set_visible(false)
+	if world.player:
+		view_to(world.player.position, ViewMode.TRACK)
 
 
 func new():
@@ -172,6 +177,11 @@ func _unhandled_input(event: InputEvent):
 		var view_location = world.active_level.position_to_location(view_position)
 		world.active_level.set_cursor(view_location + Vector2.ONE)
 		return
+	if view_mode == ViewMode.DIALOG and event.is_action_pressed("ui_cancel"):
+		for popup in $Dialogs.get_children():
+			if popup.visible:
+				hide_dialog(popup)
+				break
 
 
 func player_end_move(player):
@@ -391,8 +401,6 @@ func _on_Quit_confirmed():
 
 
 func _on_Quit_popup_hide():
-	if world.player:
-		view_to(world.player.position, ViewMode.TRACK)
 	hide_dialog(null)
 
 

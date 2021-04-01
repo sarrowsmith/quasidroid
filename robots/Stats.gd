@@ -120,6 +120,8 @@ func normalise(reference: Dictionary, no_damage: bool=false) -> Array:
 func scavenge(other: Robot) -> PoolStringArray:
 	var theirs = other.stats.equipment.duplicate()
 	var scavenged = PoolStringArray()
+	if stats.strength < 1 and len(theirs.weapons) > Robot.WEAPON:
+		stats.strength = 1
 	for i in len(theirs.weapons):
 		if not theirs.weapons[i] in equipment.weapons:
 			scavenged.append(other.weapons.get_weapon_name(theirs.weapons[i]))
@@ -137,10 +139,12 @@ func scavenge(other: Robot) -> PoolStringArray:
 		equipment.drive = theirs.drive
 		scavenged.append("drive upgrade")
 		theirs.drive = 1
+		stats.speed = max(stats.speed, 1)
 	if theirs.armour > equipment.armour:
 		equipment.armour = theirs.armour
 		scavenged.append("armour upgrade")
 		theirs.armour = 0
+		stats.protection = max(stats.protection, 1)
 	if baseline:
 		for stat in stats:
 			if other.stats.stats[stat] > baseline[stat]:

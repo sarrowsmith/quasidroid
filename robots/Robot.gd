@@ -148,10 +148,12 @@ func target():
 	return location + facing
 
 
-func move(target: Vector2):
+func move(target: Vector2, check_speed: bool):
 	if stats.stats.speed < 1:
-		end_move(true)
-		return
+		if check_speed:
+			end_move(true)
+			return
+		stats.stats.speed = max(stats.stats.speed, 0.2)
 	mode = "Move"
 	set_state(WAIT)
 	destination = target
@@ -175,13 +177,13 @@ func action(direction: Vector2, really=true) -> int: # -> enum
 	match target_type:
 		Level.FLOOR, Level.ACCESS:
 			if really:
-				move(target)
+				move(target, target_type == Level.FLOOR)
 		Level.LIFT:
 			if is_player:
 				var lift = level.lift_at(target)
 				if lift:
 					if lift.state == Lift.OPEN:
-						move(target)
+						move(target, false)
 					else:
 						set_state(WAIT)
 						if lift.open():
@@ -202,7 +204,7 @@ func action(direction: Vector2, really=true) -> int: # -> enum
 				var rogue = level.rogue_at(target)
 				if rogue:
 					if rogue.get_state() == DEAD:
-						move(target)
+						move(target, false)
 					else:
 						weapons.attack(rogue)
 		_:

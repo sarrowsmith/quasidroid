@@ -15,7 +15,7 @@ func _ready():
 	stats = Stats.new()
 	stats.type_name = "Player"
 	stats.baseline = stats.stats.duplicate()
-	stats.equipment.weapons.append("Ion")
+	stats.equipment.weapons.append("Projectile")
 	add_to_group("player")
 
 
@@ -93,7 +93,8 @@ const cursor_types = {
 }
 func set_cursor():
 	var location_type = level.location_type(level.cursor.location)
-	var in_range = location.distance_squared_to(level.cursor.location) <= stats.stats.speed
+	var distance_squared = location.distance_squared_to(level.cursor.location)
+	var in_range = distance_squared <= stats.stats.speed
 	match location_type:
 		Level.LIFT:
 			var lift = level.lift_at(level.cursor.location)
@@ -105,7 +106,7 @@ func set_cursor():
 		Level.ROGUE:
 			var rogue = level.rogue_at(level.cursor.location)
 			if rogue and rogue.get_state() == DEAD:
-				location_type = Level.PLAYER if in_range else Level.ACCESS
+				location_type = Level.PLAYER if (in_range or (stats.stats.speed == 0 and distance_squared == 1)) else Level.ACCESS
 			elif location.x == level.cursor.location.x or location.y == level.cursor.location.y:
 				if location.distance_squared_to(level.cursor.location) > 1:
 					if weapons.get_range() > 1:

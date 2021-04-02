@@ -114,7 +114,7 @@ func grapple(other: Robot, theirs: Dictionary):
 	var ours = owner.stats.stats.duplicate()
 	owner.hit(1)
 	other.hit(1)
-	var attack = grapple_effect(owner.stats, 1 if (other.target() == owner.location) else 2)
+	var attack = grapple_effect(owner.stats, 0 if (other.target() == owner.location) else 1)
 	var defence = grapple_effect(other.stats, 0)
 	var delta = attack - defence
 	var damage = 1.0 / delta
@@ -150,7 +150,7 @@ func grapple(other: Robot, theirs: Dictionary):
 
 func grapple_effect(stats: Stats, initiative: int) -> float:
 	# weight penalty is effectively a trade off against armour and speed
-	return owner.level.rng.randfn(stats.stats.logic * (0.5 * initiative +  stats.stats.power) / stats.weight(), 1.0 / stats.health())
+	return owner.level.rng.randfn(stats.stats.logic * (initiative +  stats.stats.power) / stats.weight(), 1.0 / stats.health())
 
 
 func modify_attack(theirs: Stats) -> float:

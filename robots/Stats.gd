@@ -5,7 +5,7 @@ extends Reference
 const critical_stats = ["chassis", "power", "logic"]
 const types = [
 	{ name = "Basic Unit", weapon = "Blade" },
-	{ name = "Scout", drive = 3, logic = 6 },
+	{ name = "Scout", drive = 3, power = 6, logic = 6 },
 	{ name = "Probe", drive = 2, weapon = "Probe", strength = 2, logic = 9 },
 	{ name = "Security Model A", weapon = "Dual", strength = 3, armour = 1, protection = 2},
 
@@ -75,7 +75,7 @@ func disabled() -> bool:
 
 
 func weight() -> float:
-	return equipment.drive + equipment.armour + log(stats.chassis)
+	return equipment.drive + equipment.armour + log(stats.chassis + 1)
 
 
 func health() -> float:
@@ -83,6 +83,17 @@ func health() -> float:
 	for critical in critical_stats:
 		health += stats[critical]
 	return health
+
+
+func implicit_damage() -> bool:
+	var damage_taken = false
+	if weight() > stats.power + 1:
+		stats.chassis -= 1
+		damage_taken = true
+	if stats.speed > equipment.drive:
+		stats.speed -= 1
+		damage_taken = true
+	return damage_taken
 
 
 const damage = [["protection", "armour"], ["chassis", "drive"], ["strength", ""], ["power", ""], ["logic", ""]]

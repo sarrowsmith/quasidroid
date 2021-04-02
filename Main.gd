@@ -58,11 +58,11 @@ func new():
 	game_seed = $Dialogs.find_node("Seed").text
 	seed(seed_text_to_int(game_seed))
 	world.world_depth = $Dialogs.find_node("Depth").value
-	hide_dialog($Dialogs.get_node("Start"))
-	world.log_info("[b]%s[\b]\n" % game_seed)
+	hide_dialog($"Dialogs/Start")
+	world.log_info("[b]%s[/b]\n" % game_seed)
 	world.create()
 	world.level_one.create(null, true)
-	change_level(world.level_one)
+	change_level(world.level_one, false)
 	world.turn = 1
 	start()
 
@@ -72,7 +72,7 @@ func resume():
 		world.active_level.disconnect("rogues_move_end", self, "rogues_move_end")
 	game_seed = saved_games.get_item_text(saved_games.get_item_index(saved_games.get_selected_id()))
 	seed(seed_text_to_int(game_seed))
-	hide_dialog($Dialogs.get_node("Start"))
+	hide_dialog($"Dialogs/Start")
 	load_game()
 	world.active_level.connect("rogues_move_end", self, "rogues_move_end")
 	view_to(world.player.position, ViewMode.TRACK)
@@ -93,7 +93,7 @@ func start():
 
 func connect_player():
 	world.player.connect("move", self, "_on_Player_move", [], CONNECT_DEFERRED)
-	world.player.connect("change_level", self, "change_level", [], CONNECT_DEFERRED)
+	world.player.connect("change_level", self, "change_level", [true], CONNECT_DEFERRED)
 	world.player.connect("end_move", self, "player_end_move", [], CONNECT_DEFERRED)
 
 
@@ -158,7 +158,7 @@ func _unhandled_input(event: InputEvent):
 			KEY_P:
 				level = world.active_level.children[1]
 		if level:
-			change_level(level)
+			change_level(level, true)
 	if world.active_level == null:
 		return
 	var move = Vector2.ZERO
@@ -213,24 +213,27 @@ func rogues_move_end():
 			save_game()
 
 
-func change_level(level: Level):
+func change_level(level: Level, fade: bool):
 	if not level:
 		if world.level_one.is_clear():
 			game_over(true)
 		return
 	if level != world.active_level:
-		$Fader.interpolate_property(world, "modulate", Color(1.0, 1.0, 1.0, 1.0), Color(1.0, 1.0, 1.0, 0.0), 0.5)
-		$Fader.start()
+		if fade:
+			$Fader.interpolate_property(world, "modulate", Color(1.0, 1.0, 1.0, 1.0), Color(1.0, 1.0, 1.0, 0.0), 0.5)
+			$Fader.start()
 		if world.active_level and world.active_level.is_connected("rogues_move_end", self, "rogues_move_end"):
 			world.active_level.disconnect("rogues_move_end", self, "rogues_move_end")
 		world.change_level(level)
 		world.active_level.connect("rogues_move_end", self, "rogues_move_end")
-		yield($Fader, "tween_all_completed")
+		if fade:
+			yield($Fader, "tween_all_completed")
 	world.player.change_level(level)
 	set_zoom(world.zoomed)
-	$Fader.interpolate_property(world, "modulate", Color(1.0, 1.0, 1.0, 0.0), Color(1.0, 1.0, 1.0, 1.0), 0.5)
-	$Fader.start()
-	yield($Fader, "tween_all_completed")
+	if fade:
+		$Fader.interpolate_property(world, "modulate", Color(1.0, 1.0, 1.0, 0.0), Color(1.0, 1.0, 1.0, 1.0), 0.5)
+		$Fader.start()
+		yield($Fader, "tween_all_completed")
 
 
 func view_to(view_position: Vector2, mode):

@@ -7,8 +7,8 @@ signal end_move(robot)
 enum {DEAD, IDLE, WAIT, DONE}
 enum {GRAPPLE, MELEE, WEAPON}
 
-export(float) var move_speed = 1
-export(float) var weapon_speed = 2
+export(float) var move_speed = 20
+export(float) var weapon_speed = 200
 
 var location = Vector2.ZERO
 var level = null
@@ -36,6 +36,14 @@ func get_state():
 	return state
 
 func end_move(end_turn=false):
+	if stats.stats.speed < 1:
+		stats.stats.speed = 0
+	if level and stats.implicit_damage():
+		hit(1)
+		var display_name = "You" if is_player else ("A " + stats.type_name)
+		level.world.report_damaged(display_name, is_player)
+		if check_stats():
+			level.world.report_deactivated(display_name, is_player)
 	if end_turn:
 		moves = 0
 	if moves > 0:
@@ -50,14 +58,14 @@ func end_move(end_turn=false):
 
 
 func _process(delta):
-	if level == null or get_state() == DEAD:
+	if not level or get_state() == DEAD:
 		return
 	if mode == "Move":
 		var target = level.location_to_position(destination)
 		var to_go = position.distance_squared_to(target)
-		position += facing * move_speed * 100 * delta * stats.stats.speed
+		position += facing * move_speed * delta * (2 + stats.stats.speed)
 		var current = position.distance_squared_to(target)
-		if to_go <= current or current <= (move_speed * move_speed):
+		if to_go <= current or current <= (stats.stats.speed * stats.stats.speed):
 			set_location(destination)
 			mode = "Idle"
 			set_sprite()
@@ -69,7 +77,7 @@ func _process(delta):
 			level.set_cursor(Vector2.ZERO)
 		return
 	if firing == "Fire":
-		weapon.position += facing * weapon_speed * 100 * delta
+		weapon.position += facing * weapon_speed * delta
 		var target = level.position_to_location(weapon.global_position)
 		if level.position_to_location(weapon.position) == weapons.location:
 			return
@@ -151,9 +159,10 @@ func target():
 func move(target: Vector2, check_speed: bool):
 	if stats.stats.speed < 1:
 		if check_speed:
+			stats.stats.speed = 0
 			end_move(true)
 			return
-		stats.stats.speed = max(stats.stats.speed, 0.2)
+		stats.stats.speed = max(stats.stats.speed, 0.01)
 	mode = "Move"
 	set_state(WAIT)
 	destination = target

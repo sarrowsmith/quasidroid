@@ -15,7 +15,6 @@ func _ready():
 	stats = Stats.new()
 	stats.type_name = "Player"
 	stats.baseline = stats.stats.duplicate()
-	stats.equipment.weapons.append("Projectile")
 	add_to_group("player")
 
 
@@ -33,14 +32,16 @@ func start():
 
 func update():
 	equip()
-	check_location()
-	show_stats(false)
+	if level:
+		check_location()
+		show_stats(false)
 
 
 func equip():
 	.equip()
-	level.world.set_weapon()
-	set_cursor()
+	if level:
+		level.world.set_weapon()
+		set_cursor()
 
 
 const move_map = {
@@ -92,6 +93,8 @@ const cursor_types = {
 	Level.ROGUE: "Target"
 }
 func set_cursor():
+	if not level:
+		return
 	var location_type = level.location_type(level.cursor.location)
 	var distance_squared = location.distance_squared_to(level.cursor.location)
 	var in_range = distance_squared <= stats.stats.speed

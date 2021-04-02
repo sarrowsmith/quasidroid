@@ -664,8 +664,9 @@ __meta__ = {
 }
 
 [node name="Label" type="Label" parent="Dialogs/Start/VBoxContainer/MarginContainer/VBoxContainer1/HBoxContainer/CenterContainer3"]
+margin_left = 2.0
 margin_top = 3.0
-margin_right = 113.0
+margin_right = 112.0
 margin_bottom = 23.0
 text = "Saved games:"
 
@@ -686,9 +687,9 @@ __meta__ = {
 }
 
 [node name="ResumeButton" type="Button" parent="Dialogs/Start/VBoxContainer/MarginContainer/VBoxContainer1/CenterContainer"]
-margin_left = 67.0
+margin_left = 69.0
 margin_top = 13.0
-margin_right = 164.0
+margin_right = 163.0
 margin_bottom = 45.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -725,7 +726,8 @@ __meta__ = {
 }
 
 [node name="RandomButton" type="Button" parent="Dialogs/Start/VBoxContainer/MarginContainer3/V2BoxContainer/HBoxContainer/CenterContainer3"]
-margin_right = 143.0
+margin_left = 1.0
+margin_right = 141.0
 margin_bottom = 32.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -750,9 +752,9 @@ __meta__ = {
 }
 
 [node name="NewButton" type="Button" parent="Dialogs/Start/VBoxContainer/MarginContainer3/V2BoxContainer/CenterContainer2"]
-margin_left = 38.0
+margin_left = 42.0
 margin_top = 11.0
-margin_right = 193.0
+margin_right = 190.0
 margin_bottom = 43.0
 size_flags_horizontal = 3
 size_flags_vertical = 3

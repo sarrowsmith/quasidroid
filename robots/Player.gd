@@ -39,7 +39,7 @@ func update():
 
 func equip():
 	.equip()
-	show_combat_mode()
+	level.world.set_weapon()
 	set_cursor()
 
 
@@ -175,10 +175,6 @@ You can also recharge here.
 				return
 	if not optional:
 		level.world.show_info(info)
-
-
-func show_combat_mode():
-	level.world.set_value("weapons", weapons.get_weapon_name(), true)
 
 
 func change_level(level: Level):

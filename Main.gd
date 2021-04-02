@@ -367,6 +367,15 @@ func seed_text_to_int(seed_text: String) -> int:
 	return seed_text.hash()
 
 
+func _on_Player_move(alive):
+	set_zoom(false)
+	if alive:
+		if view_mode == ViewMode.FREE:
+			view_mode = ViewMode.RESET
+	else:
+		game_over(false, "You have been deactivated!")
+
+
 func _on_Resume_pressed():
 	resume()
 
@@ -409,10 +418,5 @@ func _on_game_over(success):
 	start_dialog()
 
 
-func _on_Player_move(alive):
-	set_zoom(false)
-	if alive:
-		if view_mode == ViewMode.FREE:
-			view_mode = ViewMode.RESET
-	else:
-		game_over(false, "You have been deactivated!")
+func _on_Fullscreen_toggled(button_pressed):
+	OS.window_fullscreen = button_pressed

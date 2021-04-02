@@ -11,7 +11,7 @@ export(NodePath) var rogue_status_path
 export(NodePath) var log_path
 
 
-enum {INFO, STATUS, ABOUT, MAP}
+enum {MAP, STATUS, INFO}
 
 var Level_prototype = preload("res://levels/Level.tscn")
 var Player_prototype = preload("res://robots/Player.tscn")
@@ -21,6 +21,8 @@ onready var lower_panel = get_node(lower_panel_path)
 onready var player_status_box = get_node(player_status_path)
 onready var rogue_status_box = get_node(rogue_status_path)
 onready var log_box = get_node(log_path)
+onready var info_box = lower_panel.get_tab_control(INFO)
+onready var weapon_options = upper_panel.get_tab_control(MAP).find_node("Weapon")
 
 
 var rng = RandomNumberGenerator.new()
@@ -35,8 +37,11 @@ var zoomed = false
 
 
 func _ready():
-	upper_panel.current_tab = ABOUT
-	lower_panel.current_tab = ABOUT
+	upper_panel.current_tab = INFO
+	lower_panel.current_tab = INFO
+	var menu = weapon_options.get_popup()
+	menu.connect("index_pressed", self, "_on_Weapon_selected")
+	menu.show_on_top = true
 
 
 # warning-ignore:shadowed_variable
@@ -68,6 +73,17 @@ func set_value(name: String, value, is_player: bool):
 		lv.set_value(value)
 
 
+func set_weapon():
+	set_value("weapons", player.weapons.get_weapon_name(), true)
+	var menu = weapon_options.get_popup()
+	menu.clear()
+	menu.add_item("Weapons")
+	menu.add_separator()
+	for weapon in player.stats.equipment.weapons:
+		menu.add_radio_check_item(player.weapons.get_weapon_name(weapon))
+	menu.set_item_checked(player.combat + 2, true)
+
+
 func set_turn(inc: int):
 	turn += inc
 	var display_turn = (turn + 1) / 2
@@ -81,7 +97,6 @@ func log_info(text: String):
 
 
 func show_info(text: String):
-	var info_box = lower_panel.get_tab_control(INFO)
 	info_box.bbcode_text = text
 	lower_panel.current_tab = INFO
 
@@ -192,3 +207,9 @@ func save(file: File, game_seed: String):
 	level_one.save(file)
 	player.save(file)
 	file.store_pascal_string(log_box.bbcode_text)
+
+
+func _on_Weapon_selected(idx):
+	if idx > 2:
+		player.combat = idx - 2
+		player.equip()

@@ -1,6 +1,6 @@
 [gd_scene format=2]
 
-[node name="CenterContainer" type="CenterContainer"]
+[node name="CentredButton" type="CenterContainer"]
 margin_right = 232.0
 margin_bottom = 65.0
 size_flags_horizontal = 3

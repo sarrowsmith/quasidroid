@@ -13,6 +13,8 @@
 [node name="Main" type="Node2D"]
 script = ExtResource( 2 )
 
+[node name="Fader" type="Tween" parent="."]
+
 [node name="World" parent="." instance=ExtResource( 1 )]
 world_depth = 2
 upper_panel_path = NodePath("../View/Panel/Split/UpperPanel")
@@ -199,43 +201,69 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="Turn" parent="View/Panel/Split/UpperPanel/Status/Status" instance=ExtResource( 5 )]
-margin_top = 27.0
-margin_right = 338.0
-margin_bottom = 50.0
+margin_top = 0.0
+margin_right = 350.0
+margin_bottom = 20.0
 label = "Turn:"
 
 [node name="Moves" parent="View/Panel/Split/UpperPanel/Status/Status" instance=ExtResource( 5 )]
-margin_top = 27.0
-margin_right = 338.0
-margin_bottom = 50.0
+margin_top = 24.0
+margin_right = 350.0
+margin_bottom = 44.0
 label = "Moves left:"
 
 [node name="weapons" parent="View/Panel/Split/UpperPanel/Status/Status" instance=ExtResource( 5 )]
-margin_bottom = 715.0
+margin_top = 48.0
+margin_right = 350.0
+margin_bottom = 68.0
 label = "Weapon:"
 
 [node name="power" parent="View/Panel/Split/UpperPanel/Status/Status" instance=ExtResource( 5 )]
+margin_top = 72.0
+margin_right = 350.0
+margin_bottom = 92.0
 label = "Power:"
 
 [node name="logic" parent="View/Panel/Split/UpperPanel/Status/Status" instance=ExtResource( 5 )]
+margin_top = 96.0
+margin_right = 350.0
+margin_bottom = 116.0
 label = "Logic:"
 
 [node name="chassis" parent="View/Panel/Split/UpperPanel/Status/Status" instance=ExtResource( 5 )]
+margin_top = 120.0
+margin_right = 350.0
+margin_bottom = 140.0
 label = "Chassis:"
 
 [node name="drive" parent="View/Panel/Split/UpperPanel/Status/Status" instance=ExtResource( 5 )]
+margin_top = 144.0
+margin_right = 350.0
+margin_bottom = 164.0
 label = "Drive:"
 
 [node name="armour" parent="View/Panel/Split/UpperPanel/Status/Status" instance=ExtResource( 5 )]
+margin_top = 168.0
+margin_right = 350.0
+margin_bottom = 188.0
 label = "Armour:"
 
 [node name="protection" parent="View/Panel/Split/UpperPanel/Status/Status" instance=ExtResource( 5 )]
+margin_top = 192.0
+margin_right = 350.0
+margin_bottom = 212.0
 label = "Protection:"
 
 [node name="strength" parent="View/Panel/Split/UpperPanel/Status/Status" instance=ExtResource( 5 )]
+margin_top = 216.0
+margin_right = 350.0
+margin_bottom = 236.0
 label = "Strength:"
 
 [node name="speed" parent="View/Panel/Split/UpperPanel/Status/Status" instance=ExtResource( 5 )]
+margin_top = 240.0
+margin_right = 350.0
+margin_bottom = 260.0
 label = "Speed:"
 
 [node name="extras" parent="View/Panel/Split/UpperPanel/Status/Status" instance=ExtResource( 5 )]
@@ -673,7 +701,7 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="V2BoxContainer" type="VBoxContainer" parent="Dialogs/Start/VBoxContainer/MarginContainer3"]
-margin_right = 253.0
+margin_right = 232.0
 margin_bottom = 88.0
 size_flags_horizontal = 3
 size_flags_vertical = 3

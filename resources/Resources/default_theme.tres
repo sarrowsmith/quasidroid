@@ -45,3 +45,4 @@ OptionButton/styles/focus = null
 OptionButton/styles/hover = SubResource( 2 )
 OptionButton/styles/normal = null
 OptionButton/styles/pressed = SubResource( 3 )
+Panel/styles/panel = null

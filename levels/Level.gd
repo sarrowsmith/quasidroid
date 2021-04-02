@@ -59,7 +59,7 @@ func create(from: Level, rooms: bool):
 	else:
 		level = parent.level + 1
 		prototypes = parent.prototypes
-		map_name = String(level)
+		map_name = str(level)
 		if not rooms:
 			var depth = 1
 			var up = parent

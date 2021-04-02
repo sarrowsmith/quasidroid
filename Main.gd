@@ -14,6 +14,7 @@ onready var world = $World
 onready var world_size = $World.world_size
 onready var saved_games = $Dialogs.find_node("SavedGames")
 
+
 func _ready():
 	OS.window_fullscreen = !OS.window_fullscreen
 	if game_seed:
@@ -86,6 +87,8 @@ func start():
 	world.player.turn()
 	world.player.start()
 	world.player.show_stats(true)
+	$Fader.interpolate_property(world, "modulate", Color(1.0, 1.0, 1.0, 0.0), Color(1.0, 1.0, 1.0, 1.0), 0.5)
+	$Fader.start()
 
 
 func connect_player():
@@ -214,13 +217,20 @@ func change_level(level: Level):
 	if not level:
 		if world.level_one.is_clear():
 			game_over(true)
+		return
 	if level != world.active_level:
+		$Fader.interpolate_property(world, "modulate", Color(1.0, 1.0, 1.0, 1.0), Color(1.0, 1.0, 1.0, 0.0), 0.5)
+		$Fader.start()
 		if world.active_level and world.active_level.is_connected("rogues_move_end", self, "rogues_move_end"):
 			world.active_level.disconnect("rogues_move_end", self, "rogues_move_end")
 		world.change_level(level)
 		world.active_level.connect("rogues_move_end", self, "rogues_move_end")
+		yield($Fader, "tween_all_completed")
 	world.player.change_level(level)
 	set_zoom(world.zoomed)
+	$Fader.interpolate_property(world, "modulate", Color(1.0, 1.0, 1.0, 0.0), Color(1.0, 1.0, 1.0, 1.0), 0.5)
+	$Fader.start()
+	yield($Fader, "tween_all_completed")
 
 
 func view_to(view_position: Vector2, mode):
@@ -287,6 +297,9 @@ func save_game():
 
 
 func game_over(success: bool, title=""):
+	$Fader.interpolate_property(world, "modulate", Color(1.0, 1.0, 1.0, 1.0), Color(1.0, 1.0, 1.0, 0.0), 1.0)
+	$Fader.start()
+	yield($Fader, "tween_all_completed")
 	var popup = $Dialogs.get_node("Win" if success else "Lose")
 	if title:
 		popup.window_title = title
@@ -294,7 +307,7 @@ func game_over(success: bool, title=""):
 	if success:
 		messages.append("You succeeded!\n")
 	else:
-		messages.append("You failed \u2639")
+		messages.append("You failed\n")
 	var stats = {
 		"levels reset": 0,
 		"levels cleared": 0,

@@ -218,3 +218,8 @@ func _on_Weapon_selected(idx):
 	if idx > 2:
 		player.combat = idx - 2
 		player.equip()
+
+
+func _on_Weapon_about_to_show():
+	# dark magic to hack around panel concealing popup
+	weapon_options.get_popup().set_global_position(weapon_options.rect_global_position + Vector2.RIGHT * 372)

@@ -124,6 +124,7 @@ margin_bottom = 102.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 text = "Weapon"
+flat = false
 
 [node name="Overview" type="Button" parent="View/Panel/Split/UpperPanel/Menu"]
 margin_top = 106.0
@@ -819,6 +820,7 @@ margin_bottom = 58.0
 popup_exclusive = true
 window_title = "You have failed!"
 dialog_autowrap = true
+[connection signal="about_to_show" from="View/Panel/Split/UpperPanel/Menu/Weapon" to="World" method="_on_Weapon_about_to_show" flags=3]
 [connection signal="toggled" from="View/Panel/Split/UpperPanel/Menu/Overview" to="." method="set_zoom"]
 [connection signal="toggled" from="View/Panel/Split/UpperPanel/Menu/Fullscreen" to="." method="_on_Fullscreen_toggled"]
 [connection signal="pressed" from="View/Panel/Split/UpperPanel/Menu/Save" to="." method="_on_Save_pressed"]

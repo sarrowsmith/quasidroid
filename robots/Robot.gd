@@ -247,8 +247,10 @@ func show_stats(visible=false):
 		level.world.set_value(item, item_to_string(item), is_player)
 	if is_player:
 		level.world.set_value("Moves", moves, true)
-	else:
+	elif stats.level:
 		level.world.set_value("Type", "%s (%d)" % [stats.type_name, stats.level], false)
+	else:
+		level.world.set_value("Type", "%s +" % stats.type_name, false)
 	if visible:
 		level.world.show_stats(is_player)
 

@@ -49,22 +49,35 @@ static func choose(choices: Array, rng: RandomNumberGenerator):
 # warning-ignore:shadowed_variable
 func create(level: Level):
 	var template = types[0]
+	var hybrid = null
 	if level.level < len(level_limits):
 		template = types[level.rng.randi_range(0, level_limits[level.level-1])]
 	else:
 		template = choose(types, level.rng)
-		self.level = 1 + level.level - len(level_limits)
-	for item in template:
-		match item:
-			"weapon":
-				equipment.weapons.append(template[item])
-			"name":
-				type_name = template[item]
-			_:
-				if equipment.has(item):
-					equipment[item] = template[item]
-				else:
-					stats[item] = template[item] * self.level
+		if level.level == level.world.world_depth:
+			self.level = level.rng.randi_range(1, 3)
+			template = template.duplicate()
+			hybrid = choose(types, level.rng)
+		else:
+			self.level = 1 + level.level - len(level_limits)
+	for model in [template, hybrid]:
+		if not model:
+			continue
+		for item in model:
+			match item:
+				"weapon":
+					equipment.weapons.append(model[item])
+				"name":
+					type_name = model[item]
+				_:
+					if equipment.has(item):
+						equipment[item] = max(equipment[item], model[item])
+					else:
+						stats[item] = max(stats[item], model[item])
+	for item in stats:
+		stats[item] *= self.level
+	if hybrid:
+		self.level = 0
 
 
 func disabled() -> bool:

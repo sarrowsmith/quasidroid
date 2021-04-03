@@ -11,7 +11,7 @@ export(NodePath) var rogue_status_path
 export(NodePath) var log_path
 
 
-enum {MAP, STATUS, INFO}
+enum {INFO, STATUS, HELP}
 
 var Level_prototype = preload("res://levels/Level.tscn")
 var Player_prototype = preload("res://robots/Player.tscn")
@@ -22,7 +22,7 @@ onready var player_status_box = get_node(player_status_path)
 onready var rogue_status_box = get_node(rogue_status_path)
 onready var log_box = get_node(log_path)
 onready var info_box = lower_panel.get_tab_control(INFO)
-onready var weapon_options = upper_panel.get_tab_control(MAP).find_node("Weapon")
+onready var weapon_options = upper_panel.get_tab_control(INFO).find_node("Weapon")
 
 
 var rng = RandomNumberGenerator.new()
@@ -37,8 +37,8 @@ var zoomed = false
 
 
 func _ready():
-	upper_panel.current_tab = INFO
-	lower_panel.current_tab = INFO
+	upper_panel.current_tab = HELP
+	lower_panel.current_tab = HELP
 	var menu = weapon_options.get_popup()
 	menu.connect("index_pressed", self, "_on_Weapon_selected")
 	menu.show_on_top = true
@@ -172,6 +172,42 @@ Damage inflicted:
 		report_deactivated(a_name, attacker.is_player)
 	elif attacker.stats.stats.speed == 0:
 		report_disabled(a_name, attacker.is_player)
+
+
+const stat_colours = {
+	"levels opened": "#ff8080",
+	"levels reset": "#ffff00",
+	"levels cleared": "#80ff80",
+}
+func show_game_stats(game_seed: String):
+	var messages = PoolStringArray()
+	messages.append("[b]%s[/b]\n" % game_seed)
+	var stats = {
+		# I don't know why these can't be PoolStringArrays, but if they are
+		# then the append() call doesn't stick.
+		"levels opened": [],
+		"levels reset": [],
+		"levels cleared": [],
+		"rogues deactivated": 0,
+	}
+	var all_stats = level_one.gather_stats()
+	for level in all_stats:
+		print(level)
+		var level_stats = all_stats[level]
+		for k in stats:
+			match k:
+				"rogues deactivated":
+					stats[k] += level_stats[k]
+				_:
+					if level_stats[k]:
+						stats[k].append(level)
+	for k in stats:
+		match k:
+			"rogues deactivated":
+				messages.append("Rogues deactivated: [b]%d[/b]" % stats["rogues deactivated"])
+			_:
+				messages.append("[color=%s]%s[/color]: [b]%s[/b]" % [stat_colours[k], k.capitalize(), PoolStringArray(stats[k]).join(" ")])
+	show_info(messages.join("\n"))
 
 
 func check_end():

@@ -311,30 +311,26 @@ func game_over(success: bool, title=""):
 		messages.append("You succeeded!\n")
 	else:
 		messages.append("You failed\n")
-	var stats = {
-		"levels reset": 0,
-		"levels cleared": 0,
-		"rogues deactivated": 0,
-	}
-	gather_stats(world.level_one, stats)
+	var stats = gather_stats()
 	for stat in stats:
 		messages.append("%s: %s" % [stat, stats[stat]])
+	messages.append("\n")
 	popup.dialog_text = messages.join("\n")
 	show_dialog(popup)
 
 
-func gather_stats(level: Level, acc: Dictionary):
-	if level.state & Level.RESET:
-		acc["levels reset"] += 1
-	if level.state & Level.CLEAR:
-		acc["levels cleared"] += 1
-	for r in level.rogues:
-		if r.get_state() == Robot.DEAD:
-			acc["rogues deactivated"] += 1
-	if level.children:
-		for child in level.children:
-			if child:
-				gather_stats(child, acc)
+func gather_stats() -> Dictionary:
+	var game_stats = {
+		"levels opened": 0,
+		"levels reset": 0,
+		"levels cleared": 0,
+		"rogues deactivated": 0,
+	}
+	var level_stats = world.level_one.gather_stats()
+	for level in level_stats:
+		for stat in game_stats:
+			game_stats[stat] += level_stats[level][stat]
+	return game_stats
 
 
 func timed_out():
@@ -436,3 +432,7 @@ func _on_game_over(success):
 
 func _on_Fullscreen_toggled(button_pressed):
 	OS.window_fullscreen = button_pressed
+
+
+func _on_Game_Stats_pressed():
+	world.show_game_stats(game_seed)

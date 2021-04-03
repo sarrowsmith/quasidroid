@@ -113,71 +113,79 @@ label = "Game:"
 [node name="CenterContainer4" type="CenterContainer" parent="View/Panel/Split/UpperPanel/Menu"]
 margin_top = 24.0
 margin_right = 350.0
-margin_bottom = 61.0
+margin_bottom = 56.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="Weapon" type="MenuButton" parent="View/Panel/Split/UpperPanel/Menu"]
-margin_top = 65.0
+margin_top = 60.0
 margin_right = 350.0
-margin_bottom = 102.0
+margin_bottom = 93.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 text = "Weapon"
 flat = false
 
 [node name="Overview" type="Button" parent="View/Panel/Split/UpperPanel/Menu"]
-margin_top = 106.0
+margin_top = 97.0
 margin_right = 350.0
-margin_bottom = 143.0
+margin_bottom = 130.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 toggle_mode = true
 text = "Overview"
 
 [node name="Fullscreen" type="Button" parent="View/Panel/Split/UpperPanel/Menu"]
-margin_top = 147.0
+margin_top = 134.0
 margin_right = 350.0
-margin_bottom = 184.0
+margin_bottom = 167.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 toggle_mode = true
 pressed = true
 text = "Fullscreen"
 
-[node name="CenterContainer" type="CenterContainer" parent="View/Panel/Split/UpperPanel/Menu"]
-margin_top = 188.0
+[node name="Game Stats" type="Button" parent="View/Panel/Split/UpperPanel/Menu"]
+margin_top = 171.0
 margin_right = 350.0
-margin_bottom = 225.0
+margin_bottom = 204.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+text = "Game Stats"
+
+[node name="CenterContainer" type="CenterContainer" parent="View/Panel/Split/UpperPanel/Menu"]
+margin_top = 208.0
+margin_right = 350.0
+margin_bottom = 241.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="Save" type="Button" parent="View/Panel/Split/UpperPanel/Menu"]
-margin_top = 229.0
+margin_top = 245.0
 margin_right = 350.0
-margin_bottom = 266.0
+margin_bottom = 278.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 text = "Save"
 
 [node name="Restart" type="Button" parent="View/Panel/Split/UpperPanel/Menu"]
-margin_top = 270.0
+margin_top = 282.0
 margin_right = 350.0
-margin_bottom = 307.0
+margin_bottom = 315.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 text = "Restart"
 
 [node name="Quit" type="Button" parent="View/Panel/Split/UpperPanel/Menu"]
-margin_top = 311.0
+margin_top = 319.0
 margin_right = 350.0
-margin_bottom = 348.0
+margin_bottom = 352.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 text = "Quit"
 
 [node name="CenterContainer2" type="CenterContainer" parent="View/Panel/Split/UpperPanel/Menu"]
-margin_top = 352.0
+margin_top = 356.0
 margin_right = 350.0
 margin_bottom = 389.0
 size_flags_horizontal = 3
@@ -388,7 +396,7 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 tab_align = 0
 
-[node name="About" type="RichTextLabel" parent="View/Panel/Split/LowerPanel"]
+[node name="Info" type="RichTextLabel" parent="View/Panel/Split/LowerPanel"]
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_left = 4.0
@@ -405,21 +413,23 @@ custom_fonts/italics_font = ExtResource( 9 )
 custom_fonts/bold_font = ExtResource( 7 )
 custom_fonts/normal_font = ExtResource( 4 )
 bbcode_enabled = true
-bbcode_text = "[b][i]Shut down the [/i]rogue[i] robots on all [/i]7[i] levels of the mining complex and return to the surface to allow the automated systems to reboot safely.
+bbcode_text = "Shut down the [b]rogue[/b] robots on all [b]7[/b] levels of the mining complex and return to the surface to allow the automated systems to reboot safely.
 
 Robots are deactivated if power, logic or chassis falls to 0, or they are grappled into submission.
 
 Deactivated robots can be scavenged for upgrades.
 
-Reset all the access points on a level to unlock downward lifts.[/i][/b]"
+Reset all the access points on a level to unlock downward lifts.
+"
 text = "Shut down the rogue robots on all 7 levels of the mining complex and return to the surface to allow the automated systems to reboot safely.
 
 Robots are deactivated if power, logic or chassis falls to 0, or they are grappled into submission.
 
 Deactivated robots can be scavenged for upgrades.
 
-Reset all the access points on a level to unlock downward lifts."
-fit_content_height = true
+Reset all the access points on a level to unlock downward lifts.
+"
+scroll_following = true
 selection_enabled = true
 
 [node name="Scan" type="ScrollContainer" parent="View/Panel/Split/LowerPanel"]
@@ -477,7 +487,7 @@ label = "Speed:"
 visible = false
 label = "Equipment:"
 
-[node name="Info" type="RichTextLabel" parent="View/Panel/Split/LowerPanel"]
+[node name="About" type="RichTextLabel" parent="View/Panel/Split/LowerPanel"]
 visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -495,23 +505,21 @@ custom_fonts/italics_font = ExtResource( 9 )
 custom_fonts/bold_font = ExtResource( 7 )
 custom_fonts/normal_font = ExtResource( 4 )
 bbcode_enabled = true
-bbcode_text = "Shut down the [b]rogue[/b] robots on all [b]7[/b] levels of the mining complex and return to the surface to allow the automated systems to reboot safely.
+bbcode_text = "[b][i]Shut down the [/i]rogue[i] robots on all [/i]7[i] levels of the mining complex and return to the surface to allow the automated systems to reboot safely.
 
 Robots are deactivated if power, logic or chassis falls to 0, or they are grappled into submission.
 
 Deactivated robots can be scavenged for upgrades.
 
-Reset all the access points on a level to unlock downward lifts.
-"
+Reset all the access points on a level to unlock downward lifts.[/i][/b]"
 text = "Shut down the rogue robots on all 7 levels of the mining complex and return to the surface to allow the automated systems to reboot safely.
 
 Robots are deactivated if power, logic or chassis falls to 0, or they are grappled into submission.
 
 Deactivated robots can be scavenged for upgrades.
 
-Reset all the access points on a level to unlock downward lifts.
-"
-scroll_following = true
+Reset all the access points on a level to unlock downward lifts."
+fit_content_height = true
 selection_enabled = true
 
 [node name="Log" type="PanelContainer" parent="View"]
@@ -687,9 +695,9 @@ __meta__ = {
 }
 
 [node name="ResumeButton" type="Button" parent="Dialogs/Start/VBoxContainer/MarginContainer/VBoxContainer1/CenterContainer"]
-margin_left = 69.0
+margin_left = 67.0
 margin_top = 13.0
-margin_right = 163.0
+margin_right = 165.0
 margin_bottom = 45.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -726,8 +734,7 @@ __meta__ = {
 }
 
 [node name="RandomButton" type="Button" parent="Dialogs/Start/VBoxContainer/MarginContainer3/V2BoxContainer/HBoxContainer/CenterContainer3"]
-margin_left = 1.0
-margin_right = 141.0
+margin_right = 144.0
 margin_bottom = 32.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -752,9 +759,9 @@ __meta__ = {
 }
 
 [node name="NewButton" type="Button" parent="Dialogs/Start/VBoxContainer/MarginContainer3/V2BoxContainer/CenterContainer2"]
-margin_left = 42.0
+margin_left = 38.0
 margin_top = 11.0
-margin_right = 190.0
+margin_right = 193.0
 margin_bottom = 43.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -825,6 +832,7 @@ dialog_autowrap = true
 [connection signal="about_to_show" from="View/Panel/Split/UpperPanel/Menu/Weapon" to="World" method="_on_Weapon_about_to_show" flags=3]
 [connection signal="toggled" from="View/Panel/Split/UpperPanel/Menu/Overview" to="." method="set_zoom"]
 [connection signal="toggled" from="View/Panel/Split/UpperPanel/Menu/Fullscreen" to="." method="_on_Fullscreen_toggled"]
+[connection signal="pressed" from="View/Panel/Split/UpperPanel/Menu/Game Stats" to="." method="_on_Game_Stats_pressed"]
 [connection signal="pressed" from="View/Panel/Split/UpperPanel/Menu/Save" to="." method="_on_Save_pressed"]
 [connection signal="pressed" from="View/Panel/Split/UpperPanel/Menu/Restart" to="." method="_on_Restart_pressed"]
 [connection signal="pressed" from="View/Panel/Split/UpperPanel/Menu/Quit" to="." method="_on_Quit_pressed"]

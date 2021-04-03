@@ -45,6 +45,33 @@ func is_clear() -> bool:
 		n_children > 1 and children[1].is_clear())
 
 
+func gather_stats() -> Dictionary:
+	var level_stats = {
+		"levels opened": 0,
+		"levels reset": 0,
+		"levels cleared": 0,
+		"rogues deactivated": 0,
+	}
+	var all_stats = {}
+	if state & OPEN:
+		level_stats["levels opened"] = 1
+	if state & RESET:
+		level_stats["levels reset"] = 1
+	if state & CLEAR:
+		level_stats["levels cleared"] = 1
+	for r in rogues:
+		if not r.get_state(): # 0 == Robot.DEAD:
+			level_stats["rogues deactivated"] += 1
+	all_stats[map_name] = level_stats
+	if children:
+		for child in children:
+			if child:
+				var child_stats = child.gather_stats()
+				for child_name in child_stats:
+					all_stats[child_name] = child_stats[child_name]
+	return all_stats
+
+
 # warning-ignore:shadowed_variable
 func create(from: Level, rooms: bool):
 	set_visible(false)

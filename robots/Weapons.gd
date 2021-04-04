@@ -53,8 +53,7 @@ func shoot() -> bool:
 		Level.ROGUE:
 			var rogue = owner.level.rogue_at(location)
 			if rogue and rogue != owner:
-				if rogue.get_state() != Robot.DEAD:
-					return splash(rogue)
+				return splash(rogue)
 			else:
 				return false
 		_:
@@ -67,16 +66,17 @@ func splash(rogue: Rogue) -> bool:
 		"Dual", "Ion":
 			for r in owner.level.rogues:
 				if location.distance_squared_to(r.location) < 4:
-					attack(r)
+					attack(r, false)
+			owner.end_move()
 		"Laser":
-			attack(rogue)
+			attack(rogue, false)
 			return false
 		_:
 			attack(rogue)
 	return true
 
 
-func attack(other: Robot):
+func attack(other: Robot, end_move=true):
 	if other.get_state() == Robot.DEAD:
 		return
 	owner.set_state(Robot.WAIT)
@@ -107,7 +107,8 @@ func attack(other: Robot):
 		if not damages[i].ends_with("!"):
 			damages[i] = get_weapon_name(damages[i]) + " destroyed!"
 	owner.level.world.report_attack(owner, other, {}, theirs, damages)
-	owner.end_move()
+	if end_move:
+		owner.end_move()
 
 
 func grapple(other: Robot, theirs: Dictionary):

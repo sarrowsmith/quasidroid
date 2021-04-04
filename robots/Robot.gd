@@ -65,7 +65,7 @@ func _process(delta):
 		var to_go = position.distance_squared_to(target)
 		position += facing * move_speed * delta * ((0 if stats.stats.speed < 1 else 3) + stats.stats.speed)
 		var current = position.distance_squared_to(target)
-		if to_go <= current or current <= (stats.stats.speed * stats.stats.speed):
+		if to_go <= current or current <= 4:
 			set_location(destination)
 			mode = "Idle"
 			set_sprite()
@@ -96,7 +96,7 @@ func turn() -> bool:
 			return true
 		DONE:
 			set_state(IDLE)
-			moves = (stats.equipment.drive * stats.stats.speed) if stats.stats.speed > 0 else 1
+			moves = max(stats.stats.speed, 1)
 	return false
 
 
@@ -111,8 +111,10 @@ const facing_map = {
 	Vector2(1, -1): "Right",
 	Vector2(-1, -1): "Left",
 }
+func unit(v: Vector2) -> Vector2:
+	return Vector2(int(sign(v.x)), int(sign(v.y)))
 func get_sprite(path: String) -> Node:
-	return get_node("%s/%s" % [path, facing_map[facing]])
+	return get_node("%s/%s" % [path, facing_map[unit(facing)]])
 
 
 func set_sprite():

@@ -141,7 +141,7 @@ func cursor_activate(button):
 				if get_state() == IDLE:
 					show_info()
 					signalled = false
-					var direction = (level.cursor.location - location).clamped(1.0)
+					var direction = (level.cursor.location - location).normalized()
 					if level.cursor.mode == "Target" and weapons.get_range() > 1:
 						if direction == Vector2.ZERO:
 							direction = facing

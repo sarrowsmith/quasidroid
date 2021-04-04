@@ -192,7 +192,6 @@ func show_game_stats(game_seed: String):
 	}
 	var all_stats = level_one.gather_stats()
 	for level in all_stats:
-		print(level)
 		var level_stats = all_stats[level]
 		for k in stats:
 			match k:

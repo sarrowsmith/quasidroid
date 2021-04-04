@@ -65,7 +65,7 @@ func _process(delta):
 		var to_go = position.distance_squared_to(target)
 		position += facing * move_speed * delta * ((0 if stats.stats.speed < 1 else 3) + stats.stats.speed)
 		var current = position.distance_squared_to(target)
-		if to_go <= current or current <= 4:
+		if to_go < current or current < 4:
 			set_location(destination)
 			mode = "Idle"
 			set_sprite()
@@ -79,7 +79,7 @@ func _process(delta):
 	if firing == "Fire":
 		weapon.position += facing * weapon_speed * delta
 		var target = level.position_to_location(weapon.global_position)
-		if level.position_to_location(weapon.position) == weapons.location:
+		if target.distance_squared_to(weapons.location) < 1:
 			return
 		weapons.location = target
 		if not weapons.shoot():

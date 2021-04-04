@@ -124,7 +124,8 @@ func grapple(other: Robot, theirs: Dictionary):
 				# delta and damage are negative
 				owner.stats.stats[k] += delta * (1.5 if k in Stats.critical_stats else 0.5)
 				# defender also take damage for an unconvincing win
-				other.stats.stats[k] += damage
+				if other.stats.stats[k] > (1 - damage):
+					other.stats.stats[k] += damage
 		0.0:
 			for k in Stats.critical_stats:
 				other.stats.stats[k] -= 1
@@ -135,8 +136,10 @@ func grapple(other: Robot, theirs: Dictionary):
 			for k in other.stats.stats:
 				# a convincing win inflicts less damage for better scavenging
 				other.stats.stats[k] -= damage * (3.0 if k in Stats.critical_stats else 1.0)
-				# we also take damage for an unconvincing win
-				owner.stats.stats[k] -= damage
+			# we also take non-fatal critical damage for an unconvincing win
+			for k in Stats.critical_stats:
+				if owner.stats.stats[k] > (1 + damage):
+					owner.stats.stats[k] -= damage
 	other.stats.normalise(theirs, true)
 	owner.stats.normalise(ours, true)
 	owner.level.world.report_attack(owner, other, ours, theirs, [])

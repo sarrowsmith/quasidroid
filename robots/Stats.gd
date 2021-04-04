@@ -5,7 +5,7 @@ extends Reference
 const critical_stats = ["chassis", "power", "logic"]
 const types = [
 	{ name = "Basic Unit", weapon = "Blade" },
-	{ name = "Scout", drive = 3, power = 6, logic = 6 },
+	{ name = "Scout", drive = 3, logic = 6 },
 	{ name = "Probe", drive = 2, weapon = "Probe", strength = 2, logic = 9 },
 	{ name = "Security Model A", weapon = "Dual", strength = 3, armour = 1, protection = 2},
 
@@ -74,6 +74,7 @@ func create(level: Level):
 						equipment[item] = max(equipment[item], model[item])
 					else:
 						stats[item] = max(stats[item], model[item])
+	stats.speed = equipment.drive
 	for item in stats:
 		stats[item] *= self.level
 	if hybrid:
@@ -88,7 +89,7 @@ func disabled() -> bool:
 
 
 func weight() -> float:
-	return equipment.drive + equipment.armour + log(stats.chassis + 1)
+	return equipment.drive - 1 + equipment.armour + log(stats.chassis + 1)
 
 
 func health() -> float:
@@ -100,10 +101,10 @@ func health() -> float:
 
 func implicit_damage() -> bool:
 	var damage_taken = false
-	if weight() > stats.power + 1:
+	if weight() > 2 * stats.power:
 		stats.chassis -= 1
 		damage_taken = true
-	if stats.speed > equipment.drive:
+	if stats.speed > equipment.drive * level:
 		stats.speed -= 1
 		damage_taken = true
 	return damage_taken

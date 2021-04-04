@@ -193,6 +193,7 @@ func attack_b(other: Robot):
 				continue
 			other.stats.stats[k] -= (owner.level.rng.randfn(attack,  1.0 / other.stats.health()) if v[1] in Stats.critical_stats else 1)
 			attack -= 1
+		attack -= 1
 
 
 func probe(other: Robot):

@@ -7,7 +7,7 @@ signal end_move(robot)
 enum {DEAD, IDLE, WAIT, DONE}
 enum {GRAPPLE, MELEE, WEAPON}
 
-export(float) var move_speed = 20
+export(float) var move_speed = 25
 export(float) var weapon_speed = 200
 
 var location = Vector2.ZERO
@@ -23,10 +23,10 @@ var combat = MELEE
 var stats = null
 var moves = 0
 var state = DONE
-var is_player = false
+var signalled = false
 # This *must* be overridden by derived classes
 var weapons = null
-var signalled = false
+var is_player = false
 
 
 func set_state(value):
@@ -63,7 +63,7 @@ func _process(delta):
 	if mode == "Move":
 		var target = level.location_to_position(destination)
 		var to_go = position.distance_squared_to(target)
-		position += facing * move_speed * delta * (2 + stats.stats.speed)
+		position += facing * move_speed * delta * ((0 if stats.stats.speed < 1 else 3) + stats.stats.speed)
 		var current = position.distance_squared_to(target)
 		if to_go <= current or current <= (stats.stats.speed * stats.stats.speed):
 			set_location(destination)
@@ -162,7 +162,7 @@ func move(target: Vector2, check_speed: bool):
 			stats.stats.speed = 0
 			end_move(true)
 			return
-		stats.stats.speed = max(stats.stats.speed, 0.01)
+		stats.stats.speed = max(stats.stats.speed, 0.8)
 	mode = "Move"
 	set_state(WAIT)
 	destination = target

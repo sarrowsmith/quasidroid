@@ -182,12 +182,12 @@ func attack_b(other: Robot):
 	vulnerabilities.sort()
 	while attack > 0 and not other.stats.disabled():
 		for v in vulnerabilities:
+			if attack == 0 or other.stats.disabled():
+				break
 			var k = v[1]
 			if other.stats.stats[k] <= 0:
 				continue
 			other.stats.stats[k] -= (owner.level.rng.randfn(attack,  1.0 / other.stats.health()) if v[1] in Stats.critical_stats else 1)
-			if attack == 0 or other.stats.disabled():
-				break
 			attack -= 1
 
 

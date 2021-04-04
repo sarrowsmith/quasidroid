@@ -251,7 +251,7 @@ func save(file: File, game_seed: String):
 
 
 func _on_Weapon_selected(idx):
-	if idx > 2:
+	if idx > 1:
 		player.combat = idx - 2
 		player.equip()
 

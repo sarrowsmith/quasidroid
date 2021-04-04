@@ -2,6 +2,9 @@ class_name Rogue
 extends Robot
 
 
+var has_attacked = false
+
+
 func _ready():
 	weapons = $Weapons
 	set_state(DONE)
@@ -14,7 +17,7 @@ func turn() -> bool:
 		return true
 	while moves > 0:
 		match behaviour():
-			Level.FLOOR, Level.PLAYER:
+			Level.FLOOR:
 				while get_state() == WAIT:
 					yield(self, "end_move")
 					signalled = true
@@ -22,6 +25,12 @@ func turn() -> bool:
 					break
 				else:
 					pass
+			Level.PLAYER:
+				while get_state() == WAIT:
+					yield(self, "end_move")
+					signalled = true
+				moves = 0
+				break
 			_:
 				moves -= 1
 		equip()
@@ -60,6 +69,7 @@ func behaviour() -> int: # -> enum
 			target_type = try_target()
 		Level.PLAYER:
 			# Automatic attack
+			has_attacked = true
 			if moves > 0:
 				set_state(IDLE)
 		_:
@@ -71,18 +81,17 @@ func behaviour() -> int: # -> enum
 func try_target() -> int: # -> enum
 	var weapon_range = weapons.get_range()
 	var distance = location.distance_squared_to(level.world.player.location)
-	if distance < weapon_range * weapon_range:
-		if weapon_range > 1:
-			var target = target()
-			for _i in range(weapons.get_range() - 1):
-				match level.location_type(target):
-					Level.FLOOR:
-						target += facing
-					Level.PLAYER:
-						shoot(facing)
-						return level.PLAYER
-					_:
-						break
+	if weapon_range > 1 and distance < weapon_range * weapon_range:
+		var target = target()
+		for _i in range(weapons.get_range() - 1):
+			match level.location_type(target):
+				Level.FLOOR:
+					target += facing
+				Level.PLAYER:
+					shoot(facing)
+					return level.PLAYER
+				_:
+					break
 	if distance <= 1:
 		# player can't be in front, otherwise action() would have auto-attacked
 		var forwards = facing

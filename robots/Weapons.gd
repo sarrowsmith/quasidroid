@@ -101,20 +101,18 @@ func attack(other: Robot, end_move=true):
 			emp(other)
 		RAM, _:
 			attack_a(other)
-	other.hit(hit)
 	var damages = other.stats.normalise(theirs)
 	for i in len(damages):
 		if not damages[i].ends_with("!"):
 			damages[i] = get_weapon_name(damages[i]) + " destroyed!"
 	owner.level.world.report_attack(owner, other, {}, theirs, damages)
+	other.hit(hit)
 	if end_move:
 		owner.end_move()
 
 
 func grapple(other: Robot, theirs: Dictionary):
 	var ours = owner.stats.stats.duplicate()
-	owner.hit(1)
-	other.hit(1)
 	var attack = grapple_effect(owner.stats, 0 if (other.target() == owner.location) else 1)
 	var defence = grapple_effect(other.stats, 0)
 	var delta = attack - defence
@@ -144,6 +142,8 @@ func grapple(other: Robot, theirs: Dictionary):
 	other.stats.normalise(theirs, true)
 	owner.stats.normalise(ours, true)
 	owner.level.world.report_attack(owner, other, ours, theirs, [])
+	owner.hit(1)
+	other.hit(1)
 	owner.end_move()
 
 

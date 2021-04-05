@@ -120,9 +120,8 @@ func report_disabled(display_name: String, is_player: bool):
 	log_info("[b]%s %s disabled.[/b]" % [display_name, verb])
 
 
-func report_damaged(display_name: String, is_player: bool):
-	var verb = "are" if is_player else "is"
-	log_info("%s %s damaged." % [display_name, verb])
+func report_damaged(display_name: String, component: String):
+	log_info("%s a damaged %s." % [display_name, component])
 
 
 func report_attack(attacker: Robot, defender: Robot, attackers: Dictionary, defenders: Dictionary, damages: Array):

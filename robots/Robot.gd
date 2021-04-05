@@ -38,14 +38,10 @@ func get_state():
 func end_move(end_turn=false):
 	if stats.stats.speed < 1:
 		stats.stats.speed = 0
-	if level and stats.implicit_damage():
-		hit(1)
-		var display_name = "You" if is_player else ("A " + stats.type_name)
-		level.world.report_damaged(display_name, is_player)
-		if check_stats():
-			level.world.report_deactivated(display_name, is_player)
 	if end_turn:
 		moves = 0
+	if state == DEAD:
+		return
 	if moves > 0:
 		if state == WAIT:
 			state = IDLE
@@ -90,13 +86,19 @@ func _process(delta):
 
 
 func turn() -> bool:
+	if is_player:
+		pass
 	signalled = false
-	match get_state():
-		DEAD:
-			return true
-		DONE:
-			set_state(IDLE)
-			moves = max(stats.stats.speed, 1)
+	if state == DEAD:
+		return true
+	if level and stats.implicit_damage(is_player, level.world):
+		if check_stats():
+			var display_name = "You" if is_player else ("A " +  stats.type_name)
+			level.world.report_deactivated(display_name, is_player)
+		hit(1, false)
+	if state == DONE:
+		set_state(IDLE)
+		moves = max(stats.stats.speed, 1)
 	return false
 
 
@@ -257,20 +259,19 @@ func show_stats(visible=false):
 		level.world.show_stats(is_player)
 
 
-func hit(count: int):
-	if get_state() == DEAD:
-		return
+func hit(count: int, end_if_disabled=true):
 	var zapped = get_sprite("Robot/Hit")
-	if not zapped:
-		return
-	zapped.set_visible(true)
-	zapped.play()
-	for _i in count:
-		yield(zapped, "animation_finished")
-	zapped.stop()
-	zapped.set_visible(false)
+	if zapped:
+		zapped.set_visible(true)
+		zapped.play()
+		for _i in count:
+			yield(zapped, "animation_finished")
+		zapped.stop()
+		zapped.set_visible(false)
 	if get_state() == DEAD:
 		die()
+	elif end_if_disabled and stats.stats.speed == 0:
+		end_move(true)
 
 
 func die():

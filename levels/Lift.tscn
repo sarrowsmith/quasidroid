@@ -97,3 +97,4 @@ scale = Vector2( 0.5, 0.5 )
 texture = ExtResource( 3 )
 centered = false
 offset = Vector2( 24, -60 )
+[connection signal="animation_finished" from="Open" to="." method="_on_Open_animation_finished"]

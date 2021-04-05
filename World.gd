@@ -96,9 +96,10 @@ func log_info(text: String):
 	log_box.bbcode_text += text + "\n"
 
 
-func show_info(text: String):
+func show_info(text: String, optional=false):
 	info_box.bbcode_text = text
-	lower_panel.current_tab = INFO
+	if not optional:
+		lower_panel.current_tab = INFO
 
 
 func show_stats(is_player: bool):
@@ -204,7 +205,7 @@ func show_game_stats(game_seed: String):
 			"rogues deactivated":
 				messages.append("Rogues deactivated: [b]%d[/b]" % stats["rogues deactivated"])
 			_:
-				messages.append("[color=%s]%s[/color]: [b]%s[/b]" % [stat_colours[k], k.capitalize(), PoolStringArray(stats[k]).join(" ")])
+				messages.append("[color=%s]%s[/color]: [b]%s[/b]" % [stat_colours[k], k.capitalize(), PoolStringArray(stats[k]).join(", ")])
 	show_info(messages.join("\n"))
 
 

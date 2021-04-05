@@ -193,17 +193,7 @@ func action(direction: Vector2, really=true) -> int: # -> enum
 				move(target, target_type == Level.FLOOR)
 		Level.LIFT:
 			if is_player:
-				var lift = level.lift_at(target)
-				if lift:
-					if lift.state == Lift.OPEN:
-						move(target, false)
-					else:
-						set_state(WAIT)
-						if lift.open():
-							yield(lift.get_node("Open"), "animation_finished")
-							end_move()
-						else:
-							set_state(IDLE)
+				level.world.player.operate_lift(target)
 		Level.PLAYER:
 			if is_player:
 				end_move()

@@ -45,10 +45,12 @@ func open() -> bool:
 	return true
 
 
-func close():
-	if state == OPEN:
-		$Open.play("default", true)
-		state = CLOSED
+func close() -> bool:
+	if state != OPEN:
+		return false
+	$Open.play("default", true)
+	state = CLOSED
+	return true
 
 
 func load(file: File) -> String:
@@ -70,3 +72,7 @@ func save(file: File):
 	file.store_pascal_string(direction)
 	file.store_8(state)
 	file.store_pascal_string(to.map_name if to else "^")
+
+
+func _on_Open_animation_finished():
+	$Open.stop()

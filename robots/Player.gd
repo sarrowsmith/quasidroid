@@ -68,6 +68,7 @@ func _unhandled_input(event: InputEvent):
 			if shift and weapons.get_range() > 1:
 				shoot(move_map[e])
 			else:
+# warning-ignore:return_value_discarded
 				action(move_map[e])
 			break
 	for e in click_map:
@@ -80,6 +81,7 @@ func _unhandled_input(event: InputEvent):
 			show_stats(true)
 	if event is InputEventKey and event.pressed and event.scancode == KEY_SPACE:
 		signalled = false
+# warning-ignore:return_value_discarded
 		action(Vector2.ZERO)
 		show_stats(true)
 
@@ -147,6 +149,7 @@ func cursor_activate(button):
 							direction = facing
 						shoot(direction)
 					else:
+# warning-ignore:return_value_discarded
 						action(direction)
 
 
@@ -176,11 +179,12 @@ You can also recharge here.
 			if rogue:
 				rogue.show_stats(true)
 				return
-	if not optional:
-		level.world.show_info(info)
+	level.world.show_info(info, optional)
 
 
 func change_level(level: Level):
+	set_state(WAIT)
+	set_visible(false)
 	var lift = level.lifts[0]
 	if self.level and self.level.parent == level:
 		for i in len(level.children):
@@ -190,11 +194,38 @@ func change_level(level: Level):
 	self.level = level
 	scavenge_location = Vector2.ZERO
 	level_up((level.level + 1) / 2)
-	set_location(lift.location + Vector2.DOWN)
+	set_location(lift.location)
 	level.set_cursor(lift.location)
 	show_stats(true)
 	level.world.show_stats(true)
 	show_info()
+	if lift.open():
+		yield(lift.get_node("Open"), "animation_finished")
+	facing = Vector2.DOWN
+	set_sprite()
+	set_visible(true)
+	signalled = false
+	move(lift.location + Vector2.DOWN, false)
+	while get_state() == WAIT:
+		yield(self, "end_move")
+	if lift.close():
+		yield(lift.get_node("Open"), "animation_finished")
+	end_move(true)
+
+
+func operate_lift(target: Vector2):
+	var lift = level.lift_at(target)
+	if lift:
+		if lift.state == Lift.OPEN:
+			move(target, false)
+		else:
+			set_state(WAIT)
+			if lift.open():
+				yield(lift.get_node("Open"), "animation_finished")
+				show_info(true)
+				end_move()
+			else:
+				set_state(IDLE)
 
 
 func check_location():

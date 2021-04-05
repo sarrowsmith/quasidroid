@@ -11,4 +11,4 @@ func _ready():
 
 
 func set_value(value):
-	$Value.text = String(value)
+	$Value.text = str(value)

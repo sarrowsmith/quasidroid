@@ -1,0 +1,119 @@
+[gd_scene load_steps=9 format=2]
+
+[sub_resource type="SpriteFrames" id=1]
+animations = [ {
+"frames": [  ],
+"loop": true,
+"name": "default",
+"speed": 5.0
+} ]
+
+[sub_resource type="SpriteFrames" id=2]
+animations = [ {
+"frames": [  ],
+"loop": true,
+"name": "default",
+"speed": 5.0
+} ]
+
+[sub_resource type="SpriteFrames" id=3]
+animations = [ {
+"frames": [  ],
+"loop": true,
+"name": "default",
+"speed": 5.0
+} ]
+
+[sub_resource type="SpriteFrames" id=4]
+animations = [ {
+"frames": [  ],
+"loop": true,
+"name": "default",
+"speed": 5.0
+} ]
+
+[sub_resource type="SpriteFrames" id=5]
+animations = [ {
+"frames": [  ],
+"loop": true,
+"name": "default",
+"speed": 5.0
+} ]
+
+[sub_resource type="SpriteFrames" id=6]
+animations = [ {
+"frames": [  ],
+"loop": true,
+"name": "default",
+"speed": 5.0
+} ]
+
+[sub_resource type="SpriteFrames" id=7]
+animations = [ {
+"frames": [  ],
+"loop": true,
+"name": "default",
+"speed": 5.0
+} ]
+
+[sub_resource type="SpriteFrames" id=8]
+animations = [ {
+"frames": [  ],
+"loop": true,
+"name": "default",
+"speed": 5.0
+} ]
+
+[node name="EMP" type="Node2D"]
+
+[node name="Idle" type="Node2D" parent="."]
+
+[node name="Down" type="AnimatedSprite" parent="Idle"]
+visible = false
+frames = SubResource( 1 )
+playing = true
+centered = false
+
+[node name="Up" type="AnimatedSprite" parent="Idle"]
+visible = false
+frames = SubResource( 2 )
+playing = true
+centered = false
+
+[node name="Left" type="AnimatedSprite" parent="Idle"]
+visible = false
+frames = SubResource( 3 )
+playing = true
+centered = false
+
+[node name="Right" type="AnimatedSprite" parent="Idle"]
+visible = false
+frames = SubResource( 4 )
+playing = true
+centered = false
+
+[node name="Fire" type="Node2D" parent="."]
+
+[node name="Down" type="AnimatedSprite" parent="Fire"]
+visible = false
+frames = SubResource( 5 )
+playing = true
+centered = false
+
+[node name="Up" type="AnimatedSprite" parent="Fire"]
+visible = false
+frames = SubResource( 6 )
+playing = true
+centered = false
+
+[node name="Left" type="AnimatedSprite" parent="Fire"]
+visible = false
+frames = SubResource( 7 )
+playing = true
+centered = false
+
+[node name="Right" type="AnimatedSprite" parent="Fire"]
+visible = false
+frames = SubResource( 8 )
+playing = true
+centered = false

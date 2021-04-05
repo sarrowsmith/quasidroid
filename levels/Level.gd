@@ -105,25 +105,38 @@ func generate():
 			l.close()
 		return
 	rng.seed = level_seed
-	map.generate(rng)
-	if level == world.world_depth:
-		children = [null, null]
-	else:
-		children = []
-		for i in 2:
-			var child = prototypes[Prototype.LEVEL].instance()
-			world.add_child(child)
-			child.create(self, i == 1 and level < world.world_depth - 1)
-			n_children += 1
-			children.append(child)
-			if not rooms:
-				children.append(null)
-				break
-	place_features()
-	generate_rogues()
+	while true:
+		map.generate(rng)
+		if level == world.world_depth:
+			children = [null, null]
+		else:
+			children = []
+			n_children = 0
+			for i in 2:
+				var child = prototypes[Prototype.LEVEL].instance()
+				world.add_child(child)
+				child.create(self, i == 1 and level < world.world_depth - 1)
+				n_children += 1
+				children.append(child)
+				if not rooms:
+					children.append(null)
+					break
+		if place_features() and generate_rogues():
+			break
+		clear()
 
 
-func place_features():
+func clear():
+	for feature_set in [lifts, access.values(), rogues]:
+		for item in feature_set:
+			if item:
+				item.queue_free()
+	lifts.clear()
+	access.clear()
+	rogues.clear()
+
+
+func place_features() -> bool:
 	var n_lifts = (3 if rooms else 2) if level < world.world_depth else 1
 	var separation = 10
 	while len(lifts) < n_lifts:
@@ -142,8 +155,8 @@ func place_features():
 					access[probe] = null
 					break
 			separation -= 1
-		if separation <= 5:
-			break # Better an incomplete game than a hung one?
+		if lift_n == len(lifts):
+			return false
 	var n_access = rng.randi_range(4, 8)
 	for _n in n_access:
 		for _i in range($Caves.iterations):
@@ -169,11 +182,12 @@ func place_features():
 			if 0 < walls and walls < 5 and walls + counts[FLOOR] == 9:
 				access[probe] = new_feature(probe, Prototype.ACCESS)
 				break
+	return not access.empty()
 
 
-func generate_rogues():
+func generate_rogues() -> bool:
 	var n_rogues = rng.randi_range(15, 25)
-	while len(rogues) < n_rogues:
+	for _n in n_rogues:
 		for _i in $Caves.iterations:
 			var probe = Vector2(
 				rng.randi_range(1, map.map_w - 1),
@@ -186,6 +200,7 @@ func generate_rogues():
 				r.connect("end_move", self, "rogue_end_move")
 				rogues.append(r)
 				break
+	return not rogues.empty()
 
 
 func await_rogues():

@@ -105,6 +105,7 @@ func generate():
 			l.close()
 		return
 	while true:
+		print(map_name,  ": ", level_seed)
 		rng.seed = level_seed
 		map.generate(rng)
 		if level == world.world_depth:
@@ -124,7 +125,7 @@ func generate():
 		if place_features() and generate_rogues():
 			break
 		clear()
-		level_seed = world.rng.randi()
+		level_seed = rng.randi()
 
 
 func clear():
@@ -383,6 +384,7 @@ func load(file: File):
 	level = file.get_32()
 	state = file.get_8()
 	map_name = file.get_pascal_string()
+	print(map_name,  "<-", level_seed)
 	rng.seed = level_seed
 	if file.get_8():
 		map.generate(rng)
@@ -399,6 +401,7 @@ func load(file: File):
 
 
 func save(file: File):
+	print(map_name,  "->", level_seed)
 	file.store_32(level_seed)
 	file.store_8(int(rooms))
 	file.store_32(level)

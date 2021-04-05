@@ -839,6 +839,7 @@ dialog_autowrap = true
 [connection signal="pressed" from="View/Panel/Split/UpperPanel/Menu/Quit" to="." method="_on_Quit_pressed"]
 [connection signal="pressed" from="Dialogs/Start/VBoxContainer/MarginContainer/VBoxContainer1/CenterContainer/ResumeButton" to="." method="_on_Resume_pressed"]
 [connection signal="pressed" from="Dialogs/Start/VBoxContainer/MarginContainer3/V2BoxContainer/HBoxContainer/CenterContainer3/RandomButton" to="." method="_on_Random_pressed"]
+[connection signal="text_changed" from="Dialogs/Start/VBoxContainer/MarginContainer3/V2BoxContainer/HBoxContainer/Seed" to="." method="_on_Seed_text_changed"]
 [connection signal="pressed" from="Dialogs/Start/VBoxContainer/MarginContainer3/V2BoxContainer/CenterContainer2/NewButton" to="." method="_on_New_pressed"]
 [connection signal="confirmed" from="Dialogs/Quit" to="." method="_on_Quit_confirmed"]
 [connection signal="popup_hide" from="Dialogs/Quit" to="." method="_on_Quit_popup_hide"]

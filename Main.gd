@@ -158,7 +158,7 @@ func _unhandled_input(event: InputEvent):
 			KEY_P:
 				level = world.active_level.children[1]
 		if level:
-			change_level(level, true)
+			change_level(level, false)
 	if world.active_level == null:
 		return
 	var move = Vector2.ZERO
@@ -398,8 +398,9 @@ func _on_New_pressed():
 
 func _on_Random_pressed():
 	randomize()
-	$Dialogs.find_node("Seed").text = create_seed_text()
-	$Dialogs.find_node("NewButton").disabled = false
+	var seed_text = create_seed_text()
+	$Dialogs.find_node("Seed").text = seed_text
+	_on_Seed_text_changed(seed_text)
 
 
 func _on_Save_pressed():
@@ -436,3 +437,7 @@ func _on_Fullscreen_toggled(button_pressed):
 
 func _on_Game_Stats_pressed():
 	world.show_game_stats(game_seed)
+
+
+func _on_Seed_text_changed(new_text):
+	$Dialogs.find_node("NewButton").disabled = new_text.empty()

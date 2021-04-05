@@ -183,7 +183,6 @@ You can also recharge here.
 
 
 func change_level(level: Level, fade: bool):
-	set_state(WAIT)
 	set_visible(false)
 	var lift = level.lifts[0]
 	if self.level and self.level.parent == level:
@@ -202,6 +201,7 @@ func change_level(level: Level, fade: bool):
 		set_location(lift.location + Vector2.DOWN)
 		set_visible(true)
 		return
+	set_state(WAIT)
 	set_location(lift.location)
 	if lift.open():
 		yield(lift.get_node("Open"), "animation_finished")

@@ -197,7 +197,7 @@ func attack_b(other: Robot):
 
 
 func probe(other: Robot):
-	other.stats.stats.logic -= owner.level.rng.randfn(owner.stats.stats.strength,  1.0 / other.stats.health())
+	other.stats.stats.logic -= owner.level.rng.randfn(2 * owner.stats.stats.strength,  1.0 / other.stats.health())
 
 
 func projectile(other: Robot):

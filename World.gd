@@ -181,7 +181,7 @@ const stat_colours = {
 }
 func show_game_stats(game_seed: String):
 	var messages = PoolStringArray()
-	messages.append("[b]%s[/b]\n" % game_seed)
+	messages.append("[b]%s[/b]" % game_seed)
 	var stats = {
 		# I don't know why these can't be PoolStringArrays, but if they are
 		# then the append() call doesn't stick.
@@ -191,6 +191,15 @@ func show_game_stats(game_seed: String):
 		"rogues deactivated": 0,
 	}
 	var all_stats = level_one.gather_stats()
+	var level_name = active_level.map_name
+	var active_stats = all_stats[level_name]
+	var display_status = ""
+	for status in ["cleared", "reset", "opened"]:
+		var key = "levels " + status
+		if active_stats[key] > 0:
+			display_status = " [color=%s]%s[/color]" % [stat_colours[key], status]
+			break
+	messages.append("Level %s:%s\n" % [level_name, display_status])
 	for level in all_stats:
 		var level_stats = all_stats[level]
 		for k in stats:

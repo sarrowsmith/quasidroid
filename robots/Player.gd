@@ -182,7 +182,7 @@ You can also recharge here.
 	level.world.show_info(info, optional)
 
 
-func change_level(level: Level):
+func change_level(level: Level, fade: bool):
 	set_state(WAIT)
 	set_visible(false)
 	var lift = level.lifts[0]
@@ -194,11 +194,15 @@ func change_level(level: Level):
 	self.level = level
 	scavenge_location = Vector2.ZERO
 	level_up((level.level + 1) / 2)
-	set_location(lift.location)
 	level.set_cursor(lift.location)
 	show_stats(true)
 	level.world.show_stats(true)
 	show_info()
+	if not fade:
+		set_location(lift.location + Vector2.DOWN)
+		set_visible(true)
+		return
+	set_location(lift.location)
 	if lift.open():
 		yield(lift.get_node("Open"), "animation_finished")
 	facing = Vector2.DOWN

@@ -175,10 +175,14 @@ func move(target: Vector2, check_speed: bool):
 func shoot(direction: Vector2):
 	facing = direction
 	firing = "Fire"
-	weapons.location = target()
-	set_state(WAIT)
-	moves -= 1
 	set_sprite()
+	if weapon:
+		weapons.location = target()
+		set_state(WAIT)
+		moves -= 1
+	else: # no idea how this can happen, but I suspect in does
+		firing = "Idle"
+		set_sprite()
 
 
 func action(direction: Vector2, really=true) -> int: # -> enum

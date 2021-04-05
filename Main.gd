@@ -228,7 +228,7 @@ func change_level(level: Level, fade: bool):
 		world.active_level.connect("rogues_move_end", self, "rogues_move_end")
 		if fade:
 			yield($Fader, "tween_all_completed")
-	world.player.change_level(level)
+	world.player.change_level(level, fade)
 	set_zoom(world.zoomed)
 	if fade:
 		$Fader.interpolate_property(world, "modulate", Color(1.0, 1.0, 1.0, 0.0), Color(1.0, 1.0, 1.0, 1.0), 0.5)

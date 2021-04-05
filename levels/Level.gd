@@ -104,8 +104,8 @@ func generate():
 		for l in lifts:
 			l.close()
 		return
-	rng.seed = level_seed
 	while true:
+		rng.seed = level_seed
 		map.generate(rng)
 		if level == world.world_depth:
 			children = [null, null]
@@ -124,6 +124,7 @@ func generate():
 		if place_features() and generate_rogues():
 			break
 		clear()
+		level_seed = world.rng.randi()
 
 
 func clear():

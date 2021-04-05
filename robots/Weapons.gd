@@ -161,8 +161,8 @@ func modify_attack(theirs: Stats) -> float:
 	var ours = owner.stats
 	var ac = get_armour_required()
 	var attack = 1 + ours.stats.strength - theirs.equipment.armour
-	if theirs.equipment.armour >= ac:
-		attack -= theirs.stats.protection
+	if theirs.equipment.armour >= ac and theirs.stats.protection > 0.5:
+		attack -= theirs.stats.protection - 0.5
 	if get_range() == 1:
 		attack += 1
 	return attack
@@ -198,7 +198,7 @@ func attack_b(other: Robot):
 
 
 func probe(other: Robot):
-	other.stats.stats.logic -= owner.level.rng.randfn(2 * owner.stats.stats.strength,  1.0 / other.stats.health())
+	other.stats.stats.logic -= owner.level.rng.randfn(1.5 * owner.stats.stats.strength,  1.0 / other.stats.health())
 
 
 func projectile(other: Robot):

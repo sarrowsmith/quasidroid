@@ -10,3 +10,11 @@ data_*/
 
 # Shouldn't keep fonts in version control
 *.ttf
+
+# Godot-git ignores
+git_api.*
+
+# General (plugin) ignore
+addons/
+bin/
+

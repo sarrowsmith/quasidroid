@@ -111,12 +111,13 @@ margin_right = 350.0
 margin_bottom = 20.0
 label = "Game:"
 
-[node name="CenterContainer4" type="CenterContainer" parent="View/Panel/Split/UpperPanel/Menu"]
+[node name="Game Stats" type="Button" parent="View/Panel/Split/UpperPanel/Menu"]
 margin_top = 24.0
 margin_right = 350.0
 margin_bottom = 56.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
+text = "Game Stats"
 
 [node name="Weapon" type="MenuButton" parent="View/Panel/Split/UpperPanel/Menu"]
 margin_top = 60.0
@@ -146,13 +147,14 @@ toggle_mode = true
 pressed = true
 text = "Fullscreen"
 
-[node name="Game Stats" type="Button" parent="View/Panel/Split/UpperPanel/Menu"]
+[node name="Mute" type="Button" parent="View/Panel/Split/UpperPanel/Menu"]
 margin_top = 171.0
 margin_right = 350.0
 margin_bottom = 204.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
-text = "Game Stats"
+toggle_mode = true
+text = "Mute"
 
 [node name="CenterContainer" type="CenterContainer" parent="View/Panel/Split/UpperPanel/Menu"]
 margin_top = 208.0
@@ -367,6 +369,20 @@ margin_right = 338.0
 margin_bottom = 50.0
 label = "Reset view"
 default = "delete"
+
+[node name="LabelledValue15" parent="View/Panel/Split/UpperPanel/Controls" instance=ExtResource( 5 )]
+margin_top = 27.0
+margin_right = 338.0
+margin_bottom = 50.0
+label = "Fullscreen"
+default = "F"
+
+[node name="LabelledValue16" parent="View/Panel/Split/UpperPanel/Controls" instance=ExtResource( 5 )]
+margin_top = 27.0
+margin_right = 338.0
+margin_bottom = 50.0
+label = "Mute"
+default = "M"
 
 [node name="LabelledValue3" parent="View/Panel/Split/UpperPanel/Controls" instance=ExtResource( 5 )]
 margin_top = 54.0
@@ -830,10 +846,11 @@ margin_bottom = 58.0
 popup_exclusive = true
 window_title = "You have failed!"
 dialog_autowrap = true
+[connection signal="pressed" from="View/Panel/Split/UpperPanel/Menu/Game Stats" to="." method="_on_Game_Stats_pressed"]
 [connection signal="about_to_show" from="View/Panel/Split/UpperPanel/Menu/Weapon" to="World" method="_on_Weapon_about_to_show" flags=3]
 [connection signal="toggled" from="View/Panel/Split/UpperPanel/Menu/Overview" to="." method="set_zoom"]
 [connection signal="toggled" from="View/Panel/Split/UpperPanel/Menu/Fullscreen" to="." method="_on_Fullscreen_toggled"]
-[connection signal="pressed" from="View/Panel/Split/UpperPanel/Menu/Game Stats" to="." method="_on_Game_Stats_pressed"]
+[connection signal="toggled" from="View/Panel/Split/UpperPanel/Menu/Mute" to="." method="_on_Fullscreen2_toggled"]
 [connection signal="pressed" from="View/Panel/Split/UpperPanel/Menu/Save" to="." method="_on_Save_pressed"]
 [connection signal="pressed" from="View/Panel/Split/UpperPanel/Menu/Restart" to="." method="_on_Restart_pressed"]
 [connection signal="pressed" from="View/Panel/Split/UpperPanel/Menu/Quit" to="." method="_on_Quit_pressed"]

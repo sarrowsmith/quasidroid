@@ -441,3 +441,7 @@ func _on_Game_Stats_pressed():
 
 func _on_Seed_text_changed(new_text):
 	$Dialogs.find_node("NewButton").disabled = new_text.empty()
+
+
+func _on_Mute_toggled(button_pressed):
+	pass # Replace with function body.

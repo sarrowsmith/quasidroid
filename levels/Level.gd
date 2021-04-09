@@ -194,7 +194,7 @@ func generate_rogues() -> bool:
 			var probe = Vector2(
 				rng.randi_range(1, map.map_w - 1),
 				rng.randi_range(1, map.map_h - 1))
-			if location_type(probe) != FLOOR:
+			if location_type(probe) != FLOOR or location_type(probe + Vector2.UP) == LIFT:
 				continue
 			if probe.distance_squared_to(lifts[0].location) > 25:
 				var r = new_feature(probe, Prototype.ROGUE)

@@ -194,6 +194,9 @@ func action(direction: Vector2, really=true) -> int: # -> enum
 	match target_type:
 		Level.FLOOR, Level.ACCESS:
 			if really:
+				if not is_player and level.location_type(target + Vector2.UP) == Level.LIFT:
+					# stop rogues hanging around in front of lifts
+					return Level.LIFT
 				move(target, target_type == Level.FLOOR)
 		Level.LIFT:
 			if is_player:

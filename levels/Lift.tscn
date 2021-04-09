@@ -14,7 +14,7 @@
 
 [sub_resource type="Animation" id=1]
 resource_name = "close"
-length = 0.8
+length = 1.8
 step = 0.2
 tracks/0/type = "value"
 tracks/0/path = NodePath("Door:frame")
@@ -29,19 +29,23 @@ tracks/0/keys = {
 "values": [ 11, 10, 9, 2 ]
 }
 tracks/1/type = "audio"
-tracks/1/path = NodePath("Audio/Close")
+tracks/1/path = NodePath("Audio/Open")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/imported = false
 tracks/1/enabled = true
 tracks/1/keys = {
-"clips": [  ],
-"times": PoolRealArray(  )
+"clips": [ {
+"end_offset": 0.0,
+"start_offset": 0.0,
+"stream": ExtResource( 9 )
+} ],
+"times": PoolRealArray( 0 )
 }
 
 [sub_resource type="Animation" id=2]
 resource_name = "open"
-length = 0.8
+length = 1.8
 step = 0.2
 tracks/0/type = "value"
 tracks/0/path = NodePath("Door:frame")
@@ -55,10 +59,24 @@ tracks/0/keys = {
 "update": 1,
 "values": [ 2, 9, 10, 11 ]
 }
+tracks/1/type = "audio"
+tracks/1/path = NodePath("Audio/Open")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"clips": [ {
+"end_offset": 0.0,
+"start_offset": 0.0,
+"stream": ExtResource( 11 )
+} ],
+"times": PoolRealArray( 0 )
+}
 
 [sub_resource type="Animation" id=3]
 resource_name = "unlock"
-length = 0.6
+length = 1.4
 step = 0.2
 tracks/0/type = "value"
 tracks/0/path = NodePath("Door:frame")
@@ -73,14 +91,18 @@ tracks/0/keys = {
 "values": [ 0, 1, 2 ]
 }
 tracks/1/type = "audio"
-tracks/1/path = NodePath("Audio/Unlock")
+tracks/1/path = NodePath("Audio/Open")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/imported = false
 tracks/1/enabled = true
 tracks/1/keys = {
-"clips": [  ],
-"times": PoolRealArray(  )
+"clips": [ {
+"end_offset": 0.0,
+"start_offset": 0.0,
+"stream": ExtResource( 10 )
+} ],
+"times": PoolRealArray( 0 )
 }
 
 [node name="Lift" type="Node2D"]
@@ -97,7 +119,7 @@ texture = ExtResource( 2 )
 centered = false
 vframes = 4
 hframes = 3
-frame = 11
+frame = 2
 
 [node name="No" type="Sprite" parent="."]
 scale = Vector2( 0.5, 0.5 )
@@ -136,14 +158,6 @@ bus = "SFX"
 stream = ExtResource( 8 )
 bus = "SFX"
 
-[node name="Unlock" type="AudioStreamPlayer" parent="Audio"]
-stream = ExtResource( 10 )
-bus = "SFX"
-
-[node name="Close" type="AudioStreamPlayer" parent="Audio"]
-stream = ExtResource( 9 )
-bus = "SFX"
-
 [node name="Open" type="AudioStreamPlayer" parent="Audio"]
-stream = ExtResource( 11 )
+stream = ExtResource( 10 )
 bus = "SFX"

@@ -105,7 +105,6 @@ func generate():
 			l.close()
 		return
 	while true:
-		print(map_name,  ": ", level_seed)
 		rng.seed = level_seed
 		map.generate(rng)
 		if level == world.world_depth:
@@ -400,7 +399,6 @@ func load(file: File):
 
 
 func save(file: File):
-	print(map_name,  "->", level_seed)
 	file.store_32(level_seed)
 	file.store_8(int(rooms))
 	file.store_32(level)

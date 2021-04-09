@@ -7,6 +7,7 @@ var has_attacked = false
 
 func _ready():
 	weapons = $Weapons
+	audio = $"Robot/Audio"
 	set_state(DONE)
 	stats = Stats.new()
 	add_to_group("rogue")

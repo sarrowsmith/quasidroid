@@ -10,6 +10,7 @@ var scavenge_location = Vector2.ZERO
 
 func _ready():
 	weapons = $Weapons
+	audio = $"Robot/Audio"
 	is_player = true
 	base = "0"
 	stats = Stats.new()
@@ -247,6 +248,7 @@ func check_location():
 		return
 	var lift =  level.lift_at(location)
 	if lift:
+		lift.get_node("Audio/"+lift.direction).play()
 		moves = 0
 		level.world.log_info("Transferring to [b]%s[/b]" % lift.level_name(lift.to))
 		emit_signal("change_level", lift.to)
@@ -282,6 +284,7 @@ func scavenge(other: Robot):
 
 func level_up(to: int):
 	if to > stats.level:
+		play_audio("LevelUp")
 		stats.level += 1
 		for stat in stats.baseline:
 			stats.baseline[stat] += 3 if stat in stats.critical_stats else 1

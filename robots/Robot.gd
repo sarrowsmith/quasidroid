@@ -24,33 +24,10 @@ var stats = null
 var moves = 0
 var state = DONE
 var signalled = false
-# This *must* be overridden by derived classes
-var weapons = null
 var is_player = false
-
-
-func set_state(value):
-	state = value
-
-func get_state():
-	return state
-
-func end_move(end_turn=false):
-	if stats.stats.speed < 1:
-		stats.stats.speed = 0
-	if end_turn:
-		moves = 0
-	if state == DEAD:
-		return
-	if moves > 0:
-		if state == WAIT:
-			state = IDLE
-	else:
-		moves = 0
-		state = DONE
-	if not signalled:
-		emit_signal("end_move", self)
-		signalled = true
+# These *must* be overridden by derived classes
+var weapons = null
+var audio = null
 
 
 func _process(delta):
@@ -83,6 +60,34 @@ func _process(delta):
 		firing = "Idle"
 		weapons.location = location
 		equip()
+
+
+func play_audio(effect: String):
+	audio.get_node(effect).play()
+
+
+func set_state(value):
+	state = value
+
+func get_state():
+	return state
+
+func end_move(end_turn=false):
+	if stats.stats.speed < 1:
+		stats.stats.speed = 0
+	if end_turn:
+		moves = 0
+	if state == DEAD:
+		return
+	if moves > 0:
+		if state == WAIT:
+			state = IDLE
+	else:
+		moves = 0
+		state = DONE
+	if not signalled:
+		emit_signal("end_move", self)
+		signalled = true
 
 
 func turn() -> bool:
@@ -257,6 +262,7 @@ func show_stats(visible=false):
 
 
 func hit(count: int, end_if_disabled=true):
+	play_audio("Hit")
 	var zapped = get_sprite("Robot/Hit")
 	if zapped:
 		zapped.set_visible(true)
@@ -272,6 +278,7 @@ func hit(count: int, end_if_disabled=true):
 
 
 func die():
+	play_audio("Die")
 	var die = get_node("Robot/%s%s/Die" % [base, "-X" if stats.equipment.extras else ""])
 	if sprite:
 		sprite.set_visible(false)

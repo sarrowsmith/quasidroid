@@ -1,4 +1,4 @@
-[gd_scene load_steps=252 format=2]
+[gd_scene load_steps=247 format=2]
 
 [ext_resource path="res://resources/Robots/0/down-idle.png" type="Texture" id=1]
 [ext_resource path="res://resources/Robots/dead+.png" type="Texture" id=2]
@@ -36,11 +36,6 @@
 [ext_resource path="res://resources/Robots/zapped.png" type="Texture" id=34]
 [ext_resource path="res://resources/Robots/0/die.png" type="Texture" id=35]
 [ext_resource path="res://resources/Robots/2/die+.png" type="Texture" id=36]
-[ext_resource path="res://resources/Audio/unitready.wav" type="AudioStream" id=37]
-[ext_resource path="res://resources/Audio/error.wav" type="AudioStream" id=38]
-[ext_resource path="res://resources/Audio/somedead.wav" type="AudioStream" id=39]
-[ext_resource path="res://resources/Audio/lowR4.wav" type="AudioStream" id=40]
-[ext_resource path="res://resources/Audio/boingmachine.wav" type="AudioStream" id=41]
 
 [sub_resource type="AtlasTexture" id=1]
 flags = 4
@@ -1218,7 +1213,6 @@ script = ExtResource( 33 )
 [node name="Down" type="AnimatedSprite" parent="0/Idle"]
 visible = false
 frames = SubResource( 9 )
-frame = 2
 playing = true
 centered = false
 
@@ -1231,14 +1225,13 @@ centered = false
 [node name="Left" type="AnimatedSprite" parent="0/Idle"]
 visible = false
 frames = SubResource( 19 )
-frame = 7
+frame = 5
 playing = true
 centered = false
 
 [node name="Right" type="AnimatedSprite" parent="0/Idle"]
 visible = false
 frames = SubResource( 28 )
-frame = 2
 playing = true
 centered = false
 
@@ -1247,13 +1240,14 @@ centered = false
 [node name="Down" type="AnimatedSprite" parent="0/Move"]
 visible = false
 frames = SubResource( 33 )
-frame = 3
+frame = 1
 playing = true
 centered = false
 
 [node name="Up" type="AnimatedSprite" parent="0/Move"]
 visible = false
 frames = SubResource( 38 )
+frame = 2
 playing = true
 centered = false
 
@@ -1283,7 +1277,7 @@ centered = false
 [node name="Down" type="AnimatedSprite" parent="2/Idle"]
 visible = false
 frames = SubResource( 60 )
-frame = 6
+frame = 4
 playing = true
 centered = false
 
@@ -1296,14 +1290,14 @@ centered = false
 [node name="Left" type="AnimatedSprite" parent="2/Idle"]
 visible = false
 frames = SubResource( 70 )
-frame = 6
+frame = 4
 playing = true
 centered = false
 
 [node name="Right" type="AnimatedSprite" parent="2/Idle"]
 visible = false
 frames = SubResource( 79 )
-frame = 6
+frame = 4
 playing = true
 centered = false
 
@@ -1312,14 +1306,12 @@ centered = false
 [node name="Down" type="AnimatedSprite" parent="2/Move"]
 visible = false
 frames = SubResource( 84 )
-frame = 2
 playing = true
 centered = false
 
 [node name="Up" type="AnimatedSprite" parent="2/Move"]
 visible = false
 frames = SubResource( 89 )
-frame = 2
 playing = true
 centered = false
 
@@ -1342,7 +1334,7 @@ centered = false
 [node name="Down" type="AnimatedSprite" parent="0-X/Idle"]
 visible = false
 frames = SubResource( 106 )
-frame = 3
+frame = 1
 playing = true
 centered = false
 
@@ -1355,13 +1347,13 @@ centered = false
 [node name="Left" type="AnimatedSprite" parent="0-X/Idle"]
 visible = false
 frames = SubResource( 116 )
+frame = 6
 playing = true
 centered = false
 
 [node name="Right" type="AnimatedSprite" parent="0-X/Idle"]
 visible = false
 frames = SubResource( 125 )
-frame = 2
 playing = true
 centered = false
 
@@ -1370,14 +1362,12 @@ centered = false
 [node name="Down" type="AnimatedSprite" parent="0-X/Move"]
 visible = false
 frames = SubResource( 130 )
-frame = 2
 playing = true
 centered = false
 
 [node name="Up" type="AnimatedSprite" parent="0-X/Move"]
 visible = false
 frames = SubResource( 135 )
-frame = 2
 playing = true
 centered = false
 
@@ -1400,7 +1390,6 @@ centered = false
 [node name="Down" type="AnimatedSprite" parent="2-X/Idle"]
 visible = false
 frames = SubResource( 152 )
-frame = 2
 playing = true
 centered = false
 
@@ -1413,13 +1402,14 @@ centered = false
 [node name="Left" type="AnimatedSprite" parent="2-X/Idle"]
 visible = false
 frames = SubResource( 162 )
+frame = 6
 playing = true
 centered = false
 
 [node name="Right" type="AnimatedSprite" parent="2-X/Idle"]
 visible = false
 frames = SubResource( 171 )
-frame = 1
+frame = 7
 playing = true
 centered = false
 
@@ -1428,14 +1418,14 @@ centered = false
 [node name="Down" type="AnimatedSprite" parent="2-X/Move"]
 visible = false
 frames = SubResource( 176 )
-frame = 3
+frame = 1
 playing = true
 centered = false
 
 [node name="Up" type="AnimatedSprite" parent="2-X/Move"]
 visible = false
 frames = SubResource( 181 )
-frame = 3
+frame = 1
 playing = true
 centered = false
 
@@ -1491,25 +1481,3 @@ centered = false
 visible = false
 frames = SubResource( 210 )
 centered = false
-
-[node name="Audio" type="Node" parent="."]
-
-[node name="Hit" type="AudioStreamPlayer" parent="Audio"]
-stream = ExtResource( 38 )
-bus = "SFX"
-
-[node name="Die" type="AudioStreamPlayer" parent="Audio"]
-stream = ExtResource( 39 )
-bus = "SFX"
-
-[node name="LevelUp" type="AudioStreamPlayer" parent="Audio"]
-stream = ExtResource( 37 )
-bus = "SFX"
-
-[node name="Recharge" type="AudioStreamPlayer" parent="Audio"]
-stream = ExtResource( 40 )
-bus = "SFX"
-
-[node name="Scavenge" type="AudioStreamPlayer" parent="Audio"]
-stream = ExtResource( 41 )
-bus = "SFX"

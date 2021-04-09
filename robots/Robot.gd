@@ -6,6 +6,7 @@ signal end_move(robot)
 
 enum {DEAD, IDLE, WAIT, DONE}
 enum {GRAPPLE, MELEE, WEAPON}
+enum {HIT, DIE, LEVEL_UP, RECHARGE, SCAVENGE}
 
 export(float) var move_speed = 25
 export(float) var weapon_speed = 200
@@ -27,7 +28,6 @@ var signalled = false
 var is_player = false
 # These *must* be overridden by derived classes
 var weapons = null
-var audio = null
 
 
 func _process(delta):
@@ -60,12 +60,6 @@ func _process(delta):
 		firing = "Idle"
 		weapons.location = location
 		equip()
-
-
-func play_audio(effect: String):
-	var stream = audio.get_node(effect)
-	if not stream.playing:
-		stream.play()
 
 
 func set_state(value):
@@ -267,7 +261,7 @@ func show_stats(visible=false):
 
 
 func hit(count: int, end_if_disabled=true):
-	play_audio("Hit")
+	level.world.player.play_audio(HIT)
 	var zapped = get_sprite("Robot/Hit")
 	if zapped:
 		zapped.set_visible(true)
@@ -283,7 +277,7 @@ func hit(count: int, end_if_disabled=true):
 
 
 func die():
-	play_audio("Die")
+	level.world.player.play_audio(DIE)
 	var die = get_node("Robot/%s%s/Die" % [base, "-X" if stats.equipment.extras else ""])
 	if sprite:
 		sprite.set_visible(false)

@@ -271,13 +271,7 @@ func new_lift(location: Vector2): # -> Lift (cyclic reference)
 	lift.location = location
 	lift.from = self
 	if len(lifts) == 0:
-		lift.direction = "Up"
-		lift.to = parent
-		if level > 1:
-			lift.unlock()
-		else:
-			lift.get_node("No").set_visible(false)
-			lift.get_node("Exit").set_visible(true)
+		lift.set_up(parent, level > 1)
 	else:
 		lift.to = children[len(lifts) - 1]
 	for o in [Vector2.ZERO, Vector2.UP]:

@@ -257,7 +257,7 @@ func check_location():
 		return
 	var lift =  level.lift_at(location)
 	if lift:
-		lift.get_node("Audio/"+lift.direction).play()
+		lift.play_audio()
 		moves = 0
 		level.world.log_info("Transferring to [b]%s[/b]" % lift.level_name(lift.to))
 		emit_signal("change_level", lift.to)

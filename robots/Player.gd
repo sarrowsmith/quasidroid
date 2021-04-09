@@ -278,6 +278,7 @@ func scavenge(other: Robot):
 	other.show_stats(true)
 	var scavenged = stats.scavenge(other)
 	if len(scavenged):
+		play_audio("Scavenge")
 		level.world.log_info("""You have scavenged:
 \t[b][i]%s[/i][/b]""" % scavenged.join("\n\t"))
 		moves -= 1

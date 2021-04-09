@@ -204,7 +204,7 @@ func change_level(level: Level, fade: bool):
 	set_state(WAIT)
 	set_location(lift.location)
 	if lift.open():
-		yield(lift.get_node("Open"), "animation_finished")
+		yield(lift.anim, "animation_finished")
 	facing = Vector2.DOWN
 	set_sprite()
 	set_visible(true)
@@ -213,7 +213,7 @@ func change_level(level: Level, fade: bool):
 	while get_state() == WAIT:
 		yield(self, "end_move")
 	if lift.close():
-		yield(lift.get_node("Open"), "animation_finished")
+		yield(lift.anim, "animation_finished")
 	end_move(true)
 
 
@@ -225,7 +225,7 @@ func operate_lift(target: Vector2):
 		else:
 			set_state(WAIT)
 			if lift.open():
-				yield(lift.get_node("Open"), "animation_finished")
+				yield(lift.anim, "animation_finished")
 				show_info(true)
 				end_move()
 			else:

@@ -17,3 +17,6 @@ visible = false
 scale = Vector2( 2, 2 )
 texture = ExtResource( 3 )
 centered = false
+
+[node name="Audio" type="AudioStreamPlayer" parent="."]
+bus = "SFX"

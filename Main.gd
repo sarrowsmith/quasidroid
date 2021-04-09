@@ -216,7 +216,7 @@ func rogues_move_end():
 func change_level(level: Level, fade: bool):
 	if not level:
 		if world.level_one.is_clear():
-			game_over(true)
+			game_over("Win")
 		return
 	if level != world.active_level:
 		if fade:
@@ -299,11 +299,12 @@ func save_game():
 		save_game.close()
 
 
-func game_over(success: bool, title=""):
+func game_over(success: String, title=""):
+	$Audio.get_node(success).play()
 	$Fader.interpolate_property(world, "modulate", Color(1.0, 1.0, 1.0, 1.0), Color(1.0, 1.0, 1.0, 0.0), 1.0)
 	$Fader.start()
 	yield($Fader, "tween_all_completed")
-	var popup = $Dialogs.get_node("Win" if success else "Lose")
+	var popup = $Dialogs.get_node(success)
 	if title:
 		popup.window_title = title
 	var messages = PoolStringArray()
@@ -340,7 +341,7 @@ Systems rebooting ...
 
 All robots in the facility will be wiped.
 """ % ((world.turn + 1) / 2))
-	game_over(false, "Facility systems reboot!")
+	game_over("Lose", "Facility systems reboot!")
 
 
 # Generate a seed text of the form CVCVC CVCV which can be directly
@@ -385,7 +386,7 @@ func _on_Player_move(alive):
 		if view_mode == ViewMode.FREE:
 			view_mode = ViewMode.RESET
 	else:
-		game_over(false, "You have been deactivated!")
+		game_over("Lose", "You have been deactivated!")
 
 
 func _on_Resume_pressed():
@@ -427,7 +428,7 @@ func _on_Quit_popup_hide():
 
 
 func _on_game_over(success):
-	$Dialogs.get_node("Win" if success else "Lose").set_visible(false)
+	$Dialogs.get_node(success).set_visible(false)
 	start_dialog()
 
 

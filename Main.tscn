@@ -846,6 +846,14 @@ margin_bottom = 58.0
 popup_exclusive = true
 window_title = "You have failed!"
 dialog_autowrap = true
+
+[node name="Audio" type="Node" parent="."]
+
+[node name="Win" type="AudioStreamPlayer" parent="Audio"]
+bus = "SFX"
+
+[node name="Lose" type="AudioStreamPlayer" parent="Audio"]
+bus = "SFX"
 [connection signal="pressed" from="View/Panel/Split/UpperPanel/Menu/Game Stats" to="." method="_on_Game_Stats_pressed"]
 [connection signal="about_to_show" from="View/Panel/Split/UpperPanel/Menu/Weapon" to="World" method="_on_Weapon_about_to_show" flags=3]
 [connection signal="toggled" from="View/Panel/Split/UpperPanel/Menu/Overview" to="." method="set_zoom"]
@@ -860,5 +868,5 @@ dialog_autowrap = true
 [connection signal="pressed" from="Dialogs/Start/VBoxContainer/MarginContainer3/V2BoxContainer/CenterContainer2/NewButton" to="." method="_on_New_pressed"]
 [connection signal="confirmed" from="Dialogs/Quit" to="." method="_on_Quit_confirmed"]
 [connection signal="popup_hide" from="Dialogs/Quit" to="." method="_on_Quit_popup_hide"]
-[connection signal="confirmed" from="Dialogs/Win" to="." method="_on_game_over" binds= [ true ]]
-[connection signal="confirmed" from="Dialogs/Lose" to="." method="_on_game_over" binds= [ false ]]
+[connection signal="confirmed" from="Dialogs/Win" to="." method="_on_game_over" binds= [ "Win" ]]
+[connection signal="confirmed" from="Dialogs/Lose" to="." method="_on_game_over" binds= [ "Lose" ]]

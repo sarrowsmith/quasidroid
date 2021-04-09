@@ -12,6 +12,8 @@ var to: Level = null
 var direction = "Down"
 var state = LOCKED
 
+onready var anim = $AnimationPlayer
+
 
 func level_name(level: Level) -> String:
 	if level:
@@ -33,14 +35,13 @@ func unlock(force=false):
 		if force:
 			return state != LOCKED
 		state = CLOSED
+		anim.play("unlock")
 
 
 func open() -> bool:
 	if state != CLOSED:
 		return false
-	$Open.set_visible(true)
-	$Unlock.set_visible(false)
-	$Open.play()
+	anim.play("open")
 	state = OPEN
 	return true
 
@@ -48,7 +49,7 @@ func open() -> bool:
 func close() -> bool:
 	if state != OPEN:
 		return false
-	$Open.play("default", true)
+	anim.play("close")
 	state = CLOSED
 	return true
 
@@ -72,7 +73,3 @@ func save(file: File):
 	file.store_pascal_string(direction)
 	file.store_8(state)
 	file.store_pascal_string(to.map_name if to else "^")
-
-
-func _on_Open_animation_finished():
-	$Open.stop()

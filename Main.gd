@@ -13,6 +13,7 @@ var save = false
 onready var world = $World
 onready var world_size = $World.world_size
 onready var saved_games = $Dialogs.find_node("SavedGames")
+onready var master_index = AudioServer.get_bus_index("Master")
 
 
 func _ready():
@@ -447,4 +448,4 @@ func _on_Seed_text_changed(new_text):
 
 
 func _on_Mute_toggled(button_pressed):
-	pass # Replace with function body.
+	AudioServer.set_bus_mute(master_index, button_pressed)

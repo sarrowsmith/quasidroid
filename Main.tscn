@@ -862,7 +862,7 @@ bus = "SFX"
 [connection signal="about_to_show" from="View/Panel/Split/UpperPanel/Menu/Weapon" to="World" method="_on_Weapon_about_to_show" flags=3]
 [connection signal="toggled" from="View/Panel/Split/UpperPanel/Menu/Overview" to="." method="set_zoom"]
 [connection signal="toggled" from="View/Panel/Split/UpperPanel/Menu/Fullscreen" to="." method="_on_Fullscreen_toggled"]
-[connection signal="toggled" from="View/Panel/Split/UpperPanel/Menu/Mute" to="." method="_on_Fullscreen2_toggled"]
+[connection signal="toggled" from="View/Panel/Split/UpperPanel/Menu/Mute" to="." method="_on_Mute_toggled"]
 [connection signal="pressed" from="View/Panel/Split/UpperPanel/Menu/Save" to="." method="_on_Save_pressed"]
 [connection signal="pressed" from="View/Panel/Split/UpperPanel/Menu/Restart" to="." method="_on_Restart_pressed"]
 [connection signal="pressed" from="View/Panel/Split/UpperPanel/Menu/Quit" to="." method="_on_Quit_pressed"]

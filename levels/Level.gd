@@ -384,7 +384,6 @@ func load(file: File):
 	level = file.get_32()
 	state = file.get_8()
 	map_name = file.get_pascal_string()
-	print(map_name,  "<-", level_seed)
 	rng.seed = level_seed
 	if file.get_8():
 		map.generate(rng)

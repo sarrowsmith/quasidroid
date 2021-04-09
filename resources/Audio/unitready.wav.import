@@ -1,0 +1,21 @@
+[remap]
+
+importer="wav"
+type="AudioStreamSample"
+path="res://.import/unitready.wav-3b8277c9ca75a1dd33d6f160c854c120.sample"
+
+[deps]
+
+source_file="res://resources/Audio/unitready.wav"
+dest_files=[ "res://.import/unitready.wav-3b8277c9ca75a1dd33d6f160c854c120.sample" ]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop=false
+compress/mode=0

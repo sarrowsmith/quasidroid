@@ -264,9 +264,13 @@ func check_location():
 
 
 func recharge():
+	var recharged = false
 	for stat in stats.stats:
 		if stats.stats[stat] < stats.baseline[stat]:
 			stats.stats[stat] = stats.baseline[stat]
+			recharged = true
+	if recharged:
+		play_audio("Recharge")
 	show_stats(true)
 
 

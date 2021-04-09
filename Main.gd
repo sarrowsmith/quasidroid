@@ -308,10 +308,11 @@ func game_over(success: String, title=""):
 	if title:
 		popup.window_title = title
 	var messages = PoolStringArray()
-	if success:
-		messages.append("You succeeded!\n")
-	else:
-		messages.append("You failed\n")
+	match success:
+		"Win":
+			messages.append("You succeeded!\n")
+		"Lose":
+			messages.append("You failed\n")
 	var stats = gather_stats()
 	for stat in stats:
 		messages.append("%s: %s" % [stat, stats[stat]])

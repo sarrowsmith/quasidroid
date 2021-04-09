@@ -63,7 +63,9 @@ func _process(delta):
 
 
 func play_audio(effect: String):
-	audio.get_node(effect).play()
+	var stream = audio.get_node(effect)
+	if not stream.playing:
+		stream.play()
 
 
 func set_state(value):
@@ -197,12 +199,15 @@ func action(direction: Vector2, really=true) -> int: # -> enum
 		moves -= 1
 	var target_type = level.location_type(target)
 	match target_type:
-		Level.FLOOR, Level.ACCESS:
+		Level.FLOOR:
 			if really:
 				if not is_player and level.location_type(target + Vector2.UP) == Level.LIFT:
 					# stop rogues hanging around in front of lifts
 					return Level.LIFT
-				move(target, target_type == Level.FLOOR)
+				move(target, true)
+		Level.ACCESS:
+			if is_player:
+				move(target, false)
 		Level.LIFT:
 			if is_player:
 				level.world.player.operate_lift(target)

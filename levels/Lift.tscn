@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=2]
+[gd_scene load_steps=15 format=2]
 
 [ext_resource path="res://levels/Lift.gd" type="Script" id=1]
 [ext_resource path="res://resources/Tiles/Door.png" type="Texture" id=2]
@@ -6,6 +6,11 @@
 [ext_resource path="res://resources/Tiles/no-alt.png" type="Texture" id=4]
 [ext_resource path="res://resources/Tiles/no.png" type="Texture" id=5]
 [ext_resource path="res://resources/Tiles/go-up.png" type="Texture" id=6]
+[ext_resource path="res://resources/Audio/whyamiarobot.wav" type="AudioStream" id=7]
+[ext_resource path="res://resources/Audio/whyamiarobot2.wav" type="AudioStream" id=8]
+[ext_resource path="res://resources/Audio/proton2.wav" type="AudioStream" id=9]
+[ext_resource path="res://resources/Audio/sparkles1.wav" type="AudioStream" id=10]
+[ext_resource path="res://resources/Audio/proton4.wav" type="AudioStream" id=11]
 
 [sub_resource type="Animation" id=1]
 resource_name = "close"
@@ -22,6 +27,16 @@ tracks/0/keys = {
 "transitions": PoolRealArray( 1, 1, 1, 1 ),
 "update": 1,
 "values": [ 11, 10, 9, 2 ]
+}
+tracks/1/type = "audio"
+tracks/1/path = NodePath("Audio/Close")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"clips": [  ],
+"times": PoolRealArray(  )
 }
 
 [sub_resource type="Animation" id=2]
@@ -57,6 +72,16 @@ tracks/0/keys = {
 "update": 1,
 "values": [ 0, 1, 2 ]
 }
+tracks/1/type = "audio"
+tracks/1/path = NodePath("Audio/Unlock")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"clips": [  ],
+"times": PoolRealArray(  )
+}
 
 [node name="Lift" type="Node2D"]
 scale = Vector2( 2, 2 )
@@ -72,6 +97,7 @@ texture = ExtResource( 2 )
 centered = false
 vframes = 4
 hframes = 3
+frame = 11
 
 [node name="No" type="Sprite" parent="."]
 scale = Vector2( 0.5, 0.5 )
@@ -103,7 +129,21 @@ offset = Vector2( 24, -60 )
 [node name="Audio" type="Node" parent="."]
 
 [node name="Up" type="AudioStreamPlayer" parent="Audio"]
+stream = ExtResource( 7 )
 bus = "SFX"
 
 [node name="Down" type="AudioStreamPlayer" parent="Audio"]
+stream = ExtResource( 8 )
+bus = "SFX"
+
+[node name="Unlock" type="AudioStreamPlayer" parent="Audio"]
+stream = ExtResource( 10 )
+bus = "SFX"
+
+[node name="Close" type="AudioStreamPlayer" parent="Audio"]
+stream = ExtResource( 9 )
+bus = "SFX"
+
+[node name="Open" type="AudioStreamPlayer" parent="Audio"]
+stream = ExtResource( 11 )
 bus = "SFX"

@@ -17,7 +17,7 @@ var direction = DOWN
 var state = LOCKED
 
 onready var anim = $AnimationPlayer
-onready var audio = $Audio
+onready var audio = $AudioBankPlayer
 
 
 func set_up(up: Level, unlocked: bool):
@@ -70,9 +70,7 @@ func close() -> bool:
 
 
 func play_audio():
-	if not audio.playing:
-		audio.stream = effects[direction]
-		audio.play()
+	audio.play_from_bank(direction)
 
 
 func load(file: File) -> String:

@@ -90,7 +90,7 @@ func start():
 	world.player.show_stats(true)
 	$Fader.interpolate_property(world, "modulate", Color(1.0, 1.0, 1.0, 0.0), Color(1.0, 1.0, 1.0, 1.0), 0.5)
 	$Fader.start()
-	world.level_one.lifts[0].get_node("Audio").play()
+	world.level_one.lifts[0].audio.play()
 
 
 func connect_player():

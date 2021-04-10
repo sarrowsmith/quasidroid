@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=2]
+[gd_scene load_steps=16 format=2]
 
 [ext_resource path="res://levels/Lift.gd" type="Script" id=1]
 [ext_resource path="res://resources/Tiles/Door.png" type="Texture" id=2]
@@ -11,6 +11,7 @@
 [ext_resource path="res://resources/Audio/proton2.wav" type="AudioStream" id=9]
 [ext_resource path="res://resources/Audio/sparkles1.wav" type="AudioStream" id=10]
 [ext_resource path="res://resources/Audio/proton4.wav" type="AudioStream" id=11]
+[ext_resource path="res://AudioBankPlayer.tscn" type="PackedScene" id=12]
 
 [sub_resource type="Animation" id=1]
 resource_name = "close"
@@ -29,7 +30,7 @@ tracks/0/keys = {
 "values": [ 11, 10, 9, 2 ]
 }
 tracks/1/type = "audio"
-tracks/1/path = NodePath("Audio")
+tracks/1/path = NodePath("AudioBankPlayer")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/imported = false
@@ -60,7 +61,7 @@ tracks/0/keys = {
 "values": [ 2, 9, 10, 11 ]
 }
 tracks/1/type = "audio"
-tracks/1/path = NodePath("Audio")
+tracks/1/path = NodePath("AudioBankPlayer")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/imported = false
@@ -91,7 +92,7 @@ tracks/0/keys = {
 "values": [ 0, 1, 2 ]
 }
 tracks/1/type = "audio"
-tracks/1/path = NodePath("Audio")
+tracks/1/path = NodePath("AudioBankPlayer")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/imported = false
@@ -148,6 +149,6 @@ texture = ExtResource( 3 )
 centered = false
 offset = Vector2( 24, -60 )
 
-[node name="Audio" type="AudioStreamPlayer" parent="."]
+[node name="AudioBankPlayer" parent="." instance=ExtResource( 12 )]
 stream = ExtResource( 10 )
-bus = "SFX"
+streams = [ ExtResource( 8 ), ExtResource( 7 ) ]

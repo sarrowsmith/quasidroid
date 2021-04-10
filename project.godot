@@ -10,6 +10,11 @@ config_version=4
 
 _global_script_classes=[ {
 "base": "AudioStreamPlayer",
+"class": "AudioBankPlayer",
+"language": "GDScript",
+"path": "res://AudioBankPlayer.gd"
+}, {
+"base": "AudioStreamPlayer",
 "class": "AudioStreamPlayerADSR",
 "language": "GDScript",
 "path": "res://addons/midi/ADSR.gd"
@@ -70,6 +75,7 @@ _global_script_classes=[ {
 "path": "res://robots/Weapons.gd"
 } ]
 _global_script_class_icons={
+"AudioBankPlayer": "",
 "AudioStreamPlayerADSR": "",
 "Bank": "",
 "Level": "",

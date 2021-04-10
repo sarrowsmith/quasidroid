@@ -68,7 +68,9 @@ func set_state(value):
 func get_state():
 	return state
 
-func end_move(end_turn=false):
+func end_move(end_turn=false, always_signal=false):
+	if is_player:
+		pass
 	if stats.stats.speed < 1:
 		stats.stats.speed = 0
 	if end_turn:
@@ -81,14 +83,12 @@ func end_move(end_turn=false):
 	else:
 		moves = 0
 		state = DONE
-	if not signalled:
+	if always_signal or not signalled:
 		emit_signal("end_move", self)
 		signalled = true
 
 
 func turn() -> bool:
-	if is_player:
-		pass
 	signalled = false
 	if state == DEAD:
 		return true

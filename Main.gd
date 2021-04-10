@@ -159,7 +159,7 @@ func _unhandled_input(event: InputEvent):
 				level = world.active_level.children[0]
 			KEY_P:
 				level = world.active_level.children[1]
-		if level:
+		if level and world.player.get_state() == Robot.IDLE:
 			change_level(level, false)
 	if world.active_level == null:
 		return
@@ -219,6 +219,10 @@ func change_level(level: Level, fade: bool):
 	if not level:
 		if world.level_one.is_clear():
 			game_over("Win")
+		return
+	if level == world.player.level:
+		# Player resignals when finished arrival animation
+		world.player.end_move(true, true)
 		return
 	if level != world.active_level:
 		if fade:

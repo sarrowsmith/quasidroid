@@ -210,6 +210,7 @@ func change_level(level: Level, fade: bool):
 	if not fade:
 		set_location(lift.location + Vector2.DOWN)
 		set_visible(true)
+		end_move(true)
 		return
 	set_state(WAIT)
 	set_location(lift.location)
@@ -219,12 +220,14 @@ func change_level(level: Level, fade: bool):
 	set_sprite()
 	set_visible(true)
 	signalled = false
+	moves += 1
 	move(lift.location + Vector2.DOWN, false)
-	while get_state() == WAIT:
+	if get_state() == WAIT:
 		yield(self, "end_move")
 	if lift.close():
 		yield(lift.anim, "animation_finished")
-	end_move(true)
+	# signal that we've done
+	emit_signal("change_level", self.level)
 
 
 func operate_lift(target: Vector2):

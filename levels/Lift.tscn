@@ -120,7 +120,6 @@ texture = ExtResource( 2 )
 centered = false
 vframes = 4
 hframes = 3
-frame = 2
 
 [node name="No" type="Sprite" parent="."]
 scale = Vector2( 0.5, 0.5 )

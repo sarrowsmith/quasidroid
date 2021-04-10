@@ -2,6 +2,9 @@ extends Node2D
 
 
 enum ViewMode {TRACK, FREE, RESET, DIALOG}
+enum {WIN, LOSE}
+
+const success = ["Win", "Lose"]
 
 export(String) var game_seed = ""
 export(float) var pan_speed = 0.5
@@ -14,6 +17,7 @@ onready var world = $World
 onready var world_size = $World.world_size
 onready var saved_games = $Dialogs.find_node("SavedGames")
 onready var master_index = AudioServer.get_bus_index("Master")
+onready var audio = $AudioBankPlayer
 
 
 func _ready():
@@ -218,7 +222,7 @@ func rogues_move_end():
 func change_level(level: Level, fade: bool):
 	if not level:
 		if world.level_one.is_clear():
-			game_over("Win")
+			game_over(WIN)
 		return
 	if level == world.player.level:
 		# Player resignals when finished arrival animation
@@ -305,19 +309,19 @@ func save_game():
 		save_game.close()
 
 
-func game_over(success: String, title=""):
-	$Audio.get_node(success).play()
+func game_over(how: int, title=""):
+	audio.play_from_bank(how)
 	$Fader.interpolate_property(world, "modulate", Color(1.0, 1.0, 1.0, 1.0), Color(1.0, 1.0, 1.0, 0.0), 1.0)
 	$Fader.start()
 	yield($Fader, "tween_all_completed")
-	var popup = $Dialogs.get_node(success)
+	var popup = $Dialogs.get_node(success[how])
 	if title:
 		popup.window_title = title
 	var messages = PoolStringArray()
-	match success:
-		"Win":
+	match how:
+		WIN:
 			messages.append("You succeeded!\n")
-		"Lose":
+		LOSE:
 			messages.append("You failed\n")
 	var stats = gather_stats()
 	for stat in stats:
@@ -348,7 +352,7 @@ Systems rebooting ...
 
 All robots in the facility will be wiped.
 """ % ((world.turn + 1) / 2))
-	game_over("Lose", "Facility systems reboot!")
+	game_over(LOSE, "Facility systems reboot!")
 
 
 # Generate a seed text of the form CVCVC CVCV which can be directly
@@ -393,7 +397,7 @@ func _on_Player_move(alive):
 		if view_mode == ViewMode.FREE:
 			view_mode = ViewMode.RESET
 	else:
-		game_over("Lose", "You have been deactivated!")
+		game_over(LOSE, "You have been deactivated!")
 
 
 func _on_Resume_pressed():

@@ -129,7 +129,7 @@ func report_attack(attacker: Robot, defender: Robot, attackers: Dictionary, defe
 	var a_name = first_capital("you" if attacker.is_player else ("the " + attacker.stats.type_name))
 	var d_name = "you" if defender.is_player else ("the " + defender.stats.type_name)
 	var weapon = attacker.weapons.get_weapon_name()
-	var with = " with a " + weapon
+	var with = " with a%s %s" % ["n" if ".iE".find(weapon[0]) > 0 else "", weapon]
 	var attack = "shoot"
 	var report = PoolStringArray()
 	for stat in defenders:

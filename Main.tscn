@@ -5,12 +5,12 @@
 [ext_resource path="res://resources/Resources/nova_mono.tres" type="DynamicFont" id=3]
 [ext_resource path="res://resources/Resources/jura.tres" type="DynamicFont" id=4]
 [ext_resource path="res://LabelledValue.tscn" type="PackedScene" id=5]
-[ext_resource path="res://resources/Audio/whyamiarobot.wav" type="AudioStream" id=6]
+[ext_resource path="res://resources/Audio/failed.wav" type="AudioStream" id=6]
 [ext_resource path="res://resources/Resources/jura_bold.tres" type="DynamicFont" id=7]
 [ext_resource path="res://resources/Resources/jura_semi.tres" type="DynamicFont" id=8]
 [ext_resource path="res://resources/Resources/jura_light.tres" type="DynamicFont" id=9]
 [ext_resource path="res://resources/Resources/default_theme.tres" type="Theme" id=10]
-[ext_resource path="res://resources/Audio/whyamiarobot2.wav" type="AudioStream" id=11]
+[ext_resource path="res://AudioBankPlayer.tscn" type="PackedScene" id=11]
 
 [node name="Main" type="Node2D"]
 script = ExtResource( 2 )
@@ -849,15 +849,8 @@ popup_exclusive = true
 window_title = "You have failed!"
 dialog_autowrap = true
 
-[node name="Audio" type="Node" parent="."]
-
-[node name="Win" type="AudioStreamPlayer" parent="Audio"]
-stream = ExtResource( 6 )
-bus = "SFX"
-
-[node name="Lose" type="AudioStreamPlayer" parent="Audio"]
-stream = ExtResource( 11 )
-bus = "SFX"
+[node name="AudioBankPlayer" parent="." instance=ExtResource( 11 )]
+streams = [ null, ExtResource( 6 ) ]
 [connection signal="pressed" from="View/Panel/Split/UpperPanel/Menu/Game Stats" to="." method="_on_Game_Stats_pressed"]
 [connection signal="about_to_show" from="View/Panel/Split/UpperPanel/Menu/Weapon" to="World" method="_on_Weapon_about_to_show" flags=3]
 [connection signal="toggled" from="View/Panel/Split/UpperPanel/Menu/Overview" to="." method="set_zoom"]

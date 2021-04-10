@@ -5,11 +5,9 @@ extends Robot
 signal move(alive)
 signal change_level(level)
 
-export(Array, AudioStream) var effects
-
 var scavenge_location = Vector2.ZERO
 
-onready var audio = $Audio
+onready var audio = $AudioBankPlayer
 
 
 func _ready():
@@ -157,12 +155,6 @@ func cursor_activate(button):
 						action(direction)
 
 
-func play_audio(effect: int): # enum
-	if not audio.playing:
-		audio.stream = effects[effect]
-		audio.play()
-
-
 func show_info(optional=false):
 	var info = "Nothing to see here"
 	var location_type = level.location_type(level.cursor.location)
@@ -282,7 +274,7 @@ func recharge():
 			stats.stats[stat] = stats.baseline[stat]
 			recharged = true
 	if recharged:
-		play_audio(RECHARGE)
+		audio.play_from_bank(RECHARGE)
 	show_stats(true)
 
 
@@ -290,7 +282,7 @@ func scavenge(other: Robot):
 	other.show_stats(true)
 	var scavenged = stats.scavenge(other)
 	if len(scavenged):
-		play_audio(SCAVENGE)
+		audio.play_from_bank(SCAVENGE)
 		level.world.log_info("""You have scavenged:
 \t[b][i]%s[/i][/b]""" % scavenged.join("\n\t"))
 		moves -= 1
@@ -301,7 +293,7 @@ func scavenge(other: Robot):
 
 func level_up(to: int):
 	if to > stats.level:
-		play_audio(LEVEL_UP)
+		audio.play_from_bank(LEVEL_UP)
 		stats.level += 1
 		for stat in stats.baseline:
 			stats.baseline[stat] += 3 if stat in stats.critical_stats else 1
@@ -310,7 +302,8 @@ func level_up(to: int):
 
 func on_die():
 	set_sprite()
-	yield(get_tree().create_timer(0.5), "timeout")
+	if audio.playing:
+		yield(audio, "finished")
 	emit_signal("move", false)
 
 

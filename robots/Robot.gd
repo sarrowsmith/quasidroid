@@ -261,7 +261,7 @@ func show_stats(visible=false):
 
 
 func hit(count: int, end_if_disabled=true):
-	level.world.player.play_audio(HIT)
+	level.world.player.audio.play_from_bank(HIT)
 	var zapped = get_sprite("Robot/Hit")
 	if zapped:
 		zapped.set_visible(true)
@@ -277,7 +277,7 @@ func hit(count: int, end_if_disabled=true):
 
 
 func die():
-	level.world.player.play_audio(DIE)
+	level.world.player.audio.play_from_bank(DIE)
 	var die = get_node("Robot/%s%s/Die" % [base, "-X" if stats.equipment.extras else ""])
 	if sprite:
 		sprite.set_visible(false)

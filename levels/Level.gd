@@ -252,9 +252,8 @@ func activate(location: Vector2) -> bool:
 			return false
 	state |= RESET
 	for lift in lifts:
-		lift.unlock()
-		if lift.to and lift.to.state == LOCKED:
-			lift.to.state = OPEN
+		if lift.to:
+			lift.unlock()
 	return true
 
 func lift_at(location: Vector2): # -> Lift (cyclic reference)

@@ -73,16 +73,12 @@ func play_audio():
 	audio.play_from_bank(direction)
 
 
-func load(file: File) -> String:
+func load(level: Level, file: File) -> String:
 	location = file.get_var()
-	position = from.location_to_position(location)
+	position = level.location_to_position(location)
 	direction = file.get_8()
 	state = file.get_8()
-	if state == LOCKED:
-		if from.level == 1 and direction == UP:
-			$No.set_visible(false)
-			$Exit.set_visible(true)
-	else:
+	if state != LOCKED:
 		unlock(true)
 	return file.get_pascal_string()
 
@@ -91,4 +87,5 @@ func save(file: File):
 	file.store_var(location)
 	file.store_8(direction)
 	file.store_8(state)
+	print(to.map_name if to else "^")
 	file.store_pascal_string(to.map_name if to else "^")

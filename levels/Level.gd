@@ -152,8 +152,7 @@ func place_features() -> bool:
 						probe = null
 						break
 				if probe and check_nearby(probe.x, probe.y, 2)[FLOOR] == 25:
-					lifts.append(new_lift(probe))
-					access[probe] = null
+					new_lift(probe)
 					break
 			separation -= 1
 		if lift_n == len(lifts):
@@ -268,15 +267,20 @@ func lift_at(location: Vector2): # -> Lift (cyclic reference)
 func new_lift(location: Vector2): # -> Lift (cyclic reference)
 	var lift = new_feature(location, Prototype.LIFT)
 	lift.location = location
+	set_lift(lift, null if lifts.empty() else children[len(lifts) - 1])
+
+
+func set_lift(lift, to):
 	lift.from = self
-	if len(lifts) == 0:
-		lift.set_up(parent, level > 1)
-	else:
+	if to:
 		lift.to = children[len(lifts) - 1]
+	else:
+		lift.set_up(parent, level > 1)
 	for o in [Vector2.ZERO, Vector2.UP]:
-		map.set_cellv(location + o, map.Tiles.ROOF)
-		map.update_bitmask_area(location + o)
-	return lift
+		map.set_cellv(lift.location + o, map.Tiles.ROOF)
+		map.update_bitmask_area(lift.location + o)
+	access[lift.location] = null
+	lifts.append(lift)
 
 
 func new_feature(location: Vector2, type) -> Node:
@@ -306,8 +310,11 @@ func set_cursor(location: Vector2):
 
 
 func find_level(level_name: String) -> Level:
-	if map_name == level_name:
-		return self
+	match level_name:
+		"^":
+			return null
+		map_name:
+			return self
 	for i in n_children:
 		var found = children[i].find_level(level_name)
 		if found:
@@ -319,13 +326,7 @@ func load_lifts(file: File):
 	var n_lifts = file.get_8()
 	for _i in n_lifts:
 		var lift = new_feature(Vector2.ZERO, Prototype.LIFT)
-		lift.from = self
-		lift.to = find_level(lift.load(file))
-		for o in [Vector2.ZERO, Vector2.UP]:
-			map.set_cellv(lift.location + o, map.Tiles.ROOF)
-			map.update_bitmask_area(lift.location + o)
-		access[lift.location] = null
-		lifts.append(lift)
+		set_lift(lift, find_level(lift.load(self, file)))
 
 
 func save_lifts(file: File):

@@ -178,7 +178,7 @@ func shoot(direction: Vector2):
 	firing = "Fire"
 	set_sprite()
 	if weapon:
-		weapons.location = target()
+		weapons.location = location
 		set_state(WAIT)
 		moves -= 1
 	else: # no idea how this can happen, but I suspect in does

@@ -204,15 +204,14 @@ func generate_rogues() -> bool:
 
 
 func await_rogues():
-	awaiting = {}
+	awaiting.clear()
 	for r in rogues:
 		if r.get_state(): # 0 == Robot.DEAD:
 			awaiting[r] = true
 
 
 func rogue_end_move(rogue):
-	awaiting.erase(rogue)
-	if awaiting.empty():
+	if not rogue.is_idle() and awaiting.erase(rogue) and awaiting.empty():
 		emit_signal("rogues_move_end")
 
 

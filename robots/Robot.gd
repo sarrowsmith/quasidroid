@@ -68,9 +68,10 @@ func set_state(value):
 func get_state():
 	return state
 
+func is_idle() -> bool:
+	return state == IDLE
+
 func end_move(end_turn=false, always_signal=false):
-	if is_player:
-		pass
 	if stats.stats.speed < 1:
 		stats.stats.speed = 0
 	if end_turn:
@@ -95,7 +96,7 @@ func turn() -> bool:
 	if level and implicit_damage():
 		if check_stats():
 			level.world.report_deactivated(self)
-		hit(1, false)
+		hit(1, not is_player)
 	if state == DONE:
 		set_state(IDLE)
 		moves = max(stats.stats.speed, 1)
@@ -275,7 +276,7 @@ func show_stats(visible=false):
 		level.world.show_stats(is_player)
 
 
-func hit(count: int, end_if_disabled=true):
+func hit(count: int, end_if_disabled=false):
 	level.world.player.audio.play_from_bank(HIT)
 	var zapped = get_sprite("Robot/Hit")
 	if zapped:

@@ -2,12 +2,12 @@
 
 importer="wav"
 type="AudioStreamSample"
-path="res://.import/unitready.wav-3b8277c9ca75a1dd33d6f160c854c120.sample"
+path="res://.import/recharge.wav-40acc3f25269c6409771232bc68e7762.sample"
 
 [deps]
 
-source_file="res://resources/Audio/unitready.wav"
-dest_files=[ "res://.import/unitready.wav-3b8277c9ca75a1dd33d6f160c854c120.sample" ]
+source_file="res://resources/Audio/recharge.wav"
+dest_files=[ "res://.import/recharge.wav-40acc3f25269c6409771232bc68e7762.sample" ]
 
 [params]
 

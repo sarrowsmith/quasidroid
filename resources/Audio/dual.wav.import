@@ -2,12 +2,12 @@
 
 importer="wav"
 type="AudioStreamSample"
-path="res://.import/sparkles1.wav-990d1469b9c5b593866eaa22b2510619.sample"
+path="res://.import/dual.wav-2747d57673415e4b6226ee3e7862dda5.sample"
 
 [deps]
 
-source_file="res://resources/Audio/sparkles1.wav"
-dest_files=[ "res://.import/sparkles1.wav-990d1469b9c5b593866eaa22b2510619.sample" ]
+source_file="res://resources/Audio/dual.wav"
+dest_files=[ "res://.import/dual.wav-2747d57673415e4b6226ee3e7862dda5.sample" ]
 
 [params]
 

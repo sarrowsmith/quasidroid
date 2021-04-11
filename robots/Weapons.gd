@@ -3,22 +3,28 @@ extends Node2D
 
 
 enum {GRAPPLE, RAM, BLADE, PROBE, PROJECTILE, EMP}
-enum Field {NAME, DAMAGE, RANGE, AC}
+enum Field {NAME, DAMAGE, RANGE, AC, AUDIO}
 
 const stats_map = {
-	Grapple = ["grapple", GRAPPLE, 1, 0],
-	Ram = ["ram", RAM, 1, 1],
-	Blade = ["thermal lance", BLADE, 1, 1],
-	Probe = ["logic probe", PROBE, 1, 0],
-	Plasma = ["plasma beam", BLADE, 7, 2],
-	Laser = ["laser", BLADE, 5, 2],
-	Dual = ["plasma barrage", BLADE, 5, 2],
-	Ion = ["ion cannon", RAM, 5, 3],
-	Projectile = ["rail gun", PROJECTILE, 7, 1],
-	EMP = ["EMP", EMP, 7, 3],
+	Grapple = ["grapple", GRAPPLE, 1, 0, -1],
+	Ram = ["ram", RAM, 1, 1, 0],
+	Blade = ["thermal lance", BLADE, 1, 1, 1],
+	Probe = ["logic probe", PROBE, 1, 0, 2],
+	Plasma = ["plasma beam", BLADE, 7, 2, 3],
+	Laser = ["laser", BLADE, 5, 2, 4],
+	Dual = ["plasma barrage", BLADE, 5, 2, 5],
+	Ion = ["ion cannon", RAM, 5, 3, 6],
+	Projectile = ["rail gun", PROJECTILE, 7, 1, 7],
+	EMP = ["EMP", EMP, 7, 3, 8],
 }
 
 var location = Vector2.ZERO
+
+onready var audio = $AudioBankPlayer
+
+
+func get_field(field: int) -> int:
+	return stats_map[owner.get_weapon()][field]
 
 
 func get_weapon_name(weapon: String="") -> String:
@@ -28,15 +34,21 @@ func get_weapon_name(weapon: String="") -> String:
 
 
 func get_damage_type():
-	return stats_map[owner.get_weapon()][Field.DAMAGE]
+	return get_field(Field.DAMAGE)
 
 
 func get_range() -> int:
-	return stats_map[owner.get_weapon()][Field.RANGE]
+	return get_field(Field.RANGE)
 
 
 func get_armour_required() -> int:
-	return stats_map[owner.get_weapon()][Field.AC]
+	return get_field(Field.AC)
+
+
+func play_audio():
+	var idx = get_field(Field.AUDIO)
+	if idx >= 0:
+		audio.play_from_bank(idx)
 
 
 func shoot() -> bool:

@@ -2,12 +2,12 @@
 
 importer="wav"
 type="AudioStreamSample"
-path="res://.import/proton4.wav-c499398a08388e60c264bce195bc7e02.sample"
+path="res://.import/projectile.wav-da72bedd11642cfbac0496d38e1ac5a8.sample"
 
 [deps]
 
-source_file="res://resources/Audio/proton4.wav"
-dest_files=[ "res://.import/proton4.wav-c499398a08388e60c264bce195bc7e02.sample" ]
+source_file="res://resources/Audio/projectile.wav"
+dest_files=[ "res://.import/projectile.wav-da72bedd11642cfbac0496d38e1ac5a8.sample" ]
 
 [params]
 

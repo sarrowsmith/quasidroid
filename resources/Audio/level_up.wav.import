@@ -2,12 +2,12 @@
 
 importer="wav"
 type="AudioStreamSample"
-path="res://.import/error.wav-6a78760e9049a804d0c20d98ffae6a37.sample"
+path="res://.import/level_up.wav-beac524598712da17a80813cc26cbf56.sample"
 
 [deps]
 
-source_file="res://resources/Audio/error.wav"
-dest_files=[ "res://.import/error.wav-6a78760e9049a804d0c20d98ffae6a37.sample" ]
+source_file="res://resources/Audio/level_up.wav"
+dest_files=[ "res://.import/level_up.wav-beac524598712da17a80813cc26cbf56.sample" ]
 
 [params]
 

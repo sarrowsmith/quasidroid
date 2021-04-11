@@ -6,11 +6,11 @@
 [ext_resource path="res://resources/Tiles/no-alt.png" type="Texture" id=4]
 [ext_resource path="res://resources/Tiles/no.png" type="Texture" id=5]
 [ext_resource path="res://resources/Tiles/go-up.png" type="Texture" id=6]
-[ext_resource path="res://resources/Audio/whyamiarobot.wav" type="AudioStream" id=7]
-[ext_resource path="res://resources/Audio/whyamiarobot2.wav" type="AudioStream" id=8]
-[ext_resource path="res://resources/Audio/proton2.wav" type="AudioStream" id=9]
-[ext_resource path="res://resources/Audio/sparkles1.wav" type="AudioStream" id=10]
-[ext_resource path="res://resources/Audio/proton4.wav" type="AudioStream" id=11]
+[ext_resource path="res://resources/Audio/up.wav" type="AudioStream" id=7]
+[ext_resource path="res://resources/Audio/down.wav" type="AudioStream" id=8]
+[ext_resource path="res://resources/Audio/close.wav" type="AudioStream" id=9]
+[ext_resource path="res://resources/Audio/unlock.wav" type="AudioStream" id=10]
+[ext_resource path="res://resources/Audio/open.wav" type="AudioStream" id=11]
 [ext_resource path="res://AudioBankPlayer.tscn" type="PackedScene" id=12]
 
 [sub_resource type="Animation" id=1]
@@ -121,6 +121,7 @@ texture = ExtResource( 2 )
 centered = false
 vframes = 4
 hframes = 3
+frame = 2
 
 [node name="No" type="Sprite" parent="."]
 scale = Vector2( 0.5, 0.5 )

@@ -191,6 +191,7 @@ func shoot(direction: Vector2):
 	set_sprite()
 	if weapon:
 		weapons.location = location
+		weapons.play_audio()
 		set_state(WAIT)
 		moves -= 1
 	else: # no idea how this can happen, but I suspect in does
@@ -223,6 +224,7 @@ func action(direction: Vector2, really=true) -> int: # -> enum
 			else:
 				while combat > MELEE and weapons.get_range() > 1:
 					combat -= 1
+				weapons.play_audio()
 				weapons.attack(level.world.player)
 				combat = len(stats.equipment.weapons) - 1
 		Level.ROGUE:
@@ -232,6 +234,7 @@ func action(direction: Vector2, really=true) -> int: # -> enum
 					if rogue.get_state() == DEAD:
 						move(target, false)
 					else:
+						weapons.play_audio()
 						weapons.attack(rogue)
 		_:
 			if really:

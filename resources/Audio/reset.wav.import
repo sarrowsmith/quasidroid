@@ -2,12 +2,12 @@
 
 importer="wav"
 type="AudioStreamSample"
-path="res://.import/failed.wav-73513a69615718a7baee8392036299fb.sample"
+path="res://.import/reset.wav-4029824a9ce654c772201ee6b56912b1.sample"
 
 [deps]
 
-source_file="res://resources/Audio/failed.wav"
-dest_files=[ "res://.import/failed.wav-73513a69615718a7baee8392036299fb.sample" ]
+source_file="res://resources/Audio/reset.wav"
+dest_files=[ "res://.import/reset.wav-4029824a9ce654c772201ee6b56912b1.sample" ]
 
 [params]
 

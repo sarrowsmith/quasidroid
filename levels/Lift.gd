@@ -87,5 +87,4 @@ func save(file: File):
 	file.store_var(location)
 	file.store_8(direction)
 	file.store_8(state)
-	print(to.map_name if to else "^")
 	file.store_pascal_string(to.map_name if to else "^")

@@ -2,12 +2,12 @@
 
 importer="wav"
 type="AudioStreamSample"
-path="res://.import/somedead.wav-6bd5cc9eb4f541ab82436057484524b5.sample"
+path="res://.import/ion.wav-1f613249af79775fbb4b89c57436c5d5.sample"
 
 [deps]
 
-source_file="res://resources/Audio/somedead.wav"
-dest_files=[ "res://.import/somedead.wav-6bd5cc9eb4f541ab82436057484524b5.sample" ]
+source_file="res://resources/Audio/ion.wav"
+dest_files=[ "res://.import/ion.wav-1f613249af79775fbb4b89c57436c5d5.sample" ]
 
 [params]
 

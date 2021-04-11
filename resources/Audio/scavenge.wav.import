@@ -2,12 +2,12 @@
 
 importer="wav"
 type="AudioStreamSample"
-path="res://.import/proton2.wav-2c32d3395324ff614429ac3bf949a7fd.sample"
+path="res://.import/scavenge.wav-824d1a545051a8d6253760d4521962cd.sample"
 
 [deps]
 
-source_file="res://resources/Audio/proton2.wav"
-dest_files=[ "res://.import/proton2.wav-2c32d3395324ff614429ac3bf949a7fd.sample" ]
+source_file="res://resources/Audio/scavenge.wav"
+dest_files=[ "res://.import/scavenge.wav-824d1a545051a8d6253760d4521962cd.sample" ]
 
 [params]
 

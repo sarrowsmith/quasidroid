@@ -2,12 +2,12 @@
 
 importer="wav"
 type="AudioStreamSample"
-path="res://.import/lowR4.wav-53aa33c5c3a97bac3f3fd7dc39d68c7c.sample"
+path="res://.import/plasma.wav-ce3ccb69d1ceee8de9db4710f3b5a88e.sample"
 
 [deps]
 
-source_file="res://resources/Audio/lowR4.wav"
-dest_files=[ "res://.import/lowR4.wav-53aa33c5c3a97bac3f3fd7dc39d68c7c.sample" ]
+source_file="res://resources/Audio/plasma.wav"
+dest_files=[ "res://.import/plasma.wav-ce3ccb69d1ceee8de9db4710f3b5a88e.sample" ]
 
 [params]
 

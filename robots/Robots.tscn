@@ -1213,7 +1213,6 @@ script = ExtResource( 33 )
 [node name="Down" type="AnimatedSprite" parent="0/Idle"]
 visible = false
 frames = SubResource( 9 )
-frame = 4
 playing = true
 centered = false
 
@@ -1226,14 +1225,13 @@ centered = false
 [node name="Left" type="AnimatedSprite" parent="0/Idle"]
 visible = false
 frames = SubResource( 19 )
-frame = 1
+frame = 5
 playing = true
 centered = false
 
 [node name="Right" type="AnimatedSprite" parent="0/Idle"]
 visible = false
 frames = SubResource( 28 )
-frame = 4
 playing = true
 centered = false
 
@@ -1279,6 +1277,7 @@ centered = false
 [node name="Down" type="AnimatedSprite" parent="2/Idle"]
 visible = false
 frames = SubResource( 60 )
+frame = 4
 playing = true
 centered = false
 
@@ -1291,12 +1290,14 @@ centered = false
 [node name="Left" type="AnimatedSprite" parent="2/Idle"]
 visible = false
 frames = SubResource( 70 )
+frame = 4
 playing = true
 centered = false
 
 [node name="Right" type="AnimatedSprite" parent="2/Idle"]
 visible = false
 frames = SubResource( 79 )
+frame = 4
 playing = true
 centered = false
 
@@ -1333,7 +1334,7 @@ centered = false
 [node name="Down" type="AnimatedSprite" parent="0-X/Idle"]
 visible = false
 frames = SubResource( 106 )
-frame = 5
+frame = 1
 playing = true
 centered = false
 
@@ -1346,14 +1347,13 @@ centered = false
 [node name="Left" type="AnimatedSprite" parent="0-X/Idle"]
 visible = false
 frames = SubResource( 116 )
-frame = 2
+frame = 6
 playing = true
 centered = false
 
 [node name="Right" type="AnimatedSprite" parent="0-X/Idle"]
 visible = false
 frames = SubResource( 125 )
-frame = 4
 playing = true
 centered = false
 
@@ -1390,7 +1390,6 @@ centered = false
 [node name="Down" type="AnimatedSprite" parent="2-X/Idle"]
 visible = false
 frames = SubResource( 152 )
-frame = 4
 playing = true
 centered = false
 
@@ -1403,14 +1402,14 @@ centered = false
 [node name="Left" type="AnimatedSprite" parent="2-X/Idle"]
 visible = false
 frames = SubResource( 162 )
-frame = 2
+frame = 6
 playing = true
 centered = false
 
 [node name="Right" type="AnimatedSprite" parent="2-X/Idle"]
 visible = false
 frames = SubResource( 171 )
-frame = 3
+frame = 7
 playing = true
 centered = false
 

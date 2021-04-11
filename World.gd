@@ -34,6 +34,7 @@ var active_level: Level = null
 var turn = 1
 var target = 0
 var zoomed = false
+var last_rogue: Robot = null
 
 
 func _ready():
@@ -111,21 +112,29 @@ static func first_capital(string: String) -> String:
 	return string.substr(0, 1).to_upper() + string.substr(1)
 
 
-func report_deactivated(display_name: String, is_player: bool):
-	var past = "have" if is_player else "has"
-	log_info("[b]%s %s been deactivated![/b]" % [display_name, past])
+func display_name(robot: Robot) -> String:
+	if robot.is_player:
+		return "You"
+	var article = "The " if robot == last_rogue else "A "
+	return article +  robot.stats.type_name
 
 
-func report_disabled(display_name: String, is_player: bool):
-	var verb = "are" if is_player else "is"
-	log_info("[b]%s %s disabled.[/b]" % [display_name, verb])
+func report_deactivated(robot: Robot):
+	var past = "have" if robot.is_player else "has"
+	log_info("[b]%s %s been deactivated![/b]" % [display_name(robot), past])
 
 
-func report_damaged(display_name: String, component: String):
-	log_info("%s a damaged %s." % [display_name, component])
+func report_disabled(robot: Robot):
+	var verb = "are" if robot.is_player else "is"
+	log_info("[b]%s %s disabled.[/b]" % [display_name(robot), verb])
+
+
+func report_damaged(robot: Robot, component: String):
+	log_info("%s a damaged %s." % [display_name(robot), component])
 
 
 func report_attack(attacker: Robot, defender: Robot, attackers: Dictionary, defenders: Dictionary, damages: Array):
+	last_rogue = defender if attacker.is_player else attacker
 	var a_name = first_capital("you" if attacker.is_player else ("the " + attacker.stats.type_name))
 	var d_name = "you" if defender.is_player else ("the " + defender.stats.type_name)
 	var weapon = attacker.weapons.get_weapon_name()
@@ -165,13 +174,13 @@ Damage inflicted:
 """ % [first_capital(a_name), attack, d_name, with, report.join("\n")]
 	log_info(text)
 	if defender.check_stats():
-		report_deactivated(first_capital(d_name), defender.is_player)
+		report_deactivated(defender)
 	elif defender.stats.stats.speed == 0:
-		report_disabled(first_capital(d_name), defender.is_player)
+		report_disabled(defender)
 	if attacker.check_stats():
-		report_deactivated(a_name, attacker.is_player)
+		report_deactivated(attacker)
 	elif attacker.stats.stats.speed == 0:
-		report_disabled(a_name, attacker.is_player)
+		report_disabled(attacker)
 
 
 const stat_colours = {

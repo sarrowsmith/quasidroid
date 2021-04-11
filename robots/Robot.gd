@@ -92,15 +92,27 @@ func turn() -> bool:
 	signalled = false
 	if state == DEAD:
 		return true
-	if level and stats.implicit_damage(is_player, level.world):
+	if level and implicit_damage():
 		if check_stats():
-			var display_name = "You" if is_player else ("A " +  stats.type_name)
-			level.world.report_deactivated(display_name, is_player)
+			level.world.report_deactivated(self)
 		hit(1, false)
 	if state == DONE:
 		set_state(IDLE)
 		moves = max(stats.stats.speed, 1)
 	return false
+
+
+func implicit_damage() -> bool:
+	var damage_taken = false
+	if stats.weight() > 2 * stats.stats.power:
+		stats.stats.chassis -= 1
+		level.world.report_damaged(self, "chassis")
+		damage_taken = true
+	if stats.stats.speed > stats.equipment.drive * stats.level:
+		stats.stats.speed -= 1
+		level.world.report_damaged(self, "drive")
+		damage_taken = true
+	return damage_taken
 
 
 const facing_map = {

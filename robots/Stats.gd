@@ -99,20 +99,6 @@ func health() -> float:
 	return health
 
 
-func implicit_damage(is_player: bool, world) -> bool:
-	var damage_taken = false
-	var display_name = "You have" if is_player else ("A %s has" % type_name)
-	if weight() > 2 * stats.power:
-		stats.chassis -= 1
-		world.report_damaged(display_name, "chassis")
-		damage_taken = true
-	if stats.speed > equipment.drive * level:
-		stats.speed -= 1
-		world.report_damaged(display_name, "drive")
-		damage_taken = true
-	return damage_taken
-
-
 const damage = [["protection", "armour"], ["chassis", "drive"], ["strength", ""], ["power", ""], ["logic", ""]]
 func normalise(reference: Dictionary, no_damage: bool=false) -> Array:
 	for stat in stats:

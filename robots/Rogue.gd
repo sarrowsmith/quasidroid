@@ -23,8 +23,6 @@ func turn() -> bool:
 					signalled = true
 				if get_state() == DONE:
 					break
-				else:
-					pass
 			Level.PLAYER:
 				while get_state() == WAIT:
 					yield(self, "end_move")

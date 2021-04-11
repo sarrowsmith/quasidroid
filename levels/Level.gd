@@ -211,7 +211,7 @@ func await_rogues():
 
 
 func rogue_end_move(rogue):
-	if not rogue.is_idle() and awaiting.erase(rogue) and awaiting.empty():
+	if awaiting.erase(rogue) and awaiting.empty():
 		emit_signal("rogues_move_end")
 
 

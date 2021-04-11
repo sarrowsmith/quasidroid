@@ -308,6 +308,7 @@ func die():
 
 func on_die():
 	set_sprite()
+	emit_signal("end_move", self)
 
 
 func check_stats() -> bool:

@@ -8,8 +8,8 @@ enum {DEAD, IDLE, WAIT, DONE}
 enum {GRAPPLE, MELEE, WEAPON}
 enum {HIT, DIE, LEVEL_UP, RECHARGE, SCAVENGE}
 
-export(float) var move_speed = 25
-export(float) var weapon_speed = 200
+export(float) var move_speed = 50
+export(float) var weapon_speed = 300
 
 var location = Vector2.ZERO
 var level = null

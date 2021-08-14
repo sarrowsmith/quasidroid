@@ -1,0 +1,15 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+path="res://.import/sparkles1.mp3-553b2735bc3036df9c25a28e815f8744.mp3str"
+
+[deps]
+
+source_file="res://resources/Audio/sparkles1.mp3"
+dest_files=[ "res://.import/sparkles1.mp3-553b2735bc3036df9c25a28e815f8744.mp3str" ]
+
+[params]
+
+loop=true
+loop_offset=0

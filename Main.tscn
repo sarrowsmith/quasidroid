@@ -851,6 +851,7 @@ dialog_autowrap = true
 
 [node name="AudioBankPlayer" parent="." instance=ExtResource( 11 )]
 streams = [ null, ExtResource( 6 ) ]
+
 [connection signal="pressed" from="View/Panel/Split/UpperPanel/Menu/Game Stats" to="." method="_on_Game_Stats_pressed"]
 [connection signal="about_to_show" from="View/Panel/Split/UpperPanel/Menu/Weapon" to="World" method="_on_Weapon_about_to_show" flags=3]
 [connection signal="toggled" from="View/Panel/Split/UpperPanel/Menu/Overview" to="." method="set_zoom"]

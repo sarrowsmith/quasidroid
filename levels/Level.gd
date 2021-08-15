@@ -4,10 +4,6 @@ extends Node2D
 
 signal rogues_move_end()
 
-const LightTexture = preload("res://resources/light.png")
-const CELL_SIZE = 96
-const VIEWPORT_SIZE = 11
-
 export(int) var level_seed = 0
 export(bool) var rooms = false
 export(int) var level = 0
@@ -17,7 +13,6 @@ enum {FLOOR, WALL, LIFT, ACCESS, PLAYER, ROGUE}
 enum {LOCKED, OPEN, RESET, this_is_really_a_bitmask, CLEAR}
 
 onready var cursor = $Cursor
-onready var fog = $Fog
 
 var rng = RandomNumberGenerator.new()
 var map: TileMap = null
@@ -32,10 +27,7 @@ var map_name = ""
 var rogues = []
 var state = LOCKED
 var awaiting = {}
-var fog_image = Image.new()
-var fog_texture = ImageTexture.new()
-var light_image = LightTexture.get_data()
-var light_offset = Vector2(LightTexture.get_width()/2, LightTexture.get_height()/2)
+
 
 func _ready():
 	prototypes = [
@@ -45,13 +37,6 @@ func _ready():
 		load("res://robots/Rogue.tscn")
 	]
 	world = find_parent("World")
-	var fog_image_width = world.world_size.x / CELL_SIZE
-	var fog_image_height = world.world_size.y / CELL_SIZE
-	fog_image.create(fog_image_width + 2, fog_image_height + 2, false, Image.FORMAT_RGBAH)
-	fog_image.fill(Color.black)
-	fog.scale *= CELL_SIZE
-	light_image.convert(Image.FORMAT_RGBAH)
-	update_fog_image_texture()
 
 
 func is_clear() -> bool:
@@ -269,7 +254,6 @@ func activate(location: Vector2) -> bool:
 			lift.unlock()
 	return true
 
-
 func lift_at(location: Vector2): # -> Lift (cyclic reference)
 	if not access.has(location) or access[location]:
 		return null
@@ -322,23 +306,6 @@ func set_cursor(location: Vector2):
 		cursor.location = location
 		cursor.position = location_to_position(location)
 	world.player.set_cursor()
-
-
-func update_fog(location: Vector2):
-	fog_image.lock()
-	light_image.lock()
-
-	var light_rect = Rect2(Vector2.ZERO, light_image.get_size())
-	fog_image.blend_rect(light_image, light_rect, location - light_offset)
-
-	fog_image.unlock()
-	light_image.unlock()
-	update_fog_image_texture()
-
-
-func update_fog_image_texture():
-	fog_texture.create_from_image(fog_image)
-	fog.texture = fog_texture
 
 
 func find_level(level_name: String) -> Level:

@@ -247,9 +247,10 @@ func change_level(level: Level, fade: bool):
 
 
 func view_to(view_position: Vector2, mode):
+	var offset = 48 if mode == ViewMode.TRACK else 0
 	$View.position = Vector2(
-		clamp(view_position.x, 0, world_size.x + 0.5 * half_view.x),
-		clamp(view_position.y, 0, world_size.y + 0.5 * half_view.y))
+		clamp(view_position.x + offset, 0, world_size.x + 0.5 * half_view.x),
+		clamp(view_position.y + offset, 0, world_size.y + 0.5 * half_view.y))
 	view_mode = mode
 
 

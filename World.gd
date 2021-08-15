@@ -9,6 +9,7 @@ export(NodePath) var lower_panel_path
 export(NodePath) var player_status_path
 export(NodePath) var rogue_status_path
 export(NodePath) var log_path
+export(NodePath) var map_panel_path
 
 
 enum {INFO, STATUS, HELP}
@@ -21,6 +22,8 @@ onready var lower_panel = get_node(lower_panel_path)
 onready var player_status_box = get_node(player_status_path)
 onready var rogue_status_box = get_node(rogue_status_path)
 onready var log_box = get_node(log_path)
+onready var map_label = get_node(map_panel_path).find_node("MapLabel")
+onready var map_image = get_node(map_panel_path).find_node("MapImage")
 onready var info_box = lower_panel.get_tab_control(INFO)
 onready var weapon_options = upper_panel.get_tab_control(INFO).find_node("Weapon")
 

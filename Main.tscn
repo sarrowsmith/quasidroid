@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=2]
+[gd_scene load_steps=13 format=2]
 
 [ext_resource path="res://World.tscn" type="PackedScene" id=1]
 [ext_resource path="res://Main.gd" type="Script" id=2]
@@ -12,6 +12,11 @@
 [ext_resource path="res://resources/Resources/default_theme.tres" type="Theme" id=10]
 [ext_resource path="res://AudioBankPlayer.tscn" type="PackedScene" id=11]
 
+[sub_resource type="ImageTexture" id=1]
+flags = 1
+flags = 1
+size = Vector2( 352, 352 )
+
 [node name="Main" type="Node2D"]
 script = ExtResource( 2 )
 
@@ -20,11 +25,12 @@ script = ExtResource( 2 )
 [node name="World" parent="." instance=ExtResource( 1 )]
 z_index = -5
 world_depth = 2
-upper_panel_path = NodePath("../View/Panel/Split/UpperPanel")
-lower_panel_path = NodePath("../View/Panel/Split/LowerPanel")
-player_status_path = NodePath("../View/Panel/Split/UpperPanel/Status/Status")
-rogue_status_path = NodePath("../View/Panel/Split/LowerPanel/Scan/Scan")
-log_path = NodePath("../View/Log/Info")
+upper_panel_path = NodePath("../View/PanelL/Split/UpperPanel")
+lower_panel_path = NodePath("../View/PanelL/Split/LowerPanel")
+player_status_path = NodePath("../View/PanelL/Split/UpperPanel/Status/Status")
+rogue_status_path = NodePath("../View/PanelL/Split/LowerPanel/Scan/Scan")
+log_path = NodePath("../View/PanelR/Split/Log/Info")
+map_panel_path = NodePath("../View/PanelR/Split/Map")
 
 [node name="Frame" type="Node2D" parent="."]
 
@@ -68,7 +74,7 @@ __meta__ = {
 position = Vector2( 960, 540 )
 z_index = 3
 
-[node name="Panel" type="PanelContainer" parent="View"]
+[node name="PanelL" type="PanelContainer" parent="View"]
 margin_left = -960.0
 margin_top = -540.0
 margin_right = -588.0
@@ -78,7 +84,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Split" type="VSplitContainer" parent="View/Panel"]
+[node name="Split" type="VSplitContainer" parent="View/PanelL"]
 margin_left = 7.0
 margin_top = 7.0
 margin_right = 365.0
@@ -90,14 +96,14 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="UpperPanel" type="TabContainer" parent="View/Panel/Split"]
+[node name="UpperPanel" type="TabContainer" parent="View/PanelL/Split"]
 margin_right = 358.0
 margin_bottom = 431.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 tab_align = 0
 
-[node name="Menu" type="VBoxContainer" parent="View/Panel/Split/UpperPanel"]
+[node name="Menu" type="VBoxContainer" parent="View/PanelL/Split/UpperPanel"]
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_left = 4.0
@@ -107,13 +113,13 @@ margin_bottom = -4.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="Seed" parent="View/Panel/Split/UpperPanel/Menu" instance=ExtResource( 5 )]
+[node name="Seed" parent="View/PanelL/Split/UpperPanel/Menu" instance=ExtResource( 5 )]
 margin_top = 0.0
 margin_right = 350.0
 margin_bottom = 20.0
 label = "Game:"
 
-[node name="Game Stats" type="Button" parent="View/Panel/Split/UpperPanel/Menu"]
+[node name="Game Stats" type="Button" parent="View/PanelL/Split/UpperPanel/Menu"]
 margin_top = 24.0
 margin_right = 350.0
 margin_bottom = 56.0
@@ -121,7 +127,7 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 text = "Game Stats"
 
-[node name="Weapon" type="MenuButton" parent="View/Panel/Split/UpperPanel/Menu"]
+[node name="Weapon" type="MenuButton" parent="View/PanelL/Split/UpperPanel/Menu"]
 margin_top = 60.0
 margin_right = 350.0
 margin_bottom = 93.0
@@ -130,7 +136,7 @@ size_flags_vertical = 3
 text = "Weapon"
 flat = false
 
-[node name="Overview" type="Button" parent="View/Panel/Split/UpperPanel/Menu"]
+[node name="Overview" type="Button" parent="View/PanelL/Split/UpperPanel/Menu"]
 margin_top = 97.0
 margin_right = 350.0
 margin_bottom = 130.0
@@ -139,7 +145,7 @@ size_flags_vertical = 3
 toggle_mode = true
 text = "Overview"
 
-[node name="Fullscreen" type="Button" parent="View/Panel/Split/UpperPanel/Menu"]
+[node name="Fullscreen" type="Button" parent="View/PanelL/Split/UpperPanel/Menu"]
 margin_top = 134.0
 margin_right = 350.0
 margin_bottom = 167.0
@@ -149,7 +155,7 @@ toggle_mode = true
 pressed = true
 text = "Fullscreen"
 
-[node name="Mute" type="Button" parent="View/Panel/Split/UpperPanel/Menu"]
+[node name="Mute" type="Button" parent="View/PanelL/Split/UpperPanel/Menu"]
 margin_top = 171.0
 margin_right = 350.0
 margin_bottom = 204.0
@@ -158,14 +164,14 @@ size_flags_vertical = 3
 toggle_mode = true
 text = "Mute"
 
-[node name="CenterContainer" type="CenterContainer" parent="View/Panel/Split/UpperPanel/Menu"]
+[node name="CenterContainer" type="CenterContainer" parent="View/PanelL/Split/UpperPanel/Menu"]
 margin_top = 208.0
 margin_right = 350.0
 margin_bottom = 241.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="Save" type="Button" parent="View/Panel/Split/UpperPanel/Menu"]
+[node name="Save" type="Button" parent="View/PanelL/Split/UpperPanel/Menu"]
 margin_top = 245.0
 margin_right = 350.0
 margin_bottom = 278.0
@@ -173,7 +179,7 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 text = "Save"
 
-[node name="Restart" type="Button" parent="View/Panel/Split/UpperPanel/Menu"]
+[node name="Restart" type="Button" parent="View/PanelL/Split/UpperPanel/Menu"]
 margin_top = 282.0
 margin_right = 350.0
 margin_bottom = 315.0
@@ -181,7 +187,7 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 text = "Restart"
 
-[node name="Quit" type="Button" parent="View/Panel/Split/UpperPanel/Menu"]
+[node name="Quit" type="Button" parent="View/PanelL/Split/UpperPanel/Menu"]
 margin_top = 319.0
 margin_right = 350.0
 margin_bottom = 352.0
@@ -189,14 +195,14 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 text = "Quit"
 
-[node name="CenterContainer2" type="CenterContainer" parent="View/Panel/Split/UpperPanel/Menu"]
+[node name="CenterContainer2" type="CenterContainer" parent="View/PanelL/Split/UpperPanel/Menu"]
 margin_top = 356.0
 margin_right = 350.0
 margin_bottom = 389.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="Status" type="ScrollContainer" parent="View/Panel/Split/UpperPanel"]
+[node name="Status" type="ScrollContainer" parent="View/PanelL/Split/UpperPanel"]
 visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -208,83 +214,83 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 scroll_horizontal_enabled = false
 
-[node name="Status" type="VBoxContainer" parent="View/Panel/Split/UpperPanel/Status"]
+[node name="Status" type="VBoxContainer" parent="View/PanelL/Split/UpperPanel/Status"]
 margin_right = 350.0
 margin_bottom = 389.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="Turn" parent="View/Panel/Split/UpperPanel/Status/Status" instance=ExtResource( 5 )]
+[node name="Turn" parent="View/PanelL/Split/UpperPanel/Status/Status" instance=ExtResource( 5 )]
 margin_top = 0.0
 margin_right = 350.0
 margin_bottom = 20.0
 label = "Turn:"
 
-[node name="Moves" parent="View/Panel/Split/UpperPanel/Status/Status" instance=ExtResource( 5 )]
+[node name="Moves" parent="View/PanelL/Split/UpperPanel/Status/Status" instance=ExtResource( 5 )]
 margin_top = 24.0
 margin_right = 350.0
 margin_bottom = 44.0
 label = "Moves left:"
 
-[node name="weapons" parent="View/Panel/Split/UpperPanel/Status/Status" instance=ExtResource( 5 )]
+[node name="weapons" parent="View/PanelL/Split/UpperPanel/Status/Status" instance=ExtResource( 5 )]
 margin_top = 48.0
 margin_right = 350.0
 margin_bottom = 68.0
 label = "Weapon:"
 
-[node name="power" parent="View/Panel/Split/UpperPanel/Status/Status" instance=ExtResource( 5 )]
+[node name="power" parent="View/PanelL/Split/UpperPanel/Status/Status" instance=ExtResource( 5 )]
 margin_top = 72.0
 margin_right = 350.0
 margin_bottom = 92.0
 label = "Power:"
 
-[node name="logic" parent="View/Panel/Split/UpperPanel/Status/Status" instance=ExtResource( 5 )]
+[node name="logic" parent="View/PanelL/Split/UpperPanel/Status/Status" instance=ExtResource( 5 )]
 margin_top = 96.0
 margin_right = 350.0
 margin_bottom = 116.0
 label = "Logic:"
 
-[node name="chassis" parent="View/Panel/Split/UpperPanel/Status/Status" instance=ExtResource( 5 )]
+[node name="chassis" parent="View/PanelL/Split/UpperPanel/Status/Status" instance=ExtResource( 5 )]
 margin_top = 120.0
 margin_right = 350.0
 margin_bottom = 140.0
 label = "Chassis:"
 
-[node name="drive" parent="View/Panel/Split/UpperPanel/Status/Status" instance=ExtResource( 5 )]
+[node name="drive" parent="View/PanelL/Split/UpperPanel/Status/Status" instance=ExtResource( 5 )]
 margin_top = 144.0
 margin_right = 350.0
 margin_bottom = 164.0
 label = "Drive:"
 
-[node name="armour" parent="View/Panel/Split/UpperPanel/Status/Status" instance=ExtResource( 5 )]
+[node name="armour" parent="View/PanelL/Split/UpperPanel/Status/Status" instance=ExtResource( 5 )]
 margin_top = 168.0
 margin_right = 350.0
 margin_bottom = 188.0
 label = "Armour:"
 
-[node name="protection" parent="View/Panel/Split/UpperPanel/Status/Status" instance=ExtResource( 5 )]
+[node name="protection" parent="View/PanelL/Split/UpperPanel/Status/Status" instance=ExtResource( 5 )]
 margin_top = 192.0
 margin_right = 350.0
 margin_bottom = 212.0
 label = "Protection:"
 
-[node name="strength" parent="View/Panel/Split/UpperPanel/Status/Status" instance=ExtResource( 5 )]
+[node name="strength" parent="View/PanelL/Split/UpperPanel/Status/Status" instance=ExtResource( 5 )]
 margin_top = 216.0
 margin_right = 350.0
 margin_bottom = 236.0
 label = "Strength:"
 
-[node name="speed" parent="View/Panel/Split/UpperPanel/Status/Status" instance=ExtResource( 5 )]
+[node name="speed" parent="View/PanelL/Split/UpperPanel/Status/Status" instance=ExtResource( 5 )]
 margin_top = 240.0
 margin_right = 350.0
 margin_bottom = 260.0
 label = "Speed:"
 
-[node name="extras" parent="View/Panel/Split/UpperPanel/Status/Status" instance=ExtResource( 5 )]
+[node name="extras" parent="View/PanelL/Split/UpperPanel/Status/Status" instance=ExtResource( 5 )]
 visible = false
 label = "Equipment:"
 
-[node name="Controls" type="VBoxContainer" parent="View/Panel/Split/UpperPanel"]
+[node name="Controls" type="VBoxContainer" parent="View/PanelL/Split/UpperPanel"]
 visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -295,119 +301,119 @@ margin_bottom = -4.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="LabelledValue7" parent="View/Panel/Split/UpperPanel/Controls" instance=ExtResource( 5 )]
+[node name="LabelledValue7" parent="View/PanelL/Split/UpperPanel/Controls" instance=ExtResource( 5 )]
 margin_top = 0.0
 margin_right = 338.0
 margin_bottom = 23.0
 label = "Move"
 default = "H, J, K, L"
 
-[node name="LabelledValue13" parent="View/Panel/Split/UpperPanel/Controls" instance=ExtResource( 5 )]
+[node name="LabelledValue13" parent="View/PanelL/Split/UpperPanel/Controls" instance=ExtResource( 5 )]
 margin_top = 0.0
 margin_right = 338.0
 margin_bottom = 23.0
 label = "Fire"
 default = "shift + H, J, K, L"
 
-[node name="LabelledValue8" parent="View/Panel/Split/UpperPanel/Controls" instance=ExtResource( 5 )]
+[node name="LabelledValue8" parent="View/PanelL/Split/UpperPanel/Controls" instance=ExtResource( 5 )]
 margin_top = 0.0
 margin_right = 338.0
 margin_bottom = 23.0
 label = "Select weapon"
 default = "Z, X"
 
-[node name="LabelledValue12" parent="View/Panel/Split/UpperPanel/Controls" instance=ExtResource( 5 )]
+[node name="LabelledValue12" parent="View/PanelL/Split/UpperPanel/Controls" instance=ExtResource( 5 )]
 margin_top = 0.0
 margin_right = 338.0
 margin_bottom = 23.0
 label = "Rest"
 default = "space"
 
-[node name="LabelledValue6" parent="View/Panel/Split/UpperPanel/Controls" instance=ExtResource( 5 )]
+[node name="LabelledValue6" parent="View/PanelL/Split/UpperPanel/Controls" instance=ExtResource( 5 )]
 margin_top = 0.0
 margin_right = 338.0
 margin_bottom = 23.0
 label = "Move cursor"
 default = "W, A, S, D"
 
-[node name="LabelledValue2" parent="View/Panel/Split/UpperPanel/Controls" instance=ExtResource( 5 )]
+[node name="LabelledValue2" parent="View/PanelL/Split/UpperPanel/Controls" instance=ExtResource( 5 )]
 margin_top = 27.0
 margin_right = 338.0
 margin_bottom = 50.0
 label = "Action at cursor"
 default = "enter"
 
-[node name="LabelledValue10" parent="View/Panel/Split/UpperPanel/Controls" instance=ExtResource( 5 )]
+[node name="LabelledValue10" parent="View/PanelL/Split/UpperPanel/Controls" instance=ExtResource( 5 )]
 margin_top = 27.0
 margin_right = 338.0
 margin_bottom = 50.0
 label = "Info at cursor"
 default = "esc"
 
-[node name="LabelledValue11" parent="View/Panel/Split/UpperPanel/Controls" instance=ExtResource( 5 )]
+[node name="LabelledValue11" parent="View/PanelL/Split/UpperPanel/Controls" instance=ExtResource( 5 )]
 margin_top = 27.0
 margin_right = 338.0
 margin_bottom = 50.0
 label = "Reset cursor"
 default = "backspace"
 
-[node name="LabelledValue" parent="View/Panel/Split/UpperPanel/Controls" instance=ExtResource( 5 )]
+[node name="LabelledValue" parent="View/PanelL/Split/UpperPanel/Controls" instance=ExtResource( 5 )]
 margin_top = 0.0
 margin_right = 338.0
 margin_bottom = 23.0
 label = "Move view"
 default = "arrow keys"
 
-[node name="LabelledValue14" parent="View/Panel/Split/UpperPanel/Controls" instance=ExtResource( 5 )]
+[node name="LabelledValue14" parent="View/PanelL/Split/UpperPanel/Controls" instance=ExtResource( 5 )]
 margin_top = 0.0
 margin_right = 338.0
 margin_bottom = 23.0
 label = "Toggle overview"
 default = "tab"
 
-[node name="LabelledValue9" parent="View/Panel/Split/UpperPanel/Controls" instance=ExtResource( 5 )]
+[node name="LabelledValue9" parent="View/PanelL/Split/UpperPanel/Controls" instance=ExtResource( 5 )]
 margin_top = 27.0
 margin_right = 338.0
 margin_bottom = 50.0
 label = "Reset view"
 default = "delete"
 
-[node name="LabelledValue15" parent="View/Panel/Split/UpperPanel/Controls" instance=ExtResource( 5 )]
+[node name="LabelledValue15" parent="View/PanelL/Split/UpperPanel/Controls" instance=ExtResource( 5 )]
 margin_top = 27.0
 margin_right = 338.0
 margin_bottom = 50.0
 label = "Fullscreen"
 default = "F"
 
-[node name="LabelledValue16" parent="View/Panel/Split/UpperPanel/Controls" instance=ExtResource( 5 )]
+[node name="LabelledValue16" parent="View/PanelL/Split/UpperPanel/Controls" instance=ExtResource( 5 )]
 margin_top = 27.0
 margin_right = 338.0
 margin_bottom = 50.0
 label = "Mute"
 default = "M"
 
-[node name="LabelledValue3" parent="View/Panel/Split/UpperPanel/Controls" instance=ExtResource( 5 )]
+[node name="LabelledValue3" parent="View/PanelL/Split/UpperPanel/Controls" instance=ExtResource( 5 )]
 margin_top = 54.0
 margin_right = 338.0
 margin_bottom = 77.0
 label = "Save:"
 default = "^S"
 
-[node name="LabelledValue4" parent="View/Panel/Split/UpperPanel/Controls" instance=ExtResource( 5 )]
+[node name="LabelledValue4" parent="View/PanelL/Split/UpperPanel/Controls" instance=ExtResource( 5 )]
 margin_top = 81.0
 margin_right = 338.0
 margin_bottom = 104.0
 label = "Restart:"
 default = "^R"
 
-[node name="LabelledValue5" parent="View/Panel/Split/UpperPanel/Controls" instance=ExtResource( 5 )]
+[node name="LabelledValue5" parent="View/PanelL/Split/UpperPanel/Controls" instance=ExtResource( 5 )]
 margin_top = 108.0
 margin_right = 338.0
 margin_bottom = 131.0
 label = "Quit:"
 default = "^Q"
 
-[node name="LowerPanel" type="TabContainer" parent="View/Panel/Split"]
+[node name="LowerPanel" type="TabContainer" parent="View/PanelL/Split"]
 margin_top = 443.0
 margin_right = 358.0
 margin_bottom = 1066.0
@@ -415,7 +421,7 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 tab_align = 0
 
-[node name="Info" type="RichTextLabel" parent="View/Panel/Split/LowerPanel"]
+[node name="Info" type="RichTextLabel" parent="View/PanelL/Split/LowerPanel"]
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_left = 4.0
@@ -451,7 +457,7 @@ Reset all the access points on a level to unlock downward lifts.
 scroll_following = true
 selection_enabled = true
 
-[node name="Scan" type="ScrollContainer" parent="View/Panel/Split/LowerPanel"]
+[node name="Scan" type="ScrollContainer" parent="View/PanelL/Split/LowerPanel"]
 visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -463,50 +469,50 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 scroll_horizontal_enabled = false
 
-[node name="Scan" type="VBoxContainer" parent="View/Panel/Split/LowerPanel/Scan"]
+[node name="Scan" type="VBoxContainer" parent="View/PanelL/Split/LowerPanel/Scan"]
 margin_right = 350.0
 margin_bottom = 581.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="Type" parent="View/Panel/Split/LowerPanel/Scan/Scan" instance=ExtResource( 5 )]
+[node name="Type" parent="View/PanelL/Split/LowerPanel/Scan/Scan" instance=ExtResource( 5 )]
 margin_bottom = 715.0
 size_flags_horizontal = 1
 label = "Type:"
 
-[node name="weapons" parent="View/Panel/Split/LowerPanel/Scan/Scan" instance=ExtResource( 5 )]
+[node name="weapons" parent="View/PanelL/Split/LowerPanel/Scan/Scan" instance=ExtResource( 5 )]
 margin_bottom = 712.0
 label = "Weapon:"
 
-[node name="power" parent="View/Panel/Split/LowerPanel/Scan/Scan" instance=ExtResource( 5 )]
+[node name="power" parent="View/PanelL/Split/LowerPanel/Scan/Scan" instance=ExtResource( 5 )]
 label = "Power:"
 
-[node name="logic" parent="View/Panel/Split/LowerPanel/Scan/Scan" instance=ExtResource( 5 )]
+[node name="logic" parent="View/PanelL/Split/LowerPanel/Scan/Scan" instance=ExtResource( 5 )]
 label = "Logic:"
 
-[node name="chassis" parent="View/Panel/Split/LowerPanel/Scan/Scan" instance=ExtResource( 5 )]
+[node name="chassis" parent="View/PanelL/Split/LowerPanel/Scan/Scan" instance=ExtResource( 5 )]
 label = "Chassis:"
 
-[node name="drive" parent="View/Panel/Split/LowerPanel/Scan/Scan" instance=ExtResource( 5 )]
+[node name="drive" parent="View/PanelL/Split/LowerPanel/Scan/Scan" instance=ExtResource( 5 )]
 label = "Drive:"
 
-[node name="armour" parent="View/Panel/Split/LowerPanel/Scan/Scan" instance=ExtResource( 5 )]
+[node name="armour" parent="View/PanelL/Split/LowerPanel/Scan/Scan" instance=ExtResource( 5 )]
 label = "Armour:"
 
-[node name="protection" parent="View/Panel/Split/LowerPanel/Scan/Scan" instance=ExtResource( 5 )]
+[node name="protection" parent="View/PanelL/Split/LowerPanel/Scan/Scan" instance=ExtResource( 5 )]
 label = "Protection:"
 
-[node name="strength" parent="View/Panel/Split/LowerPanel/Scan/Scan" instance=ExtResource( 5 )]
+[node name="strength" parent="View/PanelL/Split/LowerPanel/Scan/Scan" instance=ExtResource( 5 )]
 label = "Strength:"
 
-[node name="speed" parent="View/Panel/Split/LowerPanel/Scan/Scan" instance=ExtResource( 5 )]
+[node name="speed" parent="View/PanelL/Split/LowerPanel/Scan/Scan" instance=ExtResource( 5 )]
 label = "Speed:"
 
-[node name="extras" parent="View/Panel/Split/LowerPanel/Scan/Scan" instance=ExtResource( 5 )]
+[node name="extras" parent="View/PanelL/Split/LowerPanel/Scan/Scan" instance=ExtResource( 5 )]
 visible = false
 label = "Equipment:"
 
-[node name="About" type="RichTextLabel" parent="View/Panel/Split/LowerPanel"]
+[node name="About" type="RichTextLabel" parent="View/PanelL/Split/LowerPanel"]
 visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -541,7 +547,7 @@ Reset all the access points on a level to unlock downward lifts."
 fit_content_height = true
 selection_enabled = true
 
-[node name="Log" type="PanelContainer" parent="View"]
+[node name="PanelR" type="PanelContainer" parent="View"]
 margin_left = 588.0
 margin_top = -540.0
 margin_right = 960.0
@@ -550,11 +556,23 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Info" type="RichTextLabel" parent="View/Log"]
+[node name="Split" type="VSplitContainer" parent="View/PanelR"]
 margin_left = 7.0
 margin_top = 7.0
 margin_right = 365.0
 margin_bottom = 1073.0
+split_offset = 176
+dragger_visibility = 2
+
+[node name="Log" type="ScrollContainer" parent="View/PanelR/Split"]
+margin_right = 358.0
+margin_bottom = 689.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Info" type="RichTextLabel" parent="View/PanelR/Split/Log"]
+margin_right = 358.0
+margin_bottom = 689.0
 rect_clip_content = false
 focus_mode = 2
 size_flags_horizontal = 3
@@ -567,6 +585,42 @@ custom_fonts/normal_font = ExtResource( 4 )
 bbcode_enabled = true
 scroll_following = true
 selection_enabled = true
+
+[node name="Map" type="CenterContainer" parent="View/PanelR/Split"]
+margin_top = 689.0
+margin_right = 358.0
+margin_bottom = 1066.0
+size_flags_horizontal = 3
+size_flags_vertical = 7
+
+[node name="Container" type="VBoxContainer" parent="View/PanelR/Split/Map"]
+margin_left = 3.0
+margin_right = 355.0
+margin_bottom = 377.0
+
+[node name="MapLabel" type="RichTextLabel" parent="View/PanelR/Split/Map/Container"]
+margin_right = 352.0
+margin_bottom = 21.0
+size_flags_horizontal = 3
+size_flags_vertical = 5
+custom_fonts/mono_font = ExtResource( 3 )
+custom_fonts/bold_italics_font = ExtResource( 8 )
+custom_fonts/italics_font = ExtResource( 9 )
+custom_fonts/bold_font = ExtResource( 7 )
+custom_fonts/normal_font = ExtResource( 4 )
+bbcode_enabled = true
+bbcode_text = "Level 0"
+text = "Level 0"
+fit_content_height = true
+scroll_active = false
+
+[node name="MapImage" type="TextureRect" parent="View/PanelR/Split/Map/Container"]
+margin_top = 25.0
+margin_right = 352.0
+margin_bottom = 377.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+texture = SubResource( 1 )
 
 [node name="ColorRectBottom" type="ColorRect" parent="View"]
 anchor_top = 1.0
@@ -852,14 +906,14 @@ dialog_autowrap = true
 [node name="AudioBankPlayer" parent="." instance=ExtResource( 11 )]
 streams = [ null, ExtResource( 6 ) ]
 
-[connection signal="pressed" from="View/Panel/Split/UpperPanel/Menu/Game Stats" to="." method="_on_Game_Stats_pressed"]
-[connection signal="about_to_show" from="View/Panel/Split/UpperPanel/Menu/Weapon" to="World" method="_on_Weapon_about_to_show" flags=3]
-[connection signal="toggled" from="View/Panel/Split/UpperPanel/Menu/Overview" to="." method="set_zoom"]
-[connection signal="toggled" from="View/Panel/Split/UpperPanel/Menu/Fullscreen" to="." method="_on_Fullscreen_toggled"]
-[connection signal="toggled" from="View/Panel/Split/UpperPanel/Menu/Mute" to="." method="_on_Mute_toggled"]
-[connection signal="pressed" from="View/Panel/Split/UpperPanel/Menu/Save" to="." method="_on_Save_pressed"]
-[connection signal="pressed" from="View/Panel/Split/UpperPanel/Menu/Restart" to="." method="_on_Restart_pressed"]
-[connection signal="pressed" from="View/Panel/Split/UpperPanel/Menu/Quit" to="." method="_on_Quit_pressed"]
+[connection signal="pressed" from="View/PanelL/Split/UpperPanel/Menu/Game Stats" to="." method="_on_Game_Stats_pressed"]
+[connection signal="about_to_show" from="View/PanelL/Split/UpperPanel/Menu/Weapon" to="World" method="_on_Weapon_about_to_show" flags=3]
+[connection signal="toggled" from="View/PanelL/Split/UpperPanel/Menu/Overview" to="." method="set_zoom"]
+[connection signal="toggled" from="View/PanelL/Split/UpperPanel/Menu/Fullscreen" to="." method="_on_Fullscreen_toggled"]
+[connection signal="toggled" from="View/PanelL/Split/UpperPanel/Menu/Mute" to="." method="_on_Mute_toggled"]
+[connection signal="pressed" from="View/PanelL/Split/UpperPanel/Menu/Save" to="." method="_on_Save_pressed"]
+[connection signal="pressed" from="View/PanelL/Split/UpperPanel/Menu/Restart" to="." method="_on_Restart_pressed"]
+[connection signal="pressed" from="View/PanelL/Split/UpperPanel/Menu/Quit" to="." method="_on_Quit_pressed"]
 [connection signal="pressed" from="Dialogs/Start/VBoxContainer/MarginContainer/VBoxContainer1/CenterContainer/ResumeButton" to="." method="_on_Resume_pressed"]
 [connection signal="pressed" from="Dialogs/Start/VBoxContainer/MarginContainer3/V2BoxContainer/HBoxContainer/CenterContainer3/RandomButton" to="." method="_on_Random_pressed"]
 [connection signal="text_changed" from="Dialogs/Start/VBoxContainer/MarginContainer3/V2BoxContainer/HBoxContainer/Seed" to="." method="_on_Seed_text_changed"]

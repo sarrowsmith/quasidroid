@@ -15,67 +15,66 @@ z_index = 2
 script = ExtResource( 2 )
 
 [node name="Robot" parent="." instance=ExtResource( 1 )]
-move_speed = 50.0
 
 [node name="Down" parent="Robot/0/Idle" index="0"]
-frame = 5
+frame = 0
 
 [node name="Left" parent="Robot/0/Idle" index="2"]
-frame = 2
+frame = 5
 
 [node name="Right" parent="Robot/0/Idle" index="3"]
-frame = 5
+frame = 0
 
 [node name="Down" parent="Robot/0/Move" index="0"]
-frame = 2
+frame = 1
 
 [node name="Up" parent="Robot/0/Move" index="1"]
-frame = 3
+frame = 2
 
 [node name="Down" parent="Robot/2/Idle" index="0"]
-frame = 1
-
-[node name="Left" parent="Robot/2/Idle" index="2"]
-frame = 1
-
-[node name="Right" parent="Robot/2/Idle" index="3"]
-frame = 1
-
-[node name="Down" parent="Robot/2/Move" index="0"]
-frame = 1
-
-[node name="Up" parent="Robot/2/Move" index="1"]
-frame = 1
-
-[node name="Down" parent="Robot/0-X/Idle" index="0"]
-frame = 6
-
-[node name="Left" parent="Robot/0-X/Idle" index="2"]
-frame = 3
-
-[node name="Right" parent="Robot/0-X/Idle" index="3"]
-frame = 5
-
-[node name="Down" parent="Robot/0-X/Move" index="0"]
-frame = 1
-
-[node name="Up" parent="Robot/0-X/Move" index="1"]
-frame = 1
-
-[node name="Down" parent="Robot/2-X/Idle" index="0"]
-frame = 5
-
-[node name="Left" parent="Robot/2-X/Idle" index="2"]
-frame = 3
-
-[node name="Right" parent="Robot/2-X/Idle" index="3"]
 frame = 4
 
+[node name="Left" parent="Robot/2/Idle" index="2"]
+frame = 4
+
+[node name="Right" parent="Robot/2/Idle" index="3"]
+frame = 4
+
+[node name="Down" parent="Robot/2/Move" index="0"]
+frame = 0
+
+[node name="Up" parent="Robot/2/Move" index="1"]
+frame = 0
+
+[node name="Down" parent="Robot/0-X/Idle" index="0"]
+frame = 1
+
+[node name="Left" parent="Robot/0-X/Idle" index="2"]
+frame = 6
+
+[node name="Right" parent="Robot/0-X/Idle" index="3"]
+frame = 0
+
+[node name="Down" parent="Robot/0-X/Move" index="0"]
+frame = 0
+
+[node name="Up" parent="Robot/0-X/Move" index="1"]
+frame = 0
+
+[node name="Down" parent="Robot/2-X/Idle" index="0"]
+frame = 0
+
+[node name="Left" parent="Robot/2-X/Idle" index="2"]
+frame = 6
+
+[node name="Right" parent="Robot/2-X/Idle" index="3"]
+frame = 7
+
 [node name="Down" parent="Robot/2-X/Move" index="0"]
-frame = 2
+frame = 1
 
 [node name="Up" parent="Robot/2-X/Move" index="1"]
-frame = 2
+frame = 1
 
 [node name="Weapons" parent="." instance=ExtResource( 3 )]
 

@@ -47,12 +47,14 @@ func show_named_dialog(dialog: String):
 
 func show_dialog(dialog: Popup):
 	world.set_visible(false)
+	$Frame.set_visible(false)
 	view_to(half_view, ViewMode.DIALOG)
 	dialog.popup_centered()
 
 
 func hide_dialog(dialog: Popup):
 	world.set_visible(true)
+	$Frame.set_visible(true)
 	if dialog:
 		dialog.set_visible(false)
 	if world.player:

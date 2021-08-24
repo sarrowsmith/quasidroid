@@ -77,6 +77,7 @@ centered = false
 
 [node name="Fog" type="Sprite" parent="."]
 material = SubResource( 2 )
+position = Vector2( -96, -96 )
 z_index = 6
 centered = false
 

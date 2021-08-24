@@ -48,7 +48,7 @@ func _ready():
 	world = find_parent("World")
 	var image_width = world.world_size.x / CELL_SIZE
 	var image_height = world.world_size.y / CELL_SIZE
-	fog_image.create(image_width + 2, image_height + 2, false, Image.FORMAT_RGBAH)
+	fog_image.create(image_width + 4, image_height + 4, false, Image.FORMAT_RGBAH)
 	fog_image.fill(Color.black)
 	fog.scale *= CELL_SIZE
 	light_image.convert(Image.FORMAT_RGBAH)

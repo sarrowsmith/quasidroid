@@ -12,10 +12,8 @@
 [ext_resource path="res://resources/Resources/default_theme.tres" type="Theme" id=10]
 [ext_resource path="res://AudioBankPlayer.tscn" type="PackedScene" id=11]
 
-[sub_resource type="ImageTexture" id=1]
-flags = 1
-flags = 1
-size = Vector2( 352, 352 )
+[sub_resource type="ViewportTexture" id=1]
+viewport_path = NodePath("Viewport")
 
 [node name="Main" type="Node2D"]
 script = ExtResource( 2 )
@@ -31,6 +29,12 @@ player_status_path = NodePath("../View/PanelL/Split/UpperPanel/Status/Status")
 rogue_status_path = NodePath("../View/PanelL/Split/LowerPanel/Scan/Scan")
 log_path = NodePath("../View/PanelR/Split/Log/Info")
 map_panel_path = NodePath("../View/PanelR/Split/Map")
+
+[node name="Viewport" type="Viewport" parent="."]
+size = Vector2( 3072, 3072 )
+size_override_stretch = true
+transparent_bg = true
+handle_input_locally = false
 
 [node name="Frame" type="Node2D" parent="."]
 
@@ -559,20 +563,18 @@ __meta__ = {
 [node name="Split" type="VSplitContainer" parent="View/PanelR"]
 margin_left = 7.0
 margin_top = 7.0
-margin_right = 365.0
-margin_bottom = 1073.0
+margin_right = 3079.0
+margin_bottom = 3104.0
 split_offset = 176
 dragger_visibility = 2
 
 [node name="Log" type="ScrollContainer" parent="View/PanelR/Split"]
-margin_right = 358.0
-margin_bottom = 689.0
+margin_right = 3072.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="Info" type="RichTextLabel" parent="View/PanelR/Split/Log"]
-margin_right = 358.0
-margin_bottom = 689.0
+margin_right = 3072.0
 rect_clip_content = false
 focus_mode = 2
 size_flags_horizontal = 3
@@ -586,20 +588,18 @@ bbcode_enabled = true
 scroll_following = true
 selection_enabled = true
 
-[node name="Map" type="CenterContainer" parent="View/PanelR/Split"]
-margin_top = 689.0
-margin_right = 358.0
-margin_bottom = 1066.0
+[node name="Map" type="MarginContainer" parent="View/PanelR/Split"]
+margin_right = 3072.0
+margin_bottom = 3097.0
 size_flags_horizontal = 3
 size_flags_vertical = 7
 
 [node name="Container" type="VBoxContainer" parent="View/PanelR/Split/Map"]
-margin_left = 3.0
-margin_right = 355.0
-margin_bottom = 377.0
+margin_right = 3072.0
+margin_bottom = 3097.0
 
 [node name="MapLabel" type="RichTextLabel" parent="View/PanelR/Split/Map/Container"]
-margin_right = 352.0
+margin_right = 3072.0
 margin_bottom = 21.0
 size_flags_horizontal = 3
 size_flags_vertical = 5
@@ -614,10 +614,10 @@ text = "Level 0"
 fit_content_height = true
 scroll_active = false
 
-[node name="MapImage" type="TextureRect" parent="View/PanelR/Split/Map/Container"]
+[node name="MapTexture" type="TextureRect" parent="View/PanelR/Split/Map/Container"]
 margin_top = 25.0
-margin_right = 352.0
-margin_bottom = 377.0
+margin_right = 3072.0
+margin_bottom = 3097.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 texture = SubResource( 1 )

@@ -14,7 +14,7 @@ var view_mode = ViewMode.TRACK
 var save = false
 
 onready var world = $World
-onready var world_size = $World.world_size
+onready var world_size = world.world_size
 onready var saved_games = $Dialogs.find_node("SavedGames")
 onready var master_index = AudioServer.get_bus_index("Master")
 onready var audio = $AudioBankPlayer
@@ -259,7 +259,7 @@ func view_to(view_position: Vector2, mode):
 func set_zoom(out: bool):
 	world.zoomed = out
 	var scale = Vector2.ONE / (3.0 if out else 1.0)
-	$World.scale = scale
+	world.scale = scale
 	$Frame.scale = scale
 	if out:
 		view_to(world.world_size / 6.0, ViewMode.FREE)

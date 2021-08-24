@@ -98,7 +98,6 @@ func create(from: Level, rooms: bool):
 	if parent == null:
 		level = 1
 		map_name = "1"
-		state |= OPEN
 	else:
 		level = parent.level + 1
 		prototypes = parent.prototypes
@@ -120,6 +119,7 @@ func generate():
 		for l in lifts:
 			l.close()
 		return
+	state |= OPEN
 	while true:
 		rng.seed = level_seed
 		map.generate(rng)

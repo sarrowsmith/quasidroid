@@ -69,6 +69,7 @@ func change_level(level: Level):
 		active_level.set_visible(false)
 	level.generate()
 	active_level = level
+	set_minimap()
 
 
 func set_value(name: String, value, is_player: bool):
@@ -133,7 +134,8 @@ func report_disabled(robot: Robot):
 
 
 func report_damaged(robot: Robot, component: String):
-	log_info("%s a damaged %s." % [display_name(robot), component])
+	var possessive = "have" if robot.is_player else "has"
+	log_info("%s %s a damaged %s." % [display_name(robot), possessive, component])
 
 
 func report_attack(attacker: Robot, defender: Robot, attackers: Dictionary, defenders: Dictionary, damages: Array):
@@ -186,10 +188,20 @@ Damage inflicted:
 		report_disabled(attacker)
 
 
-const stat_colours = {
-	"levels opened": "#ff8080",
-	"levels reset": "#ffff00",
-	"levels cleared": "#80ff80",
+const state_colours = [
+	"#ff8080",
+	"#ff8080",
+	"#ffff00",
+	"#ffff00",
+	"#80ff80",
+	"#80ff80",
+	"#80ff80",
+	"#80ff80",
+]
+const stat_map = {
+	"levels opened": Level.OPEN,
+	"levels reset": Level.RESET,
+	"levels cleared": Level.CLEAR,
 }
 func show_game_stats(game_seed: String):
 	var messages = PoolStringArray()
@@ -209,7 +221,7 @@ func show_game_stats(game_seed: String):
 	for status in ["cleared", "reset", "opened"]:
 		var key = "levels " + status
 		if active_stats[key] > 0:
-			display_status = " [color=%s]%s[/color]" % [stat_colours[key], status]
+			display_status = " [color=%s]%s[/color]" % [state_colours[stat_map[key]], status]
 			break
 	messages.append("Level %s:%s\n" % [level_name, display_status])
 	for level in all_stats:
@@ -226,7 +238,7 @@ func show_game_stats(game_seed: String):
 			"rogues deactivated":
 				messages.append("Rogues deactivated: [b]%d[/b]" % stats["rogues deactivated"])
 			_:
-				messages.append("[color=%s]%s[/color]: [b]%s[/b]" % [stat_colours[k], k.capitalize(), PoolStringArray(stats[k]).join(", ")])
+				messages.append("[color=%s]%s[/color]: [b]%s[/b]" % [state_colours[stat_map[k]], k.capitalize(), PoolStringArray(stats[k]).join(", ")])
 	show_info(messages.join("\n"))
 
 
@@ -239,6 +251,10 @@ func check_end():
 	log_info("""All the levels have now been cleared.
 
 [b]Make your way to the surface before the systems reboot on turn %d.[/b]""" % target)
+
+
+func set_minimap():
+	map_label.bbcode_text = "[color=%s]Level %s[/color]" % [state_colours[active_level.state], active_level.map_name]
 
 
 func load(file: File) -> String:
@@ -255,6 +271,7 @@ func load(file: File) -> String:
 	player.load(file)
 	log_box.bbcode_text = file.get_pascal_string()
 	active_level.set_visible(true)
+	set_minimap()
 	return game_seed
 
 

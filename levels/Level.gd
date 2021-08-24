@@ -4,7 +4,7 @@ extends Node2D
 
 signal rogues_move_end()
 
-const LightTexture = preload("res://resources/light.png")
+const LightTexture = preload("res://resources/mask.png")
 const CELL_SIZE = 96
 const VIEWPORT_SIZE = 11
 
@@ -18,6 +18,7 @@ enum {LOCKED, OPEN, RESET, this_is_really_a_bitmask, CLEAR}
 
 onready var cursor = $Cursor
 onready var fog = $Fog
+
 
 var rng = RandomNumberGenerator.new()
 var map: TileMap = null
@@ -45,9 +46,9 @@ func _ready():
 		load("res://robots/Rogue.tscn")
 	]
 	world = find_parent("World")
-	var fog_image_width = world.world_size.x / CELL_SIZE
-	var fog_image_height = world.world_size.y / CELL_SIZE
-	fog_image.create(fog_image_width + 2, fog_image_height + 2, false, Image.FORMAT_RGBAH)
+	var image_width = world.world_size.x / CELL_SIZE
+	var image_height = world.world_size.y / CELL_SIZE
+	fog_image.create(image_width + 2, image_height + 2, false, Image.FORMAT_RGBAH)
 	fog_image.fill(Color.black)
 	fog.scale *= CELL_SIZE
 	light_image.convert(Image.FORMAT_RGBAH)

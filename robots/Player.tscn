@@ -31,6 +31,12 @@ frame = 1
 [node name="Up" parent="Robot/0/Move" index="1"]
 frame = 2
 
+[node name="Left" parent="Robot/0/Move" index="2"]
+frame = 0
+
+[node name="Right" parent="Robot/0/Move" index="3"]
+frame = 0
+
 [node name="Down" parent="Robot/2/Idle" index="0"]
 frame = 4
 
@@ -45,6 +51,12 @@ frame = 0
 
 [node name="Up" parent="Robot/2/Move" index="1"]
 frame = 0
+
+[node name="Left" parent="Robot/2/Move" index="2"]
+frame = 2
+
+[node name="Right" parent="Robot/2/Move" index="3"]
+frame = 2
 
 [node name="Down" parent="Robot/0-X/Idle" index="0"]
 frame = 1
@@ -61,6 +73,12 @@ frame = 0
 [node name="Up" parent="Robot/0-X/Move" index="1"]
 frame = 0
 
+[node name="Left" parent="Robot/0-X/Move" index="2"]
+frame = 2
+
+[node name="Right" parent="Robot/0-X/Move" index="3"]
+frame = 2
+
 [node name="Down" parent="Robot/2-X/Idle" index="0"]
 frame = 0
 
@@ -74,6 +92,12 @@ frame = 7
 frame = 1
 
 [node name="Up" parent="Robot/2-X/Move" index="1"]
+frame = 1
+
+[node name="Left" parent="Robot/2-X/Move" index="2"]
+frame = 1
+
+[node name="Right" parent="Robot/2-X/Move" index="3"]
 frame = 1
 
 [node name="Weapons" parent="." instance=ExtResource( 3 )]

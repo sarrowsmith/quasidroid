@@ -6,7 +6,7 @@ signal rogues_move_end()
 
 const LightTexture = preload("res://resources/mask.png")
 const CELL_SIZE = 96
-const VIEWPORT_SIZE = 11
+const LIGHT_SCALE = 2
 
 export(int) var level_seed = 0
 export(bool) var rooms = false
@@ -48,7 +48,7 @@ func _ready():
 	world = find_parent("World")
 	var image_width = world.world_size.x / CELL_SIZE
 	var image_height = world.world_size.y / CELL_SIZE
-	fog_image.create(image_width + 4, image_height + 4, false, Image.FORMAT_RGBAH)
+	fog_image.create(image_width + 2, image_height + 2, false, Image.FORMAT_RGBAH)
 	fog_image.fill(Color.black)
 	fog.scale *= CELL_SIZE
 	light_image.convert(Image.FORMAT_RGBAH)
@@ -261,6 +261,7 @@ func activate(location: Vector2) -> bool:
 	if not access.has(location):
 		return false # Shouldn't be possible, but apparently is
 	access[location].reset()
+	update_fog(location, LIGHT_SCALE)
 	for ap in access.values():
 		if ap and not ap.active:
 			return false
@@ -325,12 +326,22 @@ func set_cursor(location: Vector2):
 	world.player.set_cursor()
 
 
-func update_fog(location: Vector2):
+func update_fog(location: Vector2, scale=1):
 	fog_image.lock()
 	light_image.lock()
 
-	var light_rect = Rect2(Vector2.ZERO, light_image.get_size())
-	fog_image.blend_rect(light_image, light_rect, location - light_offset)
+	var light_size = light_image.get_size()
+	var light_rect = Rect2(Vector2.ZERO, light_size)
+	if scale > 1:
+		var scaled_image = light_image.get_rect(light_rect)
+		var scaled_size = light_size * scale
+		light_rect.size = scaled_size
+		scaled_image.resize(scaled_size.x, scaled_size.y, Image.INTERPOLATE_CUBIC)
+		scaled_image.lock()
+		fog_image.blend_rect(scaled_image, light_rect, location - light_offset * scale)
+		scaled_image.unlock()
+	else:
+		fog_image.blend_rect(light_image, light_rect, location - light_offset)
 
 	fog_image.unlock()
 	light_image.unlock()

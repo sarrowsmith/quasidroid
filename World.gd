@@ -82,11 +82,9 @@ func set_weapon():
 	set_value("weapons", player.weapons.get_weapon_name(), true)
 	var menu = weapon_options.get_popup()
 	menu.clear()
-	menu.add_item("Weapons")
-	menu.add_separator()
 	for weapon in player.stats.equipment.weapons:
 		menu.add_radio_check_item(player.weapons.get_weapon_name(weapon))
-	menu.set_item_checked(player.combat + 2, true)
+	menu.set_item_checked(player.combat, true)
 
 
 func set_turn(inc: int):
@@ -288,11 +286,11 @@ func save(file: File, game_seed: String):
 
 
 func _on_Weapon_selected(idx):
-	if idx > 1:
-		player.combat = idx - 2
-		player.equip()
+	player.combat = idx
+	player.equip()
 
 
 func _on_Weapon_about_to_show():
-	# dark magic to hack around panel concealing popup
-	weapon_options.get_popup().set_global_position(weapon_options.rect_global_position + Vector2.RIGHT * 372)
+	var menu = weapon_options.get_popup()
+	menu.light_mask = 2
+	menu.set_global_position(player.position + Vector2.RIGHT * 96)

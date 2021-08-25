@@ -65,7 +65,7 @@ func _unhandled_input(event: InputEvent):
 		return
 	for e in move_map:
 		if event.is_action_pressed(e):
-			var shift = InputEventKey and event.shift
+			var shift = event is InputEventWithModifiers and event.shift
 			signalled = false
 			if shift and weapons.get_range() > 1:
 				shoot(move_map[e])

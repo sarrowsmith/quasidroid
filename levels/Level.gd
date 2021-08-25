@@ -266,6 +266,7 @@ func activate(location: Vector2) -> bool:
 		if ap and not ap.active:
 			return false
 	state |= RESET
+	world.set_minimap()
 	for lift in lifts:
 		if lift.to:
 			lift.unlock()
@@ -434,6 +435,10 @@ func load(file: File):
 	load_lifts(file)
 	load_access(file)
 	load_rogues(file)
+	var fog_data = file.get_var()
+	if fog_data:
+		fog_image.data = fog_data
+		update_fog_image_texture()
 
 
 func save(file: File):
@@ -450,6 +455,7 @@ func save(file: File):
 	save_lifts(file)
 	save_access(file)
 	save_rogues(file)
+	file.store_var(fog_image.data)
 
 
 func _on_Background_click(_position, button):

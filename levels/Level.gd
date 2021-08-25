@@ -37,6 +37,8 @@ var fog_image = Image.new()
 var fog_texture = ImageTexture.new()
 var light_image = LightTexture.get_data()
 var light_offset = Vector2(LightTexture.get_width()/2, LightTexture.get_height()/2)
+var map_image = Image.new()
+
 
 func _ready():
 	prototypes = [
@@ -53,6 +55,7 @@ func _ready():
 	fog.scale *= CELL_SIZE
 	light_image.convert(Image.FORMAT_RGBAH)
 	update_fog_image_texture()
+	map_image.copy_from(fog_image)
 
 
 func is_clear() -> bool:
@@ -266,7 +269,7 @@ func activate(location: Vector2) -> bool:
 		if ap and not ap.active:
 			return false
 	state |= RESET
-	world.set_minimap()
+	world.update_minimap()
 	for lift in lifts:
 		if lift.to:
 			lift.unlock()
@@ -352,6 +355,7 @@ func update_fog(location: Vector2, scale=1):
 func update_fog_image_texture():
 	fog_texture.create_from_image(fog_image)
 	fog.texture = fog_texture
+	map_image.copy_from(fog_image)
 
 
 func find_level(level_name: String) -> Level:

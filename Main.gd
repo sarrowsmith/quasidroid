@@ -210,7 +210,7 @@ func player_end_move(player):
 	if dead == len(world.active_level.rogues):
 		if not world.active_level.state & Level.CLEAR:
 			world.active_level.state |= Level.CLEAR
-			world.set_minimap()
+			world.update_minimap()
 			world.check_end()
 
 

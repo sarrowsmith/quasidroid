@@ -10,12 +10,16 @@ export(NodePath) var player_status_path
 export(NodePath) var rogue_status_path
 export(NodePath) var log_path
 export(NodePath) var map_panel_path
+export(Vector2) var map_size = Vector2(352, 352)
 
 
 enum {INFO, STATUS, HELP}
 
-var Level_prototype = preload("res://levels/Level.tscn")
-var Player_prototype = preload("res://robots/Player.tscn")
+const Level_prototype = preload("res://levels/Level.tscn")
+const Player_prototype = preload("res://robots/Player.tscn")
+
+var map_image = Image.new()
+var map_texture = ImageTexture.new()
 
 onready var upper_panel = get_node(upper_panel_path)
 onready var lower_panel = get_node(lower_panel_path)
@@ -23,7 +27,7 @@ onready var player_status_box = get_node(player_status_path)
 onready var rogue_status_box = get_node(rogue_status_path)
 onready var log_box = get_node(log_path)
 onready var map_label = get_node(map_panel_path).find_node("MapLabel")
-onready var map_image = get_node(map_panel_path).find_node("MapImage")
+onready var map_control = get_node(map_panel_path).find_node("MapImage")
 onready var info_box = lower_panel.get_tab_control(INFO)
 onready var weapon_options = upper_panel.get_tab_control(INFO).find_node("Weapon")
 
@@ -46,6 +50,8 @@ func _ready():
 	var menu = weapon_options.get_popup()
 	menu.connect("index_pressed", self, "_on_Weapon_selected")
 	menu.show_on_top = true
+	map_image.create(map_size.x, map_size.y, false, Image.FORMAT_RGBAH)
+	map_image.fill(Color.black)
 
 
 # warning-ignore:shadowed_variable
@@ -69,7 +75,7 @@ func change_level(level: Level):
 		active_level.set_visible(false)
 	level.generate()
 	active_level = level
-	set_minimap()
+	update_minimap()
 
 
 func set_value(name: String, value, is_player: bool):
@@ -93,6 +99,7 @@ func set_turn(inc: int):
 	set_value("Turn", display_turn , true)
 	if turn % 2:
 		log_info("\n[i]Turn %d[/i]" % display_turn)
+	update_minimap()
 
 
 func log_info(text: String):
@@ -251,8 +258,12 @@ func check_end():
 [b]Make your way to the surface before the systems reboot on turn %d.[/b]""" % target)
 
 
-func set_minimap():
+func update_minimap():
 	map_label.bbcode_text = "[color=%s]Level %s[/color]" % [state_colours[active_level.state], active_level.map_name]
+	map_image.copy_from(active_level.map_image)
+	map_image.resize(map_size.x, map_size.y, Image.INTERPOLATE_NEAREST)
+	map_texture.create_from_image(map_image)
+	map_control.texture = map_texture
 
 
 func load(file: File) -> String:
@@ -269,7 +280,7 @@ func load(file: File) -> String:
 	player.load(file)
 	log_box.bbcode_text = file.get_pascal_string()
 	active_level.set_visible(true)
-	set_minimap()
+	update_minimap()
 	return game_seed
 
 

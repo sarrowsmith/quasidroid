@@ -681,7 +681,7 @@ text = "Level 0"
 fit_content_height = true
 scroll_active = false
 
-[node name="MapTexture" type="TextureRect" parent="View/PanelR/Split/Map/Container"]
+[node name="MapImage" type="TextureRect" parent="View/PanelR/Split/Map/Container"]
 light_mask = 2
 margin_top = 25.0
 margin_right = 358.0

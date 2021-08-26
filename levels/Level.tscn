@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=2]
+[gd_scene load_steps=13 format=2]
 
 [ext_resource path="res://resources/Tiles/Spacepack Floor 1-1.png" type="Texture" id=1]
 [ext_resource path="res://levels/Rooms.tscn" type="PackedScene" id=2]
@@ -11,6 +11,9 @@
 [ext_resource path="res://resources/Cursors/move_cursor.png" type="Texture" id=9]
 [ext_resource path="res://resources/Cursors/info_cursor.png" type="Texture" id=10]
 [ext_resource path="res://resources/Cursors/inverse_cursor.png" type="Texture" id=11]
+
+[sub_resource type="CanvasItemMaterial" id=1]
+blend_mode = 3
 
 [node name="Level" type="Node2D"]
 script = ExtResource( 3 )
@@ -70,6 +73,11 @@ centered = false
 [node name="Wall" type="Sprite" parent="Cursor"]
 visible = false
 texture = ExtResource( 11 )
+centered = false
+
+[node name="Fog" type="Sprite" parent="."]
+material = SubResource( 1 )
+z_index = 6
 centered = false
 
 [connection signal="click" from="Background" to="." method="_on_Background_click"]

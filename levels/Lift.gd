@@ -42,6 +42,12 @@ func get_info() -> String:
 It is currently [b]%s[/b].""" % [directions[direction].to_lower(), level_name(from), level_name(to), state_name[state]]
 
 
+func flag_colour() -> Color:
+	if state == LOCKED:
+		return Color.darkred if direction == DOWN else Color.limegreen
+	return Color.crimson if direction == DOWN else Color.chartreuse
+
+
 func unlock(force=false):
 	if state == LOCKED or force:
 		$No.set_visible(false)

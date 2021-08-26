@@ -14,7 +14,7 @@ var view_mode = ViewMode.TRACK
 var save = false
 
 onready var world = $World
-onready var world_size = $World.world_size
+onready var world_size = world.world_size
 onready var saved_games = $Dialogs.find_node("SavedGames")
 onready var master_index = AudioServer.get_bus_index("Master")
 onready var audio = $AudioBankPlayer
@@ -47,12 +47,14 @@ func show_named_dialog(dialog: String):
 
 func show_dialog(dialog: Popup):
 	world.set_visible(false)
+	$Frame.set_visible(false)
 	view_to(half_view, ViewMode.DIALOG)
 	dialog.popup_centered()
 
 
 func hide_dialog(dialog: Popup):
 	world.set_visible(true)
+	$Frame.set_visible(true)
 	if dialog:
 		dialog.set_visible(false)
 	if world.player:
@@ -208,6 +210,7 @@ func player_end_move(player):
 	if dead == len(world.active_level.rogues):
 		if not world.active_level.state & Level.CLEAR:
 			world.active_level.state |= Level.CLEAR
+			world.update_minimap()
 			world.check_end()
 
 
@@ -247,16 +250,17 @@ func change_level(level: Level, fade: bool):
 
 
 func view_to(view_position: Vector2, mode):
+	var offset = 48 if mode == ViewMode.TRACK else 0
 	$View.position = Vector2(
-		clamp(view_position.x, 0, world_size.x + 0.5 * half_view.x),
-		clamp(view_position.y, 0, world_size.y + 0.5 * half_view.y))
+		clamp(view_position.x + offset, 0, world_size.x + 0.5 * half_view.x),
+		clamp(view_position.y + offset, 0, world_size.y + 0.5 * half_view.y))
 	view_mode = mode
 
 
 func set_zoom(out: bool):
 	world.zoomed = out
 	var scale = Vector2.ONE / (3.0 if out else 1.0)
-	$World.scale = scale
+	world.scale = scale
 	$Frame.scale = scale
 	if out:
 		view_to(world.world_size / 6.0, ViewMode.FREE)

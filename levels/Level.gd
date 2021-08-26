@@ -36,7 +36,7 @@ var awaiting = {}
 var fog_image = Image.new()
 var fog_texture = ImageTexture.new()
 var light_image = LightTexture.get_data()
-var light_offset = Vector2(LightTexture.get_width()/2, LightTexture.get_height()/2)
+var light_offset = Vector2(floor(0.5 * LightTexture.get_width()), floor(0.5 * LightTexture.get_height()))
 var map_image = Image.new()
 var player_location = Vector2.ZERO
 
@@ -154,16 +154,16 @@ func update_level_map(player: Vector2):
 	if player == Vector2.ZERO:
 		for wall in map.get_used_cells():
 			map_image.set_pixelv(wall, Color.black)
-	else:
-		map_image.set_pixelv(player_location, Color.snow)
-		map_image.set_pixelv(player, Color.darkorange)
-		player_location = player
 	for ap in access:
 		if access[ap]:
 			map_image.set_pixelv(ap, Color.magenta if access[ap].active else Color.deeppink)
 	for lift in lifts:
 		map_image.set_pixelv(lift.location, Color.blue)
 		map_image.set_pixelv(lift.location + Vector2.UP, lift.flag_colour())
+	if player != Vector2.ZERO:
+		map_image.set_pixelv(player_location, Color.snow)
+		map_image.set_pixelv(player, Color.darkorange)
+		player_location = player
 	map_image.unlock()
 
 
@@ -363,7 +363,8 @@ func update_fog(location: Vector2, scale=1):
 		light_rect.size = scaled_size
 		scaled_image.resize(scaled_size.x, scaled_size.y, Image.INTERPOLATE_CUBIC)
 		scaled_image.lock()
-		fog_image.blend_rect(scaled_image, light_rect, location - light_offset * scale)
+		# I have no idea why this 0.75 is needed, but it is.
+		fog_image.blend_rect(scaled_image, light_rect, location - light_offset * 0.75 * scale)
 		scaled_image.unlock()
 	else:
 		fog_image.blend_rect(light_image, light_rect, location - light_offset)

@@ -12,7 +12,7 @@
 [ext_resource path="res://resources/Cursors/info_cursor.png" type="Texture" id=10]
 [ext_resource path="res://resources/Cursors/inverse_cursor.png" type="Texture" id=11]
 
-[sub_resource type="CanvasItemMaterial" id=2]
+[sub_resource type="CanvasItemMaterial" id=1]
 blend_mode = 3
 
 [node name="Level" type="Node2D"]
@@ -76,7 +76,7 @@ texture = ExtResource( 11 )
 centered = false
 
 [node name="Fog" type="Sprite" parent="."]
-material = SubResource( 2 )
+material = SubResource( 1 )
 z_index = 6
 centered = false
 

@@ -38,6 +38,7 @@ var fog_texture = ImageTexture.new()
 var light_image = LightTexture.get_data()
 var light_offset = Vector2(LightTexture.get_width()/2, LightTexture.get_height()/2)
 var map_image = Image.new()
+var player_location = Vector2.ZERO
 
 
 func _ready():
@@ -55,7 +56,8 @@ func _ready():
 	fog.scale *= CELL_SIZE
 	light_image.convert(Image.FORMAT_RGBAH)
 	update_fog_image_texture()
-	map_image.copy_from(fog_image)
+	map_image.create(image_width + 2, image_height + 2, false, Image.FORMAT_RGBAH)
+	map_image.fill(Color.snow)
 
 
 func is_clear() -> bool:
@@ -144,6 +146,25 @@ func generate():
 			break
 		clear()
 		level_seed = rng.randi()
+	update_level_map(Vector2.ZERO)
+
+
+func update_level_map(player: Vector2):
+	map_image.lock()
+	if player == Vector2.ZERO:
+		for wall in map.get_used_cells():
+			map_image.set_pixelv(wall, Color.black)
+	else:
+		map_image.set_pixelv(player_location, Color.snow)
+		map_image.set_pixelv(player, Color.darkorange)
+		player_location = player
+	for ap in access:
+		if access[ap]:
+			map_image.set_pixelv(ap, Color.magenta if access[ap].active else Color.deeppink)
+	for lift in lifts:
+		map_image.set_pixelv(lift.location, Color.blue)
+		map_image.set_pixelv(lift.location + Vector2.UP, lift.flag_colour())
+	map_image.unlock()
 
 
 func clear():
@@ -355,7 +376,6 @@ func update_fog(location: Vector2, scale=1):
 func update_fog_image_texture():
 	fog_texture.create_from_image(fog_image)
 	fog.texture = fog_texture
-	map_image.copy_from(fog_image)
 
 
 func find_level(level_name: String) -> Level:
@@ -439,6 +459,7 @@ func load(file: File):
 	load_lifts(file)
 	load_access(file)
 	load_rogues(file)
+	update_level_map(Vector2.ZERO)
 	var fog_data = file.get_var()
 	if fog_data:
 		fog_image.data = fog_data

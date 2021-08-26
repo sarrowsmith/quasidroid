@@ -9,18 +9,24 @@ export(NodePath) var lower_panel_path
 export(NodePath) var player_status_path
 export(NodePath) var rogue_status_path
 export(NodePath) var log_path
+export(NodePath) var map_panel_path
+export(int) var map_scale = 12
 
 
 enum {INFO, STATUS, HELP}
 
-var Level_prototype = preload("res://levels/Level.tscn")
-var Player_prototype = preload("res://robots/Player.tscn")
+const Level_prototype = preload("res://levels/Level.tscn")
+const Player_prototype = preload("res://robots/Player.tscn")
 
 onready var upper_panel = get_node(upper_panel_path)
 onready var lower_panel = get_node(lower_panel_path)
 onready var player_status_box = get_node(player_status_path)
 onready var rogue_status_box = get_node(rogue_status_path)
 onready var log_box = get_node(log_path)
+onready var map_label = get_node(map_panel_path).find_node("MapLabel")
+onready var map_control = get_node(map_panel_path).find_node("MapImage")
+onready var level_map = map_control.get_node("LevelMap")
+onready var level_fog = map_control.get_node("LevelFog")
 onready var info_box = lower_panel.get_tab_control(INFO)
 onready var weapon_options = upper_panel.get_tab_control(INFO).find_node("Weapon")
 
@@ -43,6 +49,8 @@ func _ready():
 	var menu = weapon_options.get_popup()
 	menu.connect("index_pressed", self, "_on_Weapon_selected")
 	menu.show_on_top = true
+	level_fog.scale *= map_scale
+	level_map.scale *= map_scale
 
 
 # warning-ignore:shadowed_variable
@@ -66,6 +74,7 @@ func change_level(level: Level):
 		active_level.set_visible(false)
 	level.generate()
 	active_level = level
+	update_minimap()
 
 
 func set_value(name: String, value, is_player: bool):
@@ -78,11 +87,9 @@ func set_weapon():
 	set_value("weapons", player.weapons.get_weapon_name(), true)
 	var menu = weapon_options.get_popup()
 	menu.clear()
-	menu.add_item("Weapons")
-	menu.add_separator()
 	for weapon in player.stats.equipment.weapons:
 		menu.add_radio_check_item(player.weapons.get_weapon_name(weapon))
-	menu.set_item_checked(player.combat + 2, true)
+	menu.set_item_checked(player.combat, true)
 
 
 func set_turn(inc: int):
@@ -91,6 +98,7 @@ func set_turn(inc: int):
 	set_value("Turn", display_turn , true)
 	if turn % 2:
 		log_info("\n[i]Turn %d[/i]" % display_turn)
+	update_minimap()
 
 
 func log_info(text: String):
@@ -130,7 +138,8 @@ func report_disabled(robot: Robot):
 
 
 func report_damaged(robot: Robot, component: String):
-	log_info("%s a damaged %s." % [display_name(robot), component])
+	var possessive = "have" if robot.is_player else "has"
+	log_info("%s %s a damaged %s." % [display_name(robot), possessive, component])
 
 
 func report_attack(attacker: Robot, defender: Robot, attackers: Dictionary, defenders: Dictionary, damages: Array):
@@ -183,10 +192,20 @@ Damage inflicted:
 		report_disabled(attacker)
 
 
-const stat_colours = {
-	"levels opened": "#ff8080",
-	"levels reset": "#ffff00",
-	"levels cleared": "#80ff80",
+const state_colours = [
+	"#ff8080",
+	"#ff8080",
+	"#ffff00",
+	"#ffff00",
+	"#80ff80",
+	"#80ff80",
+	"#80ff80",
+	"#80ff80",
+]
+const stat_map = {
+	"levels opened": Level.OPEN,
+	"levels reset": Level.RESET,
+	"levels cleared": Level.CLEAR,
 }
 func show_game_stats(game_seed: String):
 	var messages = PoolStringArray()
@@ -206,7 +225,7 @@ func show_game_stats(game_seed: String):
 	for status in ["cleared", "reset", "opened"]:
 		var key = "levels " + status
 		if active_stats[key] > 0:
-			display_status = " [color=%s]%s[/color]" % [stat_colours[key], status]
+			display_status = " [color=%s]%s[/color]" % [state_colours[stat_map[key]], status]
 			break
 	messages.append("Level %s:%s\n" % [level_name, display_status])
 	for level in all_stats:
@@ -223,7 +242,7 @@ func show_game_stats(game_seed: String):
 			"rogues deactivated":
 				messages.append("Rogues deactivated: [b]%d[/b]" % stats["rogues deactivated"])
 			_:
-				messages.append("[color=%s]%s[/color]: [b]%s[/b]" % [stat_colours[k], k.capitalize(), PoolStringArray(stats[k]).join(", ")])
+				messages.append("[color=%s]%s[/color]: [b]%s[/b]" % [state_colours[stat_map[k]], k.capitalize(), PoolStringArray(stats[k]).join(", ")])
 	show_info(messages.join("\n"))
 
 
@@ -236,6 +255,13 @@ func check_end():
 	log_info("""All the levels have now been cleared.
 
 [b]Make your way to the surface before the systems reboot on turn %d.[/b]""" % target)
+
+
+func update_minimap():
+	map_label.bbcode_text = "[color=%s]Level %s[/color]" % [state_colours[active_level.state], active_level.map_name]
+	active_level.update_level_map(player.location)
+	level_map.texture.create_from_image(active_level.map_image, 0)
+	level_fog.texture.create_from_image(active_level.fog_image, 0)
 
 
 func load(file: File) -> String:
@@ -252,6 +278,7 @@ func load(file: File) -> String:
 	player.load(file)
 	log_box.bbcode_text = file.get_pascal_string()
 	active_level.set_visible(true)
+	update_minimap()
 	return game_seed
 
 
@@ -268,11 +295,11 @@ func save(file: File, game_seed: String):
 
 
 func _on_Weapon_selected(idx):
-	if idx > 1:
-		player.combat = idx - 2
-		player.equip()
+	player.combat = idx
+	player.equip()
 
 
 func _on_Weapon_about_to_show():
-	# dark magic to hack around panel concealing popup
-	weapon_options.get_popup().set_global_position(weapon_options.rect_global_position + Vector2.RIGHT * 372)
+	var menu = weapon_options.get_popup()
+	menu.light_mask = 2
+	menu.set_global_position(player.position + Vector2.RIGHT * 96)

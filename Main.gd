@@ -47,12 +47,14 @@ func show_named_dialog(dialog: String):
 
 func show_dialog(dialog: Popup):
 	world.set_visible(false)
+	$Frame.set_visible(false)
 	view_to(half_view, ViewMode.DIALOG)
 	dialog.popup_centered()
 
 
 func hide_dialog(dialog: Popup):
 	world.set_visible(true)
+	$Frame.set_visible(true)
 	if dialog:
 		dialog.set_visible(false)
 	if world.player:
@@ -248,9 +250,10 @@ func change_level(level: Level, fade: bool):
 
 
 func view_to(view_position: Vector2, mode):
+	var offset = 48 if mode == ViewMode.TRACK else 0
 	$View.position = Vector2(
-		clamp(view_position.x, 0, world_size.x + 0.5 * half_view.x),
-		clamp(view_position.y, 0, world_size.y + 0.5 * half_view.y))
+		clamp(view_position.x + offset, 0, world_size.x + 0.5 * half_view.x),
+		clamp(view_position.y + offset, 0, world_size.y + 0.5 * half_view.y))
 	view_mode = mode
 
 

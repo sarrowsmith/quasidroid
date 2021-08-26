@@ -14,6 +14,7 @@
 
 [sub_resource type="CanvasItemMaterial" id=1]
 blend_mode = 3
+
 [node name="Level" type="Node2D"]
 script = ExtResource( 3 )
 level_seed = 1902414767
@@ -78,5 +79,6 @@ centered = false
 material = SubResource( 1 )
 z_index = 6
 centered = false
+
 [connection signal="click" from="Background" to="." method="_on_Background_click"]
 [connection signal="move" from="Background" to="." method="_on_Background_move"]

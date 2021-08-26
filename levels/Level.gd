@@ -7,6 +7,7 @@ signal rogues_move_end()
 const LightTexture = preload("res://resources/mask.png")
 const CELL_SIZE = 96
 const LIGHT_SCALE = 2
+
 export(int) var level_seed = 0
 export(bool) var rooms = false
 export(int) var level = 0
@@ -38,6 +39,7 @@ var light_image = LightTexture.get_data()
 var light_offset = Vector2(LightTexture.get_width()/2, LightTexture.get_height()/2)
 var map_image = Image.new()
 var player_location = Vector2.ZERO
+
 
 func _ready():
 	prototypes = [
@@ -294,6 +296,7 @@ func activate(location: Vector2) -> bool:
 			lift.unlock()
 	return true
 
+
 func lift_at(location: Vector2): # -> Lift (cyclic reference)
 	if not access.has(location) or access[location]:
 		return null
@@ -373,6 +376,8 @@ func update_fog(location: Vector2, scale=1):
 func update_fog_image_texture():
 	fog_texture.create_from_image(fog_image)
 	fog.texture = fog_texture
+
+
 func find_level(level_name: String) -> Level:
 	match level_name:
 		"^":

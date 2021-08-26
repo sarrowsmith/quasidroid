@@ -25,6 +25,7 @@ blend_mode = 3
 [sub_resource type="ImageTexture" id=3]
 flags = 0
 flags = 0
+
 [node name="Main" type="Node2D"]
 script = ExtResource( 2 )
 
@@ -708,6 +709,7 @@ centered = false
 material = SubResource( 4 )
 texture = SubResource( 3 )
 centered = false
+
 [node name="ColorRectBottom" type="ColorRect" parent="View"]
 light_mask = 2
 anchor_top = 1.0

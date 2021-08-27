@@ -101,7 +101,7 @@ func set_cursor():
 		return
 	var location_type = level.location_type(level.cursor.location)
 	var distance_squared = location.distance_squared_to(level.cursor.location)
-	var in_range = distance_squared <= stats.stats.speed
+	var in_range = distance_squared <= moves * moves
 	match location_type:
 		Level.LIFT:
 			var lift = level.lift_at(level.cursor.location)

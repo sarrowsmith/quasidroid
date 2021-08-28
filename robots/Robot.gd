@@ -200,11 +200,12 @@ func shoot(direction: Vector2):
 		set_sprite()
 
 
-func action(direction: Vector2, really=true) -> int: # -> enum
+func action(direction: Vector2, really=true, target=Vector2.ZERO) -> int: # -> enum
 	facing = direction
-	var target = target()
+	if target == Vector2.ZERO:
+		target = target()
 	if really:
-		moves -= 1
+		moves -= ceil(location.distance_to(target))
 	var target_type = level.location_type(target)
 	match target_type:
 		Level.FLOOR:

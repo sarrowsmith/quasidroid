@@ -152,7 +152,7 @@ func cursor_activate(button):
 						shoot(direction)
 					else:
 # warning-ignore:return_value_discarded
-						action(direction)
+						action(direction, true, level.cursor.location)
 
 
 func show_info(optional=false):

@@ -40,8 +40,7 @@ func _process(delta):
 		var current = position.distance_squared_to(target)
 		if to_go < current or current < 4:
 			set_location(destination)
-			mode = "Idle"
-			set_sprite()
+			set_sprite(true)
 			end_move()
 			if is_player and moves > 0:
 				show_stats(true)
@@ -133,7 +132,7 @@ func get_sprite(path: String) -> Node:
 	return get_node("%s/%s" % [path, facing_map[unit(facing)]])
 
 
-func set_sprite():
+func set_sprite(idle=false):
 	if sprite:
 		sprite.set_visible(false)
 	if weapon:
@@ -142,6 +141,10 @@ func set_sprite():
 	var path = "Robot/Dead" if dead else base
 	if stats.equipment.extras:
 		path += "-X"
+	if is_player and moves > 0:
+		mode = "Move"
+	elif idle:
+		mode = "Idle"
 	sprite = get_node(path) if dead else get_sprite("Robot/%s/%s" % [path, mode])
 	sprite.set_visible(true)
 	if dead or combat < WEAPON:

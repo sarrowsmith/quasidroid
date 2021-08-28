@@ -205,7 +205,7 @@ func action(direction: Vector2, really=true, target=Vector2.ZERO) -> int: # -> e
 	if target == Vector2.ZERO:
 		target = target()
 	if really:
-		moves -= ceil(location.distance_to(target))
+		moves -= max(1, ceil(location.distance_to(target)))
 	var target_type = level.location_type(target)
 	match target_type:
 		Level.FLOOR:

@@ -409,7 +409,6 @@ func _on_Player_move(alive):
 		if view_mode == ViewMode.FREE:
 			view_mode = ViewMode.RESET
 	else:
-		print(OS.get_ticks_msec())
 		game_over(LOSE, "You have been deactivated!")
 
 

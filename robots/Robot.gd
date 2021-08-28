@@ -141,12 +141,17 @@ func set_sprite(idle=false):
 	var path = "Robot/Dead" if dead else base
 	if stats.equipment.extras:
 		path += "-X"
-	if is_player and moves > 0:
-		mode = "Move"
-	elif idle:
-		mode = "Idle"
-	sprite = get_node(path) if dead else get_sprite("Robot/%s/%s" % [path, mode])
+	if dead:
+		sprite = get_node(path)
+	elif is_player and moves > 0:
+		sprite = get_sprite("Robot/%s/Move" % [path])
+	else:
+		if idle:
+			mode = "Idle"
+		sprite = get_sprite("Robot/%s/%s" % [path, mode])
 	sprite.set_visible(true)
+	if idle:
+		mode = "Idle"
 	if dead or combat < WEAPON:
 		if weapon:
 			weapon.set_visible(false)

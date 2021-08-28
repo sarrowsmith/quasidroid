@@ -303,8 +303,6 @@ func level_up(to: int):
 
 func on_die():
 	set_sprite()
-	if audio.playing:
-		yield(audio, "finished")
 	emit_signal("move", false)
 
 

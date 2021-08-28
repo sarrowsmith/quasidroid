@@ -10,7 +10,7 @@ export(NodePath) var player_status_path
 export(NodePath) var rogue_status_path
 export(NodePath) var log_path
 export(NodePath) var map_panel_path
-export(int) var map_scale = 12
+export(int) var map_scale = 10
 
 
 enum {INFO, STATUS, HELP}

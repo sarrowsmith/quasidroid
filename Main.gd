@@ -314,9 +314,17 @@ func save_game():
 
 
 func game_over(how: int, title=""):
-	audio.play_from_bank(how)
-	$Fader.interpolate_property(world, "modulate", Color(1.0, 1.0, 1.0, 1.0), Color(1.0, 1.0, 1.0, 0.0), 1.0)
+	if how == LOSE:
+		$Fader.interpolate_property(world, "modulate", Color(1.0, 1.0, 1.0, 1.0), Color(1.0, 1.0, 1.0, 0.25), 4.0)
+		$Fader.start()
+		yield($Fader, "tween_all_completed")
+		if world.player.audio.playing:
+			yield(world.player.audio, "finished")
+		$Fader.interpolate_property(world, "modulate", Color(1.0, 1.0, 1.0, 0.25), Color(1.0, 1.0, 1.0, 0.0), 1.0)
+	else:
+		$Fader.interpolate_property(world, "modulate", Color(1.0, 1.0, 1.0, 1.0), Color(1.0, 1.0, 1.0, 0.0), 1.0)
 	$Fader.start()
+	audio.play_from_bank(how)
 	yield($Fader, "tween_all_completed")
 	var popup = $Dialogs.get_node(success[how])
 	if title:

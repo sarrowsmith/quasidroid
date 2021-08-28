@@ -101,19 +101,20 @@ func set_cursor():
 		return
 	var location_type = level.location_type(level.cursor.location)
 	var distance_squared = location.distance_squared_to(level.cursor.location)
-	var in_range = distance_squared <= stats.stats.speed
+	var in_range = stats.stats.speed > 0 and distance_squared <= moves * moves
+	var adjacent = stats.stats.speed == 0 and distance_squared == 1
 	match location_type:
 		Level.LIFT:
 			var lift = level.lift_at(level.cursor.location)
 			if lift and lift.state != Lift.LOCKED:
 				location_type = Level.PLAYER
 		Level.FLOOR, Level.ACCESS:
-			if in_range:
+			if in_range or adjacent and location_type == Level.ACCESS:
 				location_type = Level.PLAYER
 		Level.ROGUE:
 			var rogue = level.rogue_at(level.cursor.location)
 			if rogue and rogue.get_state() == DEAD:
-				location_type = Level.PLAYER if (in_range or (stats.stats.speed == 0 and distance_squared == 1)) else Level.ACCESS
+				location_type = Level.PLAYER if (in_range or adjacent) else Level.ACCESS
 			elif location.x == level.cursor.location.x or location.y == level.cursor.location.y:
 				if location.distance_squared_to(level.cursor.location) > 1:
 					if weapons.get_range() > 1:
@@ -131,6 +132,8 @@ func set_cursor():
 						location_type = Level.ACCESS
 			else:
 				location_type = Level.ACCESS
+	if location_type == Level.PLAYER and moves < 1:
+		location_type = Level.FLOOR
 	level.cursor.set_mode(cursor_types[location_type])
 
 
@@ -152,7 +155,7 @@ func cursor_activate(button):
 						shoot(direction)
 					else:
 # warning-ignore:return_value_discarded
-						action(direction)
+						action(direction, true, level.cursor.location)
 
 
 func show_info(optional=false):
@@ -303,8 +306,6 @@ func level_up(to: int):
 
 func on_die():
 	set_sprite()
-	if audio.playing:
-		yield(audio, "finished")
 	emit_signal("move", false)
 
 

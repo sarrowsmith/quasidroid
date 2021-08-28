@@ -13,7 +13,7 @@
 [ext_resource path="res://AudioBankPlayer.tscn" type="PackedScene" id=11]
 
 [sub_resource type="ImageTexture" id=1]
-size = Vector2( 360, 360 )
+size = Vector2( 356, 356 )
 
 [sub_resource type="ImageTexture" id=2]
 flags = 0
@@ -633,21 +633,23 @@ __meta__ = {
 light_mask = 2
 margin_left = 7.0
 margin_top = 7.0
-margin_right = 367.0
+margin_right = 365.0
 margin_bottom = 1073.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
 split_offset = 148
 dragger_visibility = 2
 
 [node name="Log" type="ScrollContainer" parent="View/PanelR/Split"]
 light_mask = 2
-margin_right = 360.0
+margin_right = 358.0
 margin_bottom = 681.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="Info" type="RichTextLabel" parent="View/PanelR/Split/Log"]
 light_mask = 2
-margin_right = 360.0
+margin_right = 358.0
 margin_bottom = 681.0
 rect_clip_content = false
 focus_mode = 2
@@ -665,19 +667,19 @@ selection_enabled = true
 [node name="Map" type="MarginContainer" parent="View/PanelR/Split"]
 light_mask = 2
 margin_top = 681.0
-margin_right = 360.0
+margin_right = 358.0
 margin_bottom = 1066.0
 size_flags_horizontal = 3
 size_flags_vertical = 7
 
 [node name="Container" type="VBoxContainer" parent="View/PanelR/Split/Map"]
 light_mask = 2
-margin_right = 360.0
+margin_right = 358.0
 margin_bottom = 385.0
 
 [node name="MapLabel" type="RichTextLabel" parent="View/PanelR/Split/Map/Container"]
 light_mask = 2
-margin_right = 360.0
+margin_right = 358.0
 margin_bottom = 21.0
 size_flags_horizontal = 3
 size_flags_vertical = 5
@@ -695,18 +697,20 @@ scroll_active = false
 [node name="MapImage" type="TextureRect" parent="View/PanelR/Split/Map/Container"]
 light_mask = 2
 margin_top = 25.0
-margin_right = 360.0
+margin_right = 358.0
 margin_bottom = 385.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 texture = SubResource( 1 )
 
 [node name="LevelMap" type="Sprite" parent="View/PanelR/Split/Map/Container/MapImage"]
+position = Vector2( 18, 18 )
 texture = SubResource( 2 )
 centered = false
 
 [node name="LevelFog" type="Sprite" parent="View/PanelR/Split/Map/Container/MapImage"]
 material = SubResource( 3 )
+position = Vector2( 18, 18 )
 texture = SubResource( 4 )
 centered = false
 

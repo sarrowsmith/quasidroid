@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=2]
+[gd_scene load_steps=19 format=2]
 
 [ext_resource path="res://World.tscn" type="PackedScene" id=1]
 [ext_resource path="res://Main.gd" type="Script" id=2]
@@ -11,6 +11,9 @@
 [ext_resource path="res://resources/Resources/jura_light.tres" type="DynamicFont" id=9]
 [ext_resource path="res://resources/Resources/default_theme.tres" type="Theme" id=10]
 [ext_resource path="res://AudioBankPlayer.tscn" type="PackedScene" id=11]
+[ext_resource path="res://resources/Audio/win.wav" type="AudioStream" id=12]
+[ext_resource path="res://resources/Audio/QuasidroidInterstitial.mp3" type="AudioStream" id=13]
+[ext_resource path="res://resources/Audio/QuasidroidMainLoop.mp3" type="AudioStream" id=14]
 
 [sub_resource type="ImageTexture" id=1]
 size = Vector2( 356, 356 )
@@ -1002,8 +1005,12 @@ popup_exclusive = true
 window_title = "You have failed!"
 dialog_autowrap = true
 
-[node name="AudioBankPlayer" parent="." instance=ExtResource( 11 )]
-streams = [ null, ExtResource( 6 ) ]
+[node name="SFXBankPlayer" parent="." instance=ExtResource( 11 )]
+streams = [ ExtResource( 12 ), ExtResource( 6 ) ]
+
+[node name="MusicBankPlayer" parent="." instance=ExtResource( 11 )]
+bus = "Music"
+streams = [ null, ExtResource( 14 ), ExtResource( 13 ) ]
 
 [connection signal="pressed" from="View/PanelL/Split/UpperPanel/Menu/Game Stats" to="." method="_on_Game_Stats_pressed"]
 [connection signal="about_to_show" from="View/PanelL/Split/UpperPanel/Menu/Weapon" to="World" method="_on_Weapon_about_to_show" flags=3]
@@ -1021,3 +1028,4 @@ streams = [ null, ExtResource( 6 ) ]
 [connection signal="popup_hide" from="Dialogs/Quit" to="." method="_on_Quit_popup_hide"]
 [connection signal="confirmed" from="Dialogs/Win" to="." method="_on_game_over" binds= [ "Win" ]]
 [connection signal="confirmed" from="Dialogs/Lose" to="." method="_on_game_over" binds= [ "Lose" ]]
+[connection signal="finished" from="MusicBankPlayer" to="." method="_on_MusicBankPlayer_finished"]

@@ -10,6 +10,8 @@ data_*/
 
 # Shouldn't keep fonts in version control
 *.ttf
+# and probably not MP3s
+*.mp3
 
 # Godot-git ignores
 git_api.*

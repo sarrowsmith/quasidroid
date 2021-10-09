@@ -3,7 +3,7 @@ extends Node2D
 
 enum ViewMode {TRACK, FREE, RESET, DIALOG}
 enum {WIN, LOSE}
-enum {MAIN, LOOP, INTERSTITIAL}
+enum {MAIN, LOOP, INTERSTITIAL, BLANK}
 
 const success = ["Win", "Lose"]
 
@@ -19,7 +19,8 @@ onready var world_size = world.world_size
 onready var saved_games = $Dialogs.find_node("SavedGames")
 onready var master_index = AudioServer.get_bus_index("Master")
 onready var sfx = $SFXBankPlayer
-onready var music = $MusicBankPlayer
+onready var music = $MainMusicBankPlayer
+onready var accent = $AccentMusicBankPlayer
 onready var time_delay = AudioServer.get_time_to_next_mix() + AudioServer.get_output_latency()
 
 
@@ -49,7 +50,8 @@ func show_named_dialog(dialog: String):
 
 
 func show_dialog(dialog: Popup):
-	music.cross_fade(MAIN, 0.2)
+	music.fade(MAIN, 0.2)
+	accent.fade(-1, 0.2)
 	world.set_visible(false)
 	$Frame.set_visible(false)
 	view_to(half_view, ViewMode.DIALOG)
@@ -57,7 +59,8 @@ func show_dialog(dialog: Popup):
 
 
 func hide_dialog(dialog: Popup):
-	music.cross_fade(LOOP, 0.2)
+	music.fade(LOOP, 0.2)
+	accent.fade(0, 0.2)
 	world.set_visible(true)
 	$Frame.set_visible(true)
 	if dialog:
@@ -322,7 +325,7 @@ func save_game():
 
 
 func game_over(how: int, title=""):
-	music.fade_out(1.0)
+	music.fade(-1, 1.0)
 	if how == LOSE:
 		$Fader.interpolate_property(world, "modulate", Color(1.0, 1.0, 1.0, 1.0), Color(1.0, 1.0, 1.0, 0.25), 4.0)
 		$Fader.start()
@@ -480,13 +483,17 @@ func _on_Mute_toggled(button_pressed):
 	AudioServer.set_bus_mute(master_index, button_pressed)
 
 
-func _on_MusicBankPlayer_finished():
+func _on_MainMusicBankPlayer_finished():
 	match music.last_played:
 		MAIN:
-			pass # TODO: worry aboout this when I've got a MAIN
+			pass # imported as a loop
 		LOOP:
-			music.play_from_bank(INTERSTITIAL, time_delay)
+			music.play_from_bank(INTERSTITIAL if accent.last_played < 0 or randf() < 0.5 else BLANK, time_delay)
 		INTERSTITIAL:
-			music.play_from_bank(INTERSTITIAL if randf() < 0.5 else LOOP, time_delay)
-		_:
-			music.play_from_bank(LOOP)
+			music.play_from_bank(LOOP if accent.last_played < 0 or randf() < 0.5 else BLANK, time_delay)
+		BLANK:
+			music.play_from_bank(LOOP if randf() < 0.5 else INTERSTITIAL, time_delay)
+
+
+func _on_AccentMusicBankPlayer_finished():
+	accent.play_random(time_delay)

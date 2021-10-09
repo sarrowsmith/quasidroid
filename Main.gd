@@ -243,7 +243,8 @@ func change_level(level: Level, fade: bool):
 		if fade:
 			$Fader.interpolate_property(world, "modulate", Color(1.0, 1.0, 1.0, 1.0), Color(1.0, 1.0, 1.0, 0.0), 0.5)
 			$Fader.start()
-			music.fade_out(0.2)
+			music.fade(-1, 0.2)
+			accent.fade(-1, 0.2)
 		if world.active_level and world.active_level.is_connected("rogues_move_end", self, "rogues_move_end"):
 			world.active_level.disconnect("rogues_move_end", self, "rogues_move_end")
 		world.change_level(level)
@@ -255,7 +256,8 @@ func change_level(level: Level, fade: bool):
 	if fade:
 		$Fader.interpolate_property(world, "modulate", Color(1.0, 1.0, 1.0, 0.0), Color(1.0, 1.0, 1.0, 1.0), 0.5)
 		$Fader.start()
-		music.fade_in(-1, 0.5)
+		music.fade(LOOP, 0.5)
+		accent.fade(BLANK, 0.5)
 		yield($Fader, "tween_all_completed")
 
 
@@ -325,6 +327,7 @@ func save_game():
 
 func game_over(how: int, title=""):
 	music.fade(-1, 1.0)
+	accent.fade(-1, 1.0)
 	if how == LOSE:
 		$Fader.interpolate_property(world, "modulate", Color(1.0, 1.0, 1.0, 1.0), Color(1.0, 1.0, 1.0, 0.25), 4.0)
 		$Fader.start()

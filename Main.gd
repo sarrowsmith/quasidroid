@@ -17,7 +17,6 @@ var save = false
 onready var world = $World
 onready var world_size = world.world_size
 onready var saved_games = $Dialogs.find_node("SavedGames")
-onready var master_index = AudioServer.get_bus_index("Master")
 onready var sfx = $SFXBankPlayer
 onready var music = $MainMusicBankPlayer
 onready var accent = $AccentMusicBankPlayer
@@ -479,10 +478,6 @@ func _on_Seed_text_changed(new_text):
 	$Dialogs.find_node("NewButton").disabled = new_text.empty()
 
 
-func _on_Mute_toggled(button_pressed):
-	AudioServer.set_bus_mute(master_index, button_pressed)
-
-
 func _on_MainMusicBankPlayer_finished():
 	match music.last_played:
 		MAIN:
@@ -497,3 +492,11 @@ func _on_MainMusicBankPlayer_finished():
 
 func _on_AccentMusicBankPlayer_finished():
 	accent.play_random(time_delay)
+
+
+func _on_Effects_toggled(button_pressed):
+	AudioServer.set_bus_mute(AudioServer.get_bus_index("SFX"), not button_pressed)
+
+
+func _on_Music_toggled(button_pressed):
+	AudioServer.set_bus_mute(AudioServer.get_bus_index("Music"), not button_pressed)

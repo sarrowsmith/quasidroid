@@ -20,3 +20,6 @@ git_api.*
 addons/
 bin/
 
+# Just a scaled image
+logo.png*
+

@@ -289,7 +289,6 @@ func scavenge(other: Robot):
 		audio.play_from_bank(SCAVENGE)
 		level.world.log_info("""You have scavenged:
 \t[b][i]%s[/i][/b]""" % scavenged.join("\n\t"))
-		moves -= 1
 	else:
 		level.world.show_info("Nothing worth scavenging here")
 	show_stats(true)

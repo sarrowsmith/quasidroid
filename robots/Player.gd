@@ -242,6 +242,7 @@ func operate_lift(target: Vector2):
 
 func check_location():
 	level.update_fog(location)
+	level.world.update_minimap()
 	if not level.access.has(location):
 		if level.access.has(level.cursor.location):
 			show_info(true)

@@ -57,7 +57,6 @@ func _ready():
 	light_image.convert(Image.FORMAT_RGBAH)
 	update_fog_image_texture()
 	map_image.create(image_width + 2, image_height + 2, false, Image.FORMAT_RGBAH)
-	map_image.fill(Color.snow)
 
 
 func is_clear() -> bool:
@@ -150,10 +149,13 @@ func generate():
 
 
 func update_level_map(player: Vector2):
-	map_image.lock()
 	if player == Vector2.ZERO:
+		map_image.fill(Color.snow)
+		map_image.lock()
 		for wall in map.get_used_cells():
 			map_image.set_pixelv(wall, Color.black)
+		return
+	map_image.lock()
 	for ap in access:
 		if access[ap]:
 			map_image.set_pixelv(ap, Color.magenta if access[ap].active else Color.deeppink)
@@ -161,7 +163,8 @@ func update_level_map(player: Vector2):
 		map_image.set_pixelv(lift.location, Color.blue)
 		map_image.set_pixelv(lift.location + Vector2.UP, lift.flag_colour())
 	if player != Vector2.ZERO:
-		map_image.set_pixelv(player_location, Color.snow)
+		if player_location != Vector2.ZERO:
+			map_image.set_pixelv(player_location, Color.snow)
 		map_image.set_pixelv(player, Color.darkorange)
 		player_location = player
 	map_image.unlock()

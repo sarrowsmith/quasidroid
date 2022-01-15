@@ -3,6 +3,7 @@ extends Node2D
 
 enum ViewMode {TRACK, FREE, RESET, DIALOG}
 enum {WIN, LOSE}
+enum {MAIN, LOOP, INTERSTITIAL, BLANK}
 
 const success = ["Win", "Lose"]
 
@@ -16,8 +17,10 @@ var save = false
 onready var world = $World
 onready var world_size = world.world_size
 onready var saved_games = $Dialogs.find_node("SavedGames")
-onready var master_index = AudioServer.get_bus_index("Master")
-onready var audio = $AudioBankPlayer
+onready var sfx = $SFXBankPlayer
+onready var music = $MainMusicBankPlayer
+onready var accent = $AccentMusicBankPlayer
+onready var time_delay = AudioServer.get_time_to_next_mix() + AudioServer.get_output_latency()
 
 
 func _ready():
@@ -46,6 +49,8 @@ func show_named_dialog(dialog: String):
 
 
 func show_dialog(dialog: Popup):
+	music.fade(MAIN, 0.2)
+	accent.fade(-1, 0.2)
 	world.set_visible(false)
 	$Frame.set_visible(false)
 	view_to(half_view, ViewMode.DIALOG)
@@ -53,6 +58,8 @@ func show_dialog(dialog: Popup):
 
 
 func hide_dialog(dialog: Popup):
+	music.fade(LOOP, 0.2)
+	accent.fade(0, 0.2)
 	world.set_visible(true)
 	$Frame.set_visible(true)
 	if dialog:
@@ -97,6 +104,7 @@ func start():
 	$Fader.interpolate_property(world, "modulate", Color(1.0, 1.0, 1.0, 0.0), Color(1.0, 1.0, 1.0, 1.0), 0.5)
 	$Fader.start()
 	world.level_one.lifts[0].audio.play()
+	yield($Fader, "tween_all_completed")
 
 
 func connect_player():
@@ -235,6 +243,8 @@ func change_level(level: Level, fade: bool):
 		if fade:
 			$Fader.interpolate_property(world, "modulate", Color(1.0, 1.0, 1.0, 1.0), Color(1.0, 1.0, 1.0, 0.0), 0.5)
 			$Fader.start()
+			music.fade(-1, 0.2)
+			accent.fade(-1, 0.2)
 		if world.active_level and world.active_level.is_connected("rogues_move_end", self, "rogues_move_end"):
 			world.active_level.disconnect("rogues_move_end", self, "rogues_move_end")
 		world.change_level(level)
@@ -246,6 +256,8 @@ func change_level(level: Level, fade: bool):
 	if fade:
 		$Fader.interpolate_property(world, "modulate", Color(1.0, 1.0, 1.0, 0.0), Color(1.0, 1.0, 1.0, 1.0), 0.5)
 		$Fader.start()
+		music.fade(LOOP, 0.5)
+		accent.fade(BLANK, 0.5)
 		yield($Fader, "tween_all_completed")
 
 
@@ -314,6 +326,8 @@ func save_game():
 
 
 func game_over(how: int, title=""):
+	music.fade(-1, 1.0)
+	accent.fade(-1, 1.0)
 	if how == LOSE:
 		$Fader.interpolate_property(world, "modulate", Color(1.0, 1.0, 1.0, 1.0), Color(1.0, 1.0, 1.0, 0.25), 4.0)
 		$Fader.start()
@@ -324,7 +338,7 @@ func game_over(how: int, title=""):
 	else:
 		$Fader.interpolate_property(world, "modulate", Color(1.0, 1.0, 1.0, 1.0), Color(1.0, 1.0, 1.0, 0.0), 1.0)
 	$Fader.start()
-	audio.play_from_bank(how)
+	sfx.play_from_bank(how)
 	yield($Fader, "tween_all_completed")
 	var popup = $Dialogs.get_node(success[how])
 	if title:
@@ -467,5 +481,25 @@ func _on_Seed_text_changed(new_text):
 	$Dialogs.find_node("NewButton").disabled = new_text.empty()
 
 
-func _on_Mute_toggled(button_pressed):
-	AudioServer.set_bus_mute(master_index, button_pressed)
+func _on_MainMusicBankPlayer_finished():
+	match music.last_played:
+		MAIN:
+			pass # imported as a loop
+		LOOP:
+			music.play_from_bank(INTERSTITIAL if accent.last_played < 0 or randf() < 0.5 else BLANK, time_delay)
+		INTERSTITIAL:
+			music.play_from_bank(LOOP if accent.last_played < 0 or randf() < 0.5 else BLANK, time_delay)
+		BLANK:
+			music.play_from_bank(LOOP if randf() < 0.5 else INTERSTITIAL, time_delay)
+
+
+func _on_AccentMusicBankPlayer_finished():
+	accent.play_random(time_delay)
+
+
+func _on_Effects_toggled(button_pressed):
+	AudioServer.set_bus_mute(AudioServer.get_bus_index("SFX"), not button_pressed)
+
+
+func _on_Music_toggled(button_pressed):
+	AudioServer.set_bus_mute(AudioServer.get_bus_index("Music"), not button_pressed)

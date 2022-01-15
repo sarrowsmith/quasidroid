@@ -242,6 +242,7 @@ func operate_lift(target: Vector2):
 
 func check_location():
 	level.update_fog(location)
+	level.world.update_minimap()
 	if not level.access.has(location):
 		if level.access.has(level.cursor.location):
 			show_info(true)
@@ -289,7 +290,6 @@ func scavenge(other: Robot):
 		audio.play_from_bank(SCAVENGE)
 		level.world.log_info("""You have scavenged:
 \t[b][i]%s[/i][/b]""" % scavenged.join("\n\t"))
-		moves -= 1
 	else:
 		level.world.show_info("Nothing worth scavenging here")
 	show_stats(true)

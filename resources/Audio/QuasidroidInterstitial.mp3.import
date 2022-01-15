@@ -1,0 +1,15 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+path="res://.import/QuasidroidInterstitial.mp3-8ed63f410b7ba1c892cb2e6502d0737e.mp3str"
+
+[deps]
+
+source_file="res://resources/Audio/QuasidroidInterstitial.mp3"
+dest_files=[ "res://.import/QuasidroidInterstitial.mp3-8ed63f410b7ba1c892cb2e6502d0737e.mp3str" ]
+
+[params]
+
+loop=false
+loop_offset=0

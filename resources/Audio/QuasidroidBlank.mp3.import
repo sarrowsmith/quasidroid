@@ -1,0 +1,15 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+path="res://.import/QuasidroidBlank.mp3-8e7e9d048b74dc06aab1d5e8cc63042d.mp3str"
+
+[deps]
+
+source_file="res://resources/Audio/QuasidroidBlank.mp3"
+dest_files=[ "res://.import/QuasidroidBlank.mp3-8e7e9d048b74dc06aab1d5e8cc63042d.mp3str" ]
+
+[params]
+
+loop=false
+loop_offset=0

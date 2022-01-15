@@ -1,0 +1,15 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+path="res://.import/QuasidroidGround.mp3-9fa27594642f3e3541a2ca74f3bb7419.mp3str"
+
+[deps]
+
+source_file="res://resources/Audio/QuasidroidGround.mp3"
+dest_files=[ "res://.import/QuasidroidGround.mp3-9fa27594642f3e3541a2ca74f3bb7419.mp3str" ]
+
+[params]
+
+loop=false
+loop_offset=0

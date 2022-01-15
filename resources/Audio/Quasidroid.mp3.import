@@ -1,0 +1,15 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+path="res://.import/Quasidroid.mp3-58941d5c2f73f478505151c771431c7a.mp3str"
+
+[deps]
+
+source_file="res://resources/Audio/Quasidroid.mp3"
+dest_files=[ "res://.import/Quasidroid.mp3-58941d5c2f73f478505151c771431c7a.mp3str" ]
+
+[params]
+
+loop=true
+loop_offset=0

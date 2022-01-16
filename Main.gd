@@ -213,7 +213,7 @@ func player_end_move(player):
 	world.active_level.await_rogues()
 	var dead = 0
 	for r in world.active_level.rogues:
-		if r.turn():
+		if not r.turn():
 			dead += 1
 	if dead == len(world.active_level.rogues):
 		if not world.active_level.state & Level.CLEAR:
@@ -223,7 +223,7 @@ func player_end_move(player):
 
 
 func rogues_move_end():
-	if not world.player.turn():
+	if world.player.turn():
 		world.player.start()
 		world.set_turn(1)
 		if save:

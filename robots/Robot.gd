@@ -91,7 +91,7 @@ func end_move(end_turn=false, always_signal=false):
 func turn() -> bool:
 	signalled = false
 	if state == DEAD:
-		return true
+		return false
 	if level and implicit_damage():
 		if check_stats():
 			level.world.report_deactivated(self)
@@ -99,7 +99,7 @@ func turn() -> bool:
 	if state == DONE:
 		set_state(IDLE)
 		moves = max(stats.stats.speed, 1)
-	return false
+	return true
 
 
 func implicit_damage() -> bool:

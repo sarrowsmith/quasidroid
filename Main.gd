@@ -114,10 +114,10 @@ func connect_player():
 
 
 const view_map = {
-	ui_up = Vector2(0, -1),
-	ui_down = Vector2(0, 1),
-	ui_left = Vector2(-1, 0),
-	ui_right = Vector2(1, 0)
+	map_up = Vector2(0, -1),
+	map_down = Vector2(0, 1),
+	map_left = Vector2(-1, 0),
+	map_right = Vector2(1, 0)
 }
 # warning-ignore:unused_argument
 func _process(_delta):
@@ -148,10 +148,10 @@ func _process(_delta):
 
 
 const cursor_map = {
-	cursor_up = Vector2(0, -1),
-	cursor_down = Vector2(0, 1),
-	cursor_left = Vector2(-1, 0),
-	cursor_right = Vector2(1, 0)
+	ui_up = Vector2(0, -1),
+	ui_down = Vector2(0, 1),
+	ui_left = Vector2(-1, 0),
+	ui_right = Vector2(1, 0)
 }
 func _unhandled_input(event: InputEvent):
 	if event is InputEventKey and event.pressed:

@@ -195,9 +195,7 @@ func _unhandled_input(event: InputEvent):
 			view_mode = ViewMode.RESET
 		return
 	if event.is_action_pressed("cursor_reset"):
-		var view_position = $View.position
-		var view_location = world.active_level.position_to_location(view_position)
-		world.active_level.set_cursor(view_location + Vector2.ONE)
+		cursor_reset()
 		return
 	if view_mode == ViewMode.DIALOG and event.is_action_pressed("ui_cancel"):
 		for popup in $Dialogs.get_children():
@@ -267,6 +265,12 @@ func change_level(level: Level, fade: bool):
 		yield($Fader, "tween_all_completed")
 
 
+func cursor_reset():
+	var view_position = $View.position
+	var view_location = world.active_level.position_to_location(view_position)
+	world.active_level.set_cursor(view_location)
+
+
 func view_to(view_position: Vector2, mode):
 	var offset = 48 if mode == ViewMode.TRACK else 0
 	$View.position = Vector2(
@@ -284,6 +288,7 @@ func set_zoom(out: bool):
 		view_to(world.world_size / 6.0, ViewMode.FREE)
 	else:
 		view_to(world.player.position, ViewMode.TRACK)
+		cursor_reset()
 
 
 func list_games() -> Array:

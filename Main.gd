@@ -210,16 +210,19 @@ func player_end_move(player):
 		return
 	world.set_turn(1)
 	world.set_value("Moves", 0, true)
-	world.active_level.await_rogues()
-	var dead = 0
-	for r in world.active_level.rogues:
-		if not r.turn():
-			dead += 1
-	if dead == len(world.active_level.rogues):
+	var alive = world.active_level.await_rogues()
+	if alive:
+		var dead = 0
+		for r in world.active_level.rogues:
+			if not r.turn():
+				dead += 1
+		alive = len(world.active_level.rogues) - dead
+	if alive == 0:
 		if not world.active_level.state & Level.CLEAR:
 			world.active_level.state |= Level.CLEAR
 			world.update_minimap()
 			world.check_end()
+		rogues_move_end()
 
 
 func rogues_move_end():

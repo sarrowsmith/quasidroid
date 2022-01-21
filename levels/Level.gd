@@ -240,17 +240,18 @@ func generate_rogues() -> bool:
 			if probe.distance_squared_to(lifts[0].location) > 25:
 				var r = new_feature(probe, Prototype.ROGUE)
 				r.generate(self, probe)
-				r.connect("end_move", self, "rogue_end_move")
+				r.connect("end_move", self, "rogue_end_move", [], CONNECT_DEFERRED)
 				rogues.append(r)
 				break
 	return not rogues.empty()
 
 
-func await_rogues():
+func await_rogues() -> int:
 	awaiting.clear()
 	for r in rogues:
-		if r.get_state(): # 0 == Robot.DEAD:
+		if r.get_state(): # 0 == Robot.DEAD
 			awaiting[r] = true
+	return len(awaiting)
 
 
 func rogue_end_move(rogue):

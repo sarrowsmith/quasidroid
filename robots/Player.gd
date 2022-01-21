@@ -78,7 +78,8 @@ func _unhandled_input(event: InputEvent):
 			cursor_activate(click_map[e])
 	for e in weapon_select_map:
 		if event.is_action_pressed(e):
-			combat = (combat + weapon_select_map[e]) % len(stats.equipment.weapons)
+			var weapons = len(stats.equipment.weapons)
+			combat = (combat + weapon_select_map[e] + weapons) % weapons
 			equip()
 			show_stats(true)
 	if event is InputEventKey and event.pressed and event.scancode == KEY_SPACE:

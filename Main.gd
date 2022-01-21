@@ -167,12 +167,15 @@ func _unhandled_input(event: InputEvent):
 		match event.scancode:
 			KEY_F:
 				OS.window_fullscreen = !OS.window_fullscreen
+			KEY_M:
+				var bus = AudioServer.get_bus_index("Master")
+				AudioServer.set_bus_mute(bus, not AudioServer.is_bus_mute(bus))
 			KEY_U:
-				level = world.active_level.parent
+				level = null #world.active_level.parent
 			KEY_O:
-				level = world.active_level.children[0]
+				level = null #world.active_level.children[0]
 			KEY_P:
-				level = world.active_level.children[1]
+				level = null #world.active_level.children[1]
 		if level and world.player.get_state() == Robot.IDLE:
 			change_level(level, false)
 	if world.active_level == null:

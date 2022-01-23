@@ -241,7 +241,7 @@ func change_level(level: Level, fade: bool):
 		return
 	if level == world.player.level:
 		# Player resignals when finished arrival animation
-		world.player.end_move(true, true)
+		world.player.end_move(false, true)
 		return
 	if level != world.active_level:
 		if fade:
@@ -280,7 +280,6 @@ func view_to(view_position: Vector2, mode):
 
 
 func set_zoom(out: bool):
-	world.zoomed = out
 	var scale = Vector2.ONE / (3.0 if out else 1.0)
 	world.scale = scale
 	$Frame.scale = scale
@@ -288,7 +287,9 @@ func set_zoom(out: bool):
 		view_to(world.world_size / 6.0, ViewMode.FREE)
 	else:
 		view_to(world.player.position, ViewMode.TRACK)
-		cursor_reset()
+		if not out and world.zoomed:
+			cursor_reset()
+	world.zoomed = out
 
 
 func list_games() -> Array:

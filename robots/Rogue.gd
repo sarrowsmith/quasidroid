@@ -13,8 +13,8 @@ func _ready():
 
 
 func turn() -> bool:
-	if .turn():
-		return true
+	if not .turn():
+		return false
 	while moves > 0:
 		match behaviour():
 			Level.FLOOR:
@@ -33,7 +33,7 @@ func turn() -> bool:
 				moves -= 1
 		equip()
 	end_move()
-	return false
+	return true
 
 
 func generate(level: Level, location: Vector2):

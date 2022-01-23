@@ -114,10 +114,10 @@ func connect_player():
 
 
 const view_map = {
-	ui_up = Vector2(0, -1),
-	ui_down = Vector2(0, 1),
-	ui_left = Vector2(-1, 0),
-	ui_right = Vector2(1, 0)
+	map_up = Vector2(0, -1),
+	map_down = Vector2(0, 1),
+	map_left = Vector2(-1, 0),
+	map_right = Vector2(1, 0)
 }
 # warning-ignore:unused_argument
 func _process(_delta):
@@ -148,10 +148,10 @@ func _process(_delta):
 
 
 const cursor_map = {
-	cursor_up = Vector2(0, -1),
-	cursor_down = Vector2(0, 1),
-	cursor_left = Vector2(-1, 0),
-	cursor_right = Vector2(1, 0)
+	ui_up = Vector2(0, -1),
+	ui_down = Vector2(0, 1),
+	ui_left = Vector2(-1, 0),
+	ui_right = Vector2(1, 0)
 }
 func _unhandled_input(event: InputEvent):
 	if event is InputEventKey and event.pressed:
@@ -167,12 +167,15 @@ func _unhandled_input(event: InputEvent):
 		match event.scancode:
 			KEY_F:
 				OS.window_fullscreen = !OS.window_fullscreen
+			KEY_M:
+				var bus = AudioServer.get_bus_index("Master")
+				AudioServer.set_bus_mute(bus, not AudioServer.is_bus_mute(bus))
 			KEY_U:
-				level = world.active_level.parent
+				level = null #world.active_level.parent
 			KEY_O:
-				level = world.active_level.children[0]
+				level = null #world.active_level.children[0]
 			KEY_P:
-				level = world.active_level.children[1]
+				level = null #world.active_level.children[1]
 		if level and world.player.get_state() == Robot.IDLE:
 			change_level(level, false)
 	if world.active_level == null:
@@ -192,9 +195,7 @@ func _unhandled_input(event: InputEvent):
 			view_mode = ViewMode.RESET
 		return
 	if event.is_action_pressed("cursor_reset"):
-		var view_position = $View.position
-		var view_location = world.active_level.position_to_location(view_position)
-		world.active_level.set_cursor(view_location + Vector2.ONE)
+		cursor_reset()
 		return
 	if view_mode == ViewMode.DIALOG and event.is_action_pressed("ui_cancel"):
 		for popup in $Dialogs.get_children():
@@ -210,20 +211,23 @@ func player_end_move(player):
 		return
 	world.set_turn(1)
 	world.set_value("Moves", 0, true)
-	world.active_level.await_rogues()
-	var dead = 0
-	for r in world.active_level.rogues:
-		if r.turn():
-			dead += 1
-	if dead == len(world.active_level.rogues):
+	var alive = world.active_level.await_rogues()
+	if alive:
+		var dead = 0
+		for r in world.active_level.rogues:
+			if not r.turn():
+				dead += 1
+		alive = len(world.active_level.rogues) - dead
+	if alive == 0:
 		if not world.active_level.state & Level.CLEAR:
 			world.active_level.state |= Level.CLEAR
 			world.update_minimap()
 			world.check_end()
+		rogues_move_end()
 
 
 func rogues_move_end():
-	if not world.player.turn():
+	if world.player.turn():
 		world.player.start()
 		world.set_turn(1)
 		if save:
@@ -237,7 +241,7 @@ func change_level(level: Level, fade: bool):
 		return
 	if level == world.player.level:
 		# Player resignals when finished arrival animation
-		world.player.end_move(true, true)
+		world.player.end_move(false, true)
 		return
 	if level != world.active_level:
 		if fade:
@@ -261,6 +265,12 @@ func change_level(level: Level, fade: bool):
 		yield($Fader, "tween_all_completed")
 
 
+func cursor_reset():
+	var view_position = $View.position
+	var view_location = world.active_level.position_to_location(view_position)
+	world.active_level.set_cursor(view_location)
+
+
 func view_to(view_position: Vector2, mode):
 	var offset = 48 if mode == ViewMode.TRACK else 0
 	$View.position = Vector2(
@@ -270,7 +280,6 @@ func view_to(view_position: Vector2, mode):
 
 
 func set_zoom(out: bool):
-	world.zoomed = out
 	var scale = Vector2.ONE / (3.0 if out else 1.0)
 	world.scale = scale
 	$Frame.scale = scale
@@ -278,6 +287,9 @@ func set_zoom(out: bool):
 		view_to(world.world_size / 6.0, ViewMode.FREE)
 	else:
 		view_to(world.player.position, ViewMode.TRACK)
+		if not out and world.zoomed:
+			cursor_reset()
+	world.zoomed = out
 
 
 func list_games() -> Array:

@@ -78,7 +78,8 @@ func _unhandled_input(event: InputEvent):
 			cursor_activate(click_map[e])
 	for e in weapon_select_map:
 		if event.is_action_pressed(e):
-			combat = (combat + weapon_select_map[e]) % len(stats.equipment.weapons)
+			var weapons = len(stats.equipment.weapons)
+			combat = (combat + weapon_select_map[e] + weapons) % weapons
 			equip()
 			show_stats(true)
 	if event is InputEventKey and event.pressed and event.scancode == KEY_SPACE:
@@ -215,7 +216,6 @@ func change_level(level: Level, fade: bool):
 	set_sprite()
 	set_visible(true)
 	signalled = false
-	moves += 1
 	move(lift.location + Vector2.DOWN, false)
 	if get_state() == WAIT:
 		yield(self, "end_move")
@@ -233,7 +233,11 @@ func operate_lift(target: Vector2):
 		else:
 			set_state(WAIT)
 			if lift.open():
+				var left = moves
+				moves = 0
+				set_sprite()
 				yield(lift.anim, "animation_finished")
+				moves = left
 				show_info(true)
 				end_move()
 			else:
@@ -257,10 +261,11 @@ func check_location():
 		return
 	var lift =  level.lift_at(location)
 	if lift:
-		lift.play_audio()
-		moves = 0
-		level.world.log_info("Transferring to [b]%s[/b]" % lift.level_name(lift.to))
-		emit_signal("change_level", lift.to)
+		if get_state() != WAIT:
+			set_state(WAIT)
+			lift.play_audio()
+			level.world.log_info("Transferring to [b]%s[/b]" % lift.level_name(lift.to))
+			emit_signal("change_level", lift.to)
 	else:
 		recharge()
 		level.set_cursor(location)
